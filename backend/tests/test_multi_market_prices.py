@@ -254,5 +254,16 @@ class CollectionPriceChoiceApiTests(unittest.TestCase):
         self.assertEqual(self.client.put("/api/settings/", json={"price_divergence_pct": "25"}).status_code, 200)
 
 
+    def test_dashboard_lists_cards_still_needing_a_choice(self):
+        from api.dashboard import router as dashboard_router
+        self.client.app.include_router(dashboard_router, prefix="/api/dashboard")
+        item_id = self._add().json()["id"]
+        data = self.client.get("/api/dashboard/").json()
+        self.assertEqual(data["price_choice_count"], 1)
+        self.assertEqual(data["price_choices"][0]["collection_item_id"], item_id)
+        self.client.put(f"/api/collection/{item_id}", json={"price_source": "cardmarket"})
+        self.assertEqual(self.client.get("/api/dashboard/").json()["price_choice_count"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

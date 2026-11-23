@@ -19,9 +19,9 @@ class TcgdexLanguageHelperTests(unittest.TestCase):
         self.assertEqual(normalize_tcgdex_language("jp"), "ja")
 
     def test_sync_languages_ignore_invalid_env_values_and_fallback_to_default(self):
-        self.assertEqual(normalize_tcgdex_sync_languages("banana,xx"), "en,de")
-        self.assertEqual(normalize_tcgdex_sync_languages(""), "en,de")
-        self.assertEqual(normalize_tcgdex_sync_languages(None), "en,de")
+        self.assertEqual(normalize_tcgdex_sync_languages("banana,xx"), "en,fr,ja,zh-cn,zh-tw,ko")
+        self.assertEqual(normalize_tcgdex_sync_languages(""), "en,fr,ja,zh-cn,zh-tw,ko")
+        self.assertEqual(normalize_tcgdex_sync_languages(None), "en,fr,ja,zh-cn,zh-tw,ko")
 
     def test_sync_languages_keep_supported_order_and_drop_duplicates(self):
         self.assertEqual(normalize_tcgdex_sync_languages("de,fr,en,fr,zh_tw"), "en,fr,de,zh-tw")

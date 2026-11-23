@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   RefreshCw, LogOut,
-  Search, Library, Grid2X2, BarChart3, Settings, Trophy, ArrowRightLeft, ListOrdered, Info, Layers3,
+  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, ListOrdered, Info, Layers3,
 } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -241,7 +241,6 @@ export default function HomeScreen() {
     { to: '/binders',    icon: Layers3,     label: t('nav.binders'),    color: '#7986cb' },
     { to: '/analytics',  icon: BarChart3,  label: t('nav.analytics'),   color: '#f5c842' },
     { to: '/trades',     icon: ArrowRightLeft, label: t('nav.trades'),   color: '#ff8a65' },
-    ...(multiUser ? [{ to: '/leaderboard', icon: Trophy, label: t('nav.leaderboard') }] : []),
     { to: '/settings',   icon: Settings,   label: t('nav.settings'),    color: '#b0bec5' },
   ]
 
@@ -353,6 +352,27 @@ export default function HomeScreen() {
                 </ResponsiveContainer>
               )}
             </section>
+
+            {Number(data?.price_choice_count ?? 0) > 0 && (
+              <section>
+                <h2 className={`${sectionTitle} mb-1`}>{t('home.priceChoices')}</h2>
+                <p className="text-xs text-text-muted mb-1">
+                  {t('home.priceChoicesHint').replace('{count}', data.price_choice_count)}
+                </p>
+                {(data.price_choices || []).map(choice => (
+                  <button key={choice.collection_item_id} onClick={() => openCollectionItem(choice)}
+                    className="flex w-full items-center justify-between gap-3 min-h-[56px] border-b border-border text-left">
+                    <span className="min-w-0">
+                      <span className="block text-sm truncate">{choice.name}</span>
+                      <span className="block text-xs text-text-muted">
+                        Cardmarket {formatPrice(choice.cardmarket ?? 0)} · TCGPlayer {formatPrice(choice.tcgplayer ?? 0)}
+                      </span>
+                    </span>
+                    <span className="text-xs text-brand-red">{t('home.priceChoiceAction')}</span>
+                  </button>
+                ))}
+              </section>
+            )}
 
             <section>
               <h2 className={`${sectionTitle} mb-1`}>{t('home.navigation')}</h2>

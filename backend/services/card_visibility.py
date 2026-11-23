@@ -21,7 +21,7 @@ SetLangPair = tuple[str, str]
 def get_configured_sync_languages(db: Session) -> list[str]:
     """Return globally enabled TCGdex catalogue languages in stable order."""
     row = db.query(Setting).filter(Setting.key == "tcgdex_sync_languages").first()
-    normalized = normalize_tcgdex_sync_languages(row.value if row else "en,de")
+    normalized = normalize_tcgdex_sync_languages(row.value if row else "en,fr,ja,zh-cn,zh-tw,ko")
     return normalized.split(",") if normalized else ["en", "de"]
 
 

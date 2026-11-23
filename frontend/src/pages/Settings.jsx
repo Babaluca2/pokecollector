@@ -120,7 +120,7 @@ function TcgdexLanguageControl({ value, onChange, selectedLabel, fallbackNote })
       .map((language) => language.code)
       .filter((code) => next.has(code))
       .join(',')
-    onChange(normalized || 'en,de')
+    onChange(normalized || 'en,fr,ja,zh-cn,zh-tw,ko')
   }
 
   return (
@@ -881,7 +881,7 @@ export default function Settings() {
       toast.error(error.response?.data?.detail || t('common.error'))
     }
   }
-  const currentTcgdexSyncLanguages = normalizeTcgdexLanguageCsv(settings.tcgdex_sync_languages || 'en,de')
+  const currentTcgdexSyncLanguages = normalizeTcgdexLanguageCsv(settings.tcgdex_sync_languages || 'en,fr,ja,zh-cn,zh-tw,ko')
   const digitalSetsEnabled = settings.tcgdex_digital_sets_enabled === 'true'
   const crossLanguagePriceFallback = settings.cross_language_price_fallback !== 'false'
   const crossLanguageImageFallback = settings.cross_language_image_fallback !== 'false'

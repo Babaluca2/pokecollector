@@ -122,7 +122,10 @@
     "portfolioValue": "Valeur du portefeuille",
     "portfolioHistory": "Historique du portefeuille",
     "noData": "Aucune donnée pour le moment",
-    "startSyncHint": "Lancez une synchronisation pour créer un instantané du portefeuille"
+    "startSyncHint": "Lancez une synchronisation pour créer un instantané du portefeuille",
+    "priceChoices": "Prix à trancher",
+    "priceChoicesHint": "{count} cartes ont des prix très différents entre Cardmarket et TCGPlayer.",
+    "priceChoiceAction": "Choisir"
   },
   "dashboard": {
     "title": "Tableau de bord",

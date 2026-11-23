@@ -39,6 +39,7 @@ from services.printing_detail_tags import (
     get_or_create_printing_detail_tags,
     printing_detail_keys,
 )
+from services.auto_binders import sync_auto_binder
 from services.card_values import effective_market_price, normalize_price_field
 from services.price_context import build_price_context
 from services.product_sources import annotate_product_sources, product_sources_by_collection_item
@@ -394,9 +395,10 @@ def _normalize_price_choice_update(update_data: dict, item: CollectionItem) -> N
 
 def _add_collection_item(db: Session, current_user: User, item: CollectionItemCreate, commit: bool = True) -> str:
     """Add one item and return "added" or "updated"."""
-    status, _row = _upsert_collection_item(db, current_user, item)
+    status, row = _upsert_collection_item(db, current_user, item)
     if commit:
         db.commit()
+        sync_auto_binder(db, current_user, row)
     return status
 
 
@@ -627,6 +629,7 @@ def add_to_collection(
     """Add a card to the collection, grouping only identical physical-copy details."""
     _status, db_item = _upsert_collection_item(db, current_user, item)
     db.commit()
+    sync_auto_binder(db, current_user, db_item)
     db.refresh(db_item)
     return _annotate_collection_item(db, current_user, db_item)
 
@@ -653,6 +656,7 @@ def bulk_add_to_collection(
         try:
             status, _row = _upsert_collection_item(db, current_user, item)
             db.commit()
+            sync_auto_binder(db, current_user, _row)
             if status == "added":
                 added += 1
             else:

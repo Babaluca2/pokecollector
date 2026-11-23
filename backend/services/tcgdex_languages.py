@@ -10,7 +10,7 @@ import re
 from collections.abc import Iterable
 from typing import Any
 
-DEFAULT_TCGDEX_SYNC_LANGUAGES: tuple[str, ...] = ("en", "de")
+DEFAULT_TCGDEX_SYNC_LANGUAGES: tuple[str, ...] = ("en", "fr", "ja", "zh-cn", "zh-tw", "ko")
 ENGLISH_FALLBACK_LANGUAGE = "en"
 SUPPORTED_TCGDEX_LANGUAGES: tuple[str, ...] = (
     "en",
@@ -85,7 +85,7 @@ def normalize_tcgdex_sync_languages(value: Any, *, default_on_empty: bool = True
     """Normalize configured sync languages to a stable CSV string.
 
     Unknown values are ignored so Docker/env typos cannot break startup. If no
-    valid values remain and default_on_empty is true, the default en,de pair is
+    valid values remain and default_on_empty is true, the default language set is
     returned. The special value "all" expands to every known TCGdex language.
     """
     raw_parts = iter_tcgdex_language_parts(value)

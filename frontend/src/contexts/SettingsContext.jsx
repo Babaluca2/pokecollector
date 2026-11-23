@@ -36,7 +36,7 @@ const DEFAULT_SETTINGS = {
   price_market: 'cardmarket',
   price_divergence_pct: '40',
   portfolio_display_mode: 'portfolio_value',
-  tcgdex_sync_languages: 'en,de',
+  tcgdex_sync_languages: 'en,fr,ja,zh-cn,zh-tw,ko',
   tcgdex_digital_sets_enabled: 'true',
   cross_language_price_fallback: 'true',
   cross_language_image_fallback: 'true',

@@ -201,7 +201,7 @@ GEMINI_API_KEY=your_gemini_key
 GEMINI_MODEL=gemini-flash-latest
 TELEGRAM_BOT_TOKEN=your_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
-TCGDEX_SYNC_LANGUAGES=en,de
+TCGDEX_SYNC_LANGUAGES=en,fr,ja,zh-cn,zh-tw,ko
 PUBLIC_MODE=false
 CORS_ORIGINS=https://yourdomain.com
 # Host ports, if 8000 or 3000 are already taken on this host
@@ -346,7 +346,7 @@ If you are already locked out of multi-user mode, set `USER_MODE=single` in the 
 | `SCAN_TRACE_STORAGE_DIR` | Stable cleanup path for previously stored scanner diagnostics. Standard Docker Compose sets this to `/app/data/scan-traces`; custom deployments should keep it pointed at the storage location even when `SCAN_TRACE_DIR` is unset. | `/app/data/scan-traces` with Docker Compose |
 | `TELEGRAM_BOT_TOKEN` | Initial Telegram bot token for the admin user | *(empty)* |
 | `TELEGRAM_CHAT_ID` | Initial Telegram chat ID for the admin user | *(empty)* |
-| `TCGDEX_SYNC_LANGUAGES` | Initial admin default for TCGdex set/card sync languages on first launch only. After bootstrap, the DB setting in Settings is authoritative. Comma-separated TCGdex language codes, or `all` to enable every supported TCGdex language. Empty or invalid values safely fall back to `en,de`. Extra languages increase sync time, API calls, and database size. | `en,de` |
+| `TCGDEX_SYNC_LANGUAGES` | Initial admin default for TCGdex set/card sync languages on first launch only. After bootstrap, the DB setting in Settings is authoritative. Comma-separated TCGdex language codes, or `all` to enable every supported TCGdex language. Empty or invalid values safely fall back to `en,fr,ja,zh-cn,zh-tw,ko`. Extra languages increase sync time, API calls, and database size. | `en,fr,ja,zh-cn,zh-tw,ko` |
 | `USER_MODE` | Pin the mode from the environment, overriding the stored setting and disabling the in-app toggle. `single` forces single-user (no login screen) and is the recovery hatch after a multi-user lockout; `multi` forces multi-user. Because `single` disables authentication, use it only on a local/LAN install and unset it once recovered. Unset means the in-app setting controls the mode. | *(unset)* |
 | `PUBLIC_MODE` | Enable SEO meta tags, Open Graph, and allow search engine indexing. Default blocks all crawlers. Recreate the frontend container after changing it. | `false` |
 | `POKECOLLECTOR_VERSION` | Optional frontend and backend image-tag override for controlled deployments and rollbacks. Leave unset to use the exact release bundled with `docker-compose.yml`; `latest` is available only when deliberately requested. | Bundled release version |
@@ -506,7 +506,7 @@ container-level behavior.
 | Currency | `EUR` | Per-user |
 | Primary Price | `trend` | Per-user. Options: `trend`, `avg`, `avg1`, `avg7`, `avg30`, `low` |
 | Multi-User Mode | `false` | Admin-only toggle |
-| TCGdex Sync Languages | `en,de` | Admin-only. Controls which TCGdex set/card languages full sync fetches. Extra languages increase sync time, API calls, and database size. |
+| TCGdex Sync Languages | `en,fr,ja,zh-cn,zh-tw,ko` | Admin-only. Controls which TCGdex set/card languages full sync fetches. Extra languages increase sync time, API calls, and database size. |
 | Cross-language Price Fallback | `true` | Admin-only. Uses English exact-ID price data when the selected card language has no native public price data. |
 | Cross-language Image Fallback | `true` | Admin-only. Uses English exact-ID images when the selected card language has no native public image data. |
 | Show digital sets | `true` | Admin-only. Hides or shows digital-only catalogue sets. |

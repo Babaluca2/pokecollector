@@ -179,7 +179,7 @@ DEFAULT_SETTINGS = {
     "price_display": '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
     "set_overview_filters": "{}",
     "hidden_set_ids": "[]",
-    "tcgdex_sync_languages": "en,de",
+    "tcgdex_sync_languages": "en,fr,ja,zh-cn,zh-tw,ko",
     DIGITAL_SETS_SETTING_KEY: "true",
     "cross_language_price_fallback": "true",
     "cross_language_image_fallback": "true",

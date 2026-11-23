@@ -33,9 +33,6 @@ const Settings = lazy(() => import('./pages/Settings'))
 const CardMigration = lazy(() => import('./pages/CardMigration'))
 const ScanQueue = lazy(() => import('./pages/ScanQueue'))
 const Login = lazy(() => import('./pages/Login'))
-const Leaderboard = lazy(() => import('./pages/Leaderboard'))
-const Compare = lazy(() => import('./pages/Compare'))
-const Achievements = lazy(() => import('./pages/Achievements'))
 const UserCollection = lazy(() => import('./pages/UserCollection'))
 const PublicProfile = lazy(() => import('./pages/PublicProfile'))
 const PublicBinderView = lazy(() => import('./pages/PublicBinderView'))
@@ -185,10 +182,9 @@ function ProtectedRoutes() {
         <Route path="analytics" element={lazyRoute(<Analytics />)} />
         <Route path="products" element={lazyRoute(<Products />)} />
         <Route path="trades" element={lazyRoute(<Trades />)} />
-        <Route path="leaderboard" element={lazyRoute(<Leaderboard />)} />
-        <Route path="leaderboard/compare/:userId" element={lazyRoute(<Compare />)} />
-        <Route path="achievements" element={lazyRoute(<Achievements />)} />
-        <Route path="achievements/:userId" element={lazyRoute(<Achievements />)} />
+        {/* Social features are hidden in this fork; keep the URLs from 404ing. */}
+        <Route path="leaderboard/*" element={<Navigate to="/" replace />} />
+        <Route path="achievements/*" element={<Navigate to="/" replace />} />
         <Route path="settings" element={lazyRoute(<Settings />)} />
         <Route path="migration" element={lazyRoute(<CardMigration />)} />
         <Route path="scans" element={lazyRoute(<ScanQueue />)} />

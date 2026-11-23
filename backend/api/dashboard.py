@@ -179,7 +179,25 @@ def get_dashboard(
         visible_set_filter(db, current_user.id, "all"),
     ).count()
 
+    price_choices = []
+    for item in items:
+        if not item.card or item.price_source:
+            continue
+        comparison = price_ctx.comparison(item)
+        if comparison.get("diverges"):
+            price_choices.append({
+                "collection_item_id": item.id,
+                "card_id": item.card.id,
+                "name": item.card.name,
+                "set_id": item.card.set_id,
+                "variant": item.variant,
+                "cardmarket": comparison.get("cardmarket"),
+                "tcgplayer": comparison.get("tcgplayer"),
+            })
+
     return {
+        "price_choice_count": len(price_choices),
+        "price_choices": price_choices[:5],
         "total_cards": total_cards,
         "unique_cards": unique_cards,
         "total_value": round(total_value, 2),

@@ -243,7 +243,10 @@
     "legacySnapshot": "Legacy card-only snapshot",
     "portfolioHistory": "Portfolio History",
     "noData": "No data yet",
-    "startSyncHint": "Run a sync to create portfolio snapshots"
+    "startSyncHint": "Run a sync to create portfolio snapshots",
+    "priceChoices": "Prices to decide",
+    "priceChoicesHint": "{count} cards have very different prices between Cardmarket and TCGPlayer.",
+    "priceChoiceAction": "Choose"
   },
   "dashboard": {
     "title": "Dashboard",
