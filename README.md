@@ -28,8 +28,39 @@ Be kind. Be clear. Assume good intent. Keep feedback constructive.
 
 ---
 
+## 🍴 About this fork
+
+This repository is a **personal fork** of [Git-Romer/pokecollector](https://github.com/Git-Romer/pokecollector) by Gilles Romer (AGPLv3). Everything not listed below is the upstream project: the standard documentation (Quick Start, users, environment variables, updating, license) still refers to the upstream repository and its releases. The fork is built from source and is not published to `ghcr.io`.
+
+**Run this fork** (builds the images locally instead of pulling upstream's):
+
+```bash
+git clone -b feat/ui-gallery-dark https://github.com/Babaluca2/pokecollector.git
+cd pokecollector
+cp .env.example .env   # set POSTGRES_PASSWORD
+docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+```
+
+**What this fork adds**
+
+- **Look and feel:** a sober dark "gallery" theme across the whole app, a mobile-friendly home page, and a home entry point to scan a card or search by set name, card name and number (for example `Obsidian Flames Charizard 125`).
+- **Prices:** choose which market counts (Cardmarket or TCGplayer, with USD→EUR conversion) globally and per copy, with a home block listing cards whose markets diverge.
+- **Binders and products:** automatic per-set binders (also after CSV import and scans, plus a catch-up button), opening a sealed product into cards with the cost split across them, and dated sealed-product values with a stale warning.
+- **Languages and artwork:** default languages EN, FR, JA, ZH-CN, ZH-TW, KO; admin tools in Settings to audit missing images, copy artwork from another language, import Simplified Chinese cards and complete Japanese cards; TCGdex data always wins and a sync never erases artwork added from the datasets below.
+- **Set names:** sets that are not in English or French are shown with their English name (original name kept as a tooltip). The table lives in `backend/data/set_names_en.json`; names missing from the datasets were translated by hand and may differ from official ones.
+
+**Third-party data used by the fork** (nothing is bundled except set names; card data and images are downloaded on demand and cached on your server):
+
+- [duanxr/PTCG-CHS-Datasets](https://github.com/duanxr/PTCG-CHS-Datasets): Simplified Chinese cards and images. The README allows non-commercial use only and forbids redistribution, so keep your instance private.
+- [ImLogueybear/PKMNDB](https://github.com/ImLogueybear/PKMNDB): Japanese sets and card images, and English set names. The repository has no licence and its images come from TCG Collector; use it for personal purposes only.
+
+Korean cards still have no image source, and Japanese, Chinese and Korean cards have no automatic prices (manual price or the optional cross-language fallback).
+
+---
+
 ## 📑 Table of Contents
 
+- [About this fork](#-about-this-fork)
 - [Features](#-features)
 - [Quick Start](#-quick-start)
 - [Reverse Proxy Authentication](#-reverse-proxy-authentication)
@@ -470,6 +501,8 @@ PokéCollector is self-hosted, but it can call these external sources depending 
 | Frankfurter | `api.frankfurter.dev` | Currency exchange rates | Currency conversion and Telegram price formatting when non-EUR values are needed |
 | PokéCollector supporter registry | `pokecollector.romerg.de` | Strictly limited public supporter names, profile links, crowns, and aggregated support details | The self-hosted backend fetches the public registry when the Settings Community view is opened; there is no recurring polling |
 | GitHub | `api.github.com`, `raw.githubusercontent.com`, `avatars.githubusercontent.com`, `github.com` | Community contributor data, historic rescue-donation data, GitHub avatars, project links, and release/source links | Settings community section and linked project metadata |
+| duanxr/PTCG-CHS-Datasets (fork) | `raw.githubusercontent.com` | Simplified Chinese card data and images | Only when an admin runs the CN import; images are fetched on display and cached |
+| ImLogueybear/PKMNDB (fork) | `raw.githubusercontent.com`, `pub-54a82c9e988c459da62f95d0bd9c78d9.r2.dev` | Japanese sets and card images | Only when an admin runs the JP import; images are fetched on display and cached |
 | Betterplace | `www.betterplace.org` | Direct animal-rescue donation campaign | Browser opens the outbound campaign link only; self-hosted instances do not call the Betterplace API |
 | Cardmarket | `www.cardmarket.com` | Product/search links for cards | Browser opens outbound links only; PokéCollector does not call a Cardmarket API |
 
