@@ -5,6 +5,7 @@ import {
   RefreshCw, LogOut,
   Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, Trophy, ListOrdered, Info, Layers3,
 } from 'lucide-react'
+import HomeQuickAdd from '../components/HomeQuickAdd'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
 } from 'recharts'
@@ -283,6 +284,7 @@ export default function HomeScreen() {
 
           {/* ── Left: value, chart, navigation ── */}
           <div className="flex flex-col gap-10 min-w-0">
+            <HomeQuickAdd />
             <section>
               <div className="flex gap-5 mb-2" role="group" aria-label={t('home.portfolioDisplayMode')}>
                 {[

@@ -246,7 +246,11 @@
     "startSyncHint": "Run a sync to create portfolio snapshots",
     "priceChoices": "Prices to decide",
     "priceChoicesHint": "{count} cards have very different prices between Cardmarket and TCGPlayer.",
-    "priceChoiceAction": "Choose"
+    "priceChoiceAction": "Choose",
+    "quickAdd": "Add a card",
+    "scan": "Scan",
+    "or": "or",
+    "quickSearchPlaceholder": "Set name, card name, number (e.g. Obsidian Flames Charizard 125)"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -1437,7 +1441,11 @@
     "importChs": "Import Chinese (CN) cards",
     "importChsRunning": "Importing…",
     "importChsResult": "{{sets}} sets, {{cards}} cards imported",
-    "importChsError": "Import failed"
+    "importChsError": "Import failed",
+    "importJp": "Complete Japanese (JP) cards",
+    "importJpRunning": "Importing…",
+    "importJpResult": "{{filled}} images added, {{sets}} sets and {{cards}} cards created",
+    "importJpError": "Import failed"
   },
   "publicProfiles": {
     "directory": "Public profiles",

@@ -125,7 +125,11 @@
     "startSyncHint": "Lancez une synchronisation pour créer un instantané du portefeuille",
     "priceChoices": "Prix à trancher",
     "priceChoicesHint": "{count} cartes ont des prix très différents entre Cardmarket et TCGPlayer.",
-    "priceChoiceAction": "Choisir"
+    "priceChoiceAction": "Choisir",
+    "quickAdd": "Ajouter une carte",
+    "scan": "Scanner",
+    "or": "ou",
+    "quickSearchPlaceholder": "Nom du set, de la carte, numéro (ex. Flammes Obsidiennes Dracaufeu 125)"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -849,7 +853,11 @@
     "importChs": "Importer les cartes chinoises (CN)",
     "importChsRunning": "Import en cours…",
     "importChsResult": "{{sets}} sets, {{cards}} cartes importés",
-    "importChsError": "Import impossible"
+    "importChsError": "Import impossible",
+    "importJp": "Compléter les cartes japonaises (JP)",
+    "importJpRunning": "Import en cours…",
+    "importJpResult": "{{filled}} images ajoutées, {{sets}} sets et {{cards}} cartes créés",
+    "importJpError": "Import impossible"
   },
   "period": {
     "label": "Période",

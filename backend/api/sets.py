@@ -181,6 +181,22 @@ def import_chs(
         raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
 
 
+@router.post("/import-jp")
+def import_jp(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Admin: fill Japanese artwork and add missing JP sets from PKMNDB."""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    from services.jp_import import import_jp_cards
+
+    try:
+        return import_jp_cards(db)
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
+
+
 @router.post("/image-repair")
 def repair_images(
     db: Session = Depends(get_db),

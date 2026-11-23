@@ -52,6 +52,50 @@ router = APIRouter()
 _CODE_NUMBER_RE = re.compile(r'^([A-Za-z0-9]+)\s+(\d+)$')
 
 
+_TRAILING_NUMBER_RE = re.compile(r"^(.*?)\s+(\d{1,4})(?:\s*/\s*\d{1,4})?$")
+
+
+def _parse_smart_query(db: Session, user, term: str, lang: str):
+    """Split "obsidian flames charizard 125" into set ids, card name and number.
+
+    Returns None when the term has no recognisable set name or trailing number,
+    or when the split would match no card (the caller then keeps the plain
+    name search).
+    """
+    text = term.strip()
+    number = None
+    m = _TRAILING_NUMBER_RE.match(text)
+    if m and m.group(1).strip():
+        text, number = m.group(1).strip(), m.group(2)
+    set_ids: list[str] = []
+    lowered = text.lower()
+    best = ""
+    for row in db.query(Set.name, Set.tcg_set_id).filter(visible_set_filter(db, user.id, lang)).all():
+        name = (row[0] or "").strip().lower()
+        if len(name) >= 3 and name in lowered and len(name) > len(best):
+            best = name
+    if best:
+        set_ids = [
+            r[0] for r in db.query(Set.tcg_set_id)
+            .filter(func.lower(Set.name) == best, visible_set_filter(db, user.id, lang)).all()
+            if r[0]
+        ]
+        text = re.sub(re.escape(best), " ", lowered, count=1).strip()
+        text = re.sub(r"\s+", " ", text)
+    if not set_ids and number is None:
+        return None
+    probe = db.query(Card.id).filter(Card.is_custom == False, visible_card_filter(db, user.id, lang))  # noqa: E712
+    if set_ids:
+        probe = probe.filter(Card.set_id.in_(set_ids))
+    if text:
+        probe = probe.filter(accent_insensitive_contains(db, Card.name, text))
+    if number:
+        probe = probe.filter(card_number_filter(Card.number, number))
+    if probe.first() is None:
+        return None
+    return {"set_ids": set_ids, "name": text, "number": number}
+
+
 def _card_to_dict(card: Card, current_user_id: int | None = None) -> dict:
     """Convert a Card ORM object to a dict matching the search result format."""
     set_ref = getattr(card, 'set_ref', None)
@@ -648,7 +692,15 @@ def search_cards(
                 # card names such as "151 025" reachable.
 
         # ── Pure DB search ────────────────────────────────────────────────────
+        smart = _parse_smart_query(db, current_user, search_term, search_lang) if search_term and not number else None
+        smart_set_ids = None
+        if smart:
+            search_term = smart["name"] or None
+            number = smart["number"]
+            smart_set_ids = smart["set_ids"]
         query = db.query(Card).filter(Card.is_custom == False, visible_card_filter(db, current_user.id, search_lang))
+        if smart_set_ids:
+            query = query.filter(Card.set_id.in_(smart_set_ids))
 
         if search_term:
             query = query.filter(accent_insensitive_contains(db, Card.name, search_term))

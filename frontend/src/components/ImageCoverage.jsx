@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getImageCoverage, importChsCards, repairImages } from '../api/client'
+import { getImageCoverage, importChsCards, importJpCards, repairImages } from '../api/client'
 import { useSettings } from '../contexts/SettingsContext'
 
 /** Compact audit of cards that have no artwork, per language and per set. */
@@ -8,6 +8,14 @@ export default function ImageCoverage() {
   const queryClient = useQueryClient()
   const importChs = useMutation({
     mutationFn: importChsCards,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['image-coverage'] })
+      queryClient.invalidateQueries({ queryKey: ['sets'] })
+      queryClient.invalidateQueries({ queryKey: ['cards'] })
+    },
+  })
+  const importJp = useMutation({
+    mutationFn: importJpCards,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['image-coverage'] })
       queryClient.invalidateQueries({ queryKey: ['sets'] })
@@ -40,6 +48,15 @@ export default function ImageCoverage() {
         <button type="button" className="btn-secondary text-xs" disabled={importChs.isPending} onClick={() => importChs.mutate()}>
           {importChs.isPending ? t('settings.importChsRunning') : t('settings.importChs')}
         </button>
+        <button type="button" className="btn-secondary text-xs" disabled={importJp.isPending} onClick={() => importJp.mutate()}>
+          {importJp.isPending ? t('settings.importJpRunning') : t('settings.importJp')}
+        </button>
+        {importJp.data && (
+          <span className="text-xs text-text-muted">
+            {t('settings.importJpResult', { filled: importJp.data.filled, sets: importJp.data.sets, cards: importJp.data.cards })}
+          </span>
+        )}
+        {importJp.isError && <span className="text-xs text-red">{t('settings.importJpError')}</span>}
         {importChs.data && (
           <span className="text-xs text-text-muted">
             {t('settings.importChsResult', { sets: importChs.data.sets, cards: importChs.data.cards })}
