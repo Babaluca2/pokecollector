@@ -165,6 +165,19 @@ def mark_sets_seen(
     return {"message": "All new sets marked as seen"}
 
 
+@router.post("/image-repair")
+def repair_images(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Admin: fill missing artwork from the same card in another language."""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    from services.image_repair import repair_missing_images
+
+    return repair_missing_images(db)
+
+
 @router.get("/image-coverage")
 def get_image_coverage(
     only_missing: bool = Query(default=True, description="List only sets that have missing images"),

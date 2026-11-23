@@ -237,6 +237,7 @@ export const getDeckProbability = (deckId, params = {}) => api.get(`/decks/${dec
 // Sets
 export const syncAutoBinders = () => api.post('/binders/sync-auto').then(r => r.data)
 export const getUsdEurRate = () => api.get('/settings/usd-eur-rate').then(r => r.data?.rate ?? null)
+export const repairImages = () => api.post('/sets/image-repair').then(r => r.data)
 export const getImageCoverage = () => api.get('/sets/image-coverage').then(r => r.data)
 export const getSets = (params) => api.get('/sets/', { params })
 export const getSet = (id) => api.get(`/sets/${id}`)

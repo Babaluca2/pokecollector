@@ -48,5 +48,33 @@ class ImageCoverageTests(unittest.TestCase):
         db.close()
 
 
+
+@unittest.skipUnless(DEPS, "FastAPI/httpx are not installed")
+class ImageRepairTests(unittest.TestCase):
+    def test_copies_artwork_from_a_sibling_language(self):
+        from sqlalchemy import create_engine
+        from sqlalchemy.orm import sessionmaker
+        from sqlalchemy.pool import StaticPool
+        from database import Base
+        from models import Card
+        from services.image_repair import repair_missing_images
+
+        engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+        Base.metadata.create_all(engine)
+        db = sessionmaker(bind=engine)()
+        db.add_all([
+            Card(id="x-1_en", tcg_card_id="x-1", name="n", set_id="x", lang="en", images_small="http://i/en.png"),
+            Card(id="x-1_ko", tcg_card_id="x-1", name="n", set_id="x", lang="ko"),
+            Card(id="y-1_ko", tcg_card_id="y-1", name="m", set_id="y", lang="ko"),
+        ])
+        db.commit()
+        result = repair_missing_images(db)
+        self.assertEqual(result, {"checked": 2, "repaired": 1, "still_missing": 1})
+        ko = db.query(Card).filter(Card.id == "x-1_ko").one()
+        self.assertEqual(ko.images_small, "http://i/en.png")
+        self.assertEqual(ko.image_source_lang, "en")
+        db.close()
+
+
 if __name__ == "__main__":
     unittest.main()

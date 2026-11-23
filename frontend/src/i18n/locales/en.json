@@ -1430,7 +1430,10 @@
     "priceDivergenceDesc": "Ask which price to keep when Cardmarket and TCGPlayer differ by at least this much",
     "imageCoverage": "Missing images",
     "imageCoverageDesc": "Cards with no artwork at all, per language.",
-    "imageCoverageWorst": "Sets with the most missing images"
+    "imageCoverageWorst": "Sets with the most missing images",
+    "imageRepair": "Fill from another language",
+    "imageRepairRunning": "Repairing…",
+    "imageRepairResult": "{{repaired}} fixed, {{remaining}} still without image"
   },
   "publicProfiles": {
     "directory": "Public profiles",

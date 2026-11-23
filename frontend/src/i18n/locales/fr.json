@@ -842,7 +842,10 @@
     "priceDivergenceDesc": "Demander quel prix garder quand Cardmarket et TCGPlayer diffèrent d'au moins ce pourcentage",
     "imageCoverage": "Images manquantes",
     "imageCoverageDesc": "Cartes sans aucune image, par langue.",
-    "imageCoverageWorst": "Sets avec le plus d'images manquantes"
+    "imageCoverageWorst": "Sets avec le plus d'images manquantes",
+    "imageRepair": "Réparer avec une autre langue",
+    "imageRepairRunning": "Réparation…",
+    "imageRepairResult": "{{repaired}} réparées, {{remaining}} sans image"
   },
   "period": {
     "label": "Période",
