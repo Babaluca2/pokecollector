@@ -427,6 +427,7 @@ class ProductPurchase(Base):
     product_type = Column(String)  # Booster, Display, ETB, Tin, Bundle, etc.
     purchase_price = Column(Float, nullable=False)
     current_value = Column(Float)
+    value_updated_at = Column(Date)  # when current_value was last set by hand
     sold_price = Column(Float)
     purchase_date = Column(Date, nullable=False)
     sold_date = Column(Date)

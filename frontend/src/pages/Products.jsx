@@ -765,6 +765,12 @@ function ProductCardsModal({
   )
 }
 
+const STALE_VALUE_DAYS = 30
+function isValueStale(isoDate) {
+  const updated = Date.parse(isoDate)
+  return Number.isFinite(updated) && Date.now() - updated > STALE_VALUE_DAYS * 86400000
+}
+
 export default function Products() {
   const { t, formatPrice, pricePrimaryField } = useSettings()
   const confirmDialog = useConfirmDialog()
@@ -1306,6 +1312,11 @@ export default function Products() {
                           {p.value_source === 'purchase_cost_fallback' && <p className="text-[10px] text-text-muted">{t('products.costFallback')}</p>}
                           {p.value_source === 'opened_unlinked' && <p className="text-[10px] text-text-muted">{t('products.openedUnlinked')}</p>}
                           {p.value_source === 'needs_review' && <p className="text-[10px] text-amber-400">{t('products.excludedUntilReviewed')}</p>}
+                          {p.value_source === 'manual_current' && p.value_updated_at && (
+                            <p className={clsx('text-[10px]', isValueStale(p.value_updated_at) ? 'text-amber-400' : 'text-text-muted')}>
+                              {(isValueStale(p.value_updated_at) ? t('products.valueStale') : t('products.valueDated')).replace('{date}', p.value_updated_at)}
+                            </p>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-right font-medium">
                           {p.pnl !== null ? (

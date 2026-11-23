@@ -1051,7 +1051,9 @@
     "openAllocation_none_help": "Cards are added with no purchase price.",
     "openConfirm": "Add {count} cards and mark as opened",
     "opened": "Product opened, cards added",
-    "openFailed": "Could not open this product"
+    "openFailed": "Could not open this product",
+    "valueDated": "Value set on {date}",
+    "valueStale": "Value from {date}, worth checking"
   },
   "trades": {
     "title": "Trades",

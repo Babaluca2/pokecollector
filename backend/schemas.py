@@ -626,6 +626,7 @@ class ProductPurchaseResponse(BaseModel):
     product_type: Optional[str] = None
     purchase_price: float
     current_value: Optional[float] = None
+    value_updated_at: Optional[date] = None
     sold_price: Optional[float] = None
     purchase_date: date
     sold_date: Optional[date] = None

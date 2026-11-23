@@ -425,6 +425,7 @@ def _run_migrations(conn):
         # v54: Explicit product lifecycle. Legacy products without enough
         # provenance are held for review instead of being assumed sealed.
         "ALTER TABLE product_purchases ADD COLUMN IF NOT EXISTS lifecycle_status VARCHAR",
+        "ALTER TABLE product_purchases ADD COLUMN IF NOT EXISTS value_updated_at DATE",
         """UPDATE product_purchases
            SET lifecycle_status = CASE
                WHEN EXISTS (

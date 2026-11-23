@@ -562,7 +562,9 @@
     "openAllocation_none_help": "Les cartes sont ajoutées sans prix d'achat.",
     "openConfirm": "Ajouter {count} cartes et marquer comme ouvert",
     "opened": "Produit ouvert, cartes ajoutées",
-    "openFailed": "Impossible d'ouvrir ce produit"
+    "openFailed": "Impossible d'ouvrir ce produit",
+    "valueDated": "Valeur du {date}",
+    "valueStale": "Valeur du {date}, à vérifier"
   },
   "settings": {
     "title": "Paramètres",

@@ -137,6 +137,7 @@ def _new_product_purchase(
         product_type=product.product_type,
         purchase_price=product.purchase_price,
         current_value=product.current_value,
+        value_updated_at=datetime.date.today() if product.current_value is not None else None,
         sold_price=product.sold_price,
         purchase_date=product.purchase_date,
         sold_date=product.sold_date,
@@ -291,6 +292,7 @@ def _product_response(
         product_type=product.product_type,
         purchase_price=product.purchase_price,
         current_value=product.current_value,
+        value_updated_at=product.value_updated_at,
         sold_price=product.sold_price,
         purchase_date=product.purchase_date,
         sold_date=product.sold_date,
@@ -620,6 +622,8 @@ def update_product(
             value = _normalize_image_url(value)
         elif field == "cardmarket_url":
             value = _normalize_cardmarket_url(value)
+        elif field == "current_value" and value != product.current_value:
+            product.value_updated_at = datetime.date.today() if value is not None else None
         setattr(product, field, value)
 
     if previous_image_url != product.image_url:
