@@ -314,20 +314,18 @@ export default function Binders() {
                       onCancel={() => setEditingId(null)} loading={updateMutation.isPending} />
                   </div>
                 ) : (
-                  <div className="card cursor-pointer hover:border-opacity-50 group relative"
-                    style={{ borderColor: `${binder.color}30` }}
+                  <div className="card cursor-pointer hover:border-brand-red/40 group relative"
                     onClick={() => navigate(isDeck ? `/decks/${binder.id}` : `/binders/${binder.id}`)}>
-                    <div className="absolute top-0 left-0 right-0 h-1 rounded-t-xl" style={{ backgroundColor: binder.color }} />
-                    <div className="pt-2">
+                    <div>
                       {binder.icon_pokemon_id ? (
                         <img src={`${SPRITE_BASE_URL}/${binder.icon_pokemon_id}.gif`} alt="" className="max-h-10 max-w-10 object-contain mb-2 pixelated" loading="lazy" />
                       ) : (
-                        <TypeIcon size={32} className="mb-3" style={{ color: binder.color }} />
+                        <TypeIcon size={20} className="mb-3 text-text-muted" aria-hidden="true" />
                       )}
-                      <h3 className="mb-1 truncate pr-10 text-sm font-semibold text-text-primary">{binder.name}</h3>
+                      <h3 className="mb-1 truncate pr-16 font-serif text-base text-text-primary">{binder.name}</h3>
                       <div className="mt-1.5">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
-                          isRealDeck ? 'bg-green/20 text-green' : isPlannedDeck ? 'bg-purple-500/20 text-purple-300' : isWishlist ? 'bg-yellow/20 text-yellow' : 'bg-blue/20 text-blue'
+                        <span className={`inline-flex items-center gap-1 text-xs ${
+                          'text-text-muted'
                         }`}>
                           <TypeIcon size={11} /> {isRealDeck ? t('binderTypes.realDeck') : isPlannedDeck ? t('binderTypes.plannedDeck') : isWishlist ? t('binderTypes.planned') : t('binderTypes.collection')}
                         </span>
@@ -389,10 +387,10 @@ export default function Binders() {
                       )}
                     </div>
 
-                    <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-3 right-3 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
                       <button onClick={(e) => { e.stopPropagation(); setEditingId(binder.id) }}
-                        className="text-text-muted hover:text-text-primary bg-bg/80 rounded p-1 transition-colors">
-                        <Edit2 size={12} />
+                        className="grid h-9 w-9 place-items-center text-text-muted hover:text-text-primary bg-bg/80 rounded transition-colors" aria-label={`${t('common.edit')}: ${binder.name}`}>
+                        <Edit2 size={14} />
                       </button>
                       <button onClick={async (e) => {
                         e.stopPropagation()
@@ -403,9 +401,9 @@ export default function Binders() {
                           destructive: true,
                         })
                         if (confirmed) deleteMutation.mutate(binder.id)
-                      }} className="text-text-muted hover:text-brand-red bg-bg/80 rounded p-1 transition-colors"
+                      }} className="grid h-9 w-9 place-items-center text-text-muted hover:text-brand-red bg-bg/80 rounded transition-colors"
                         aria-label={`${t('common.delete')}: ${binder.name}`}>
-                        <Trash2 size={12} />
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </div>
