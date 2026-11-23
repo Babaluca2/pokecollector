@@ -156,8 +156,6 @@ input:-webkit-autofill:focus {
   /* ── Card — glass morphism ── */
   .card, .card-hover {
     background: var(--color-card);
-    
-    -webkit-
     border: 1px solid var(--color-border);
     border-radius: 10px;
     padding: 1rem;
@@ -171,8 +169,6 @@ input:-webkit-autofill:focus {
   }
   .card-surface {
     background: var(--color-surface);
-    
-    -webkit-
     border: 1px solid var(--color-border);
     border-radius: 10px;
     padding: 1rem;
