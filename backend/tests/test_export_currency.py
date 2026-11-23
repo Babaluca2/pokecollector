@@ -28,6 +28,10 @@ class _Query:
     def all(self):
         return self.rows
 
+    def first(self):
+        # Settings lookups (price market, statistic) find nothing: defaults apply.
+        return None
+
 
 class _Database:
     def __init__(self, rows):
@@ -70,7 +74,7 @@ class ExportCurrencyTests(unittest.TestCase):
     def test_csv_uses_database_rate_instead_of_client_supplied_rate(self):
         with patch("api.export.get_exchange_rate", create=True, return_value={"rate": 7.46}):
             with patch("api.export.visible_any_card_filter", return_value=True), \
-                 patch("api.export.effective_market_price", return_value=10.0):
+                 patch("api.export.build_price_context", return_value=SimpleNamespace(price=lambda _item: 10.0)):
                 response = export_api.export_csv(
                     currency="DKK",
                     exchange_rate=1.0,

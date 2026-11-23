@@ -33,6 +33,8 @@ const DEFAULT_SETTINGS = {
   language: 'en',
   price_display: '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
   price_primary: 'trend',
+  price_market: 'cardmarket',
+  price_divergence_pct: '40',
   portfolio_display_mode: 'portfolio_value',
   tcgdex_sync_languages: 'en,de',
   tcgdex_digital_sets_enabled: 'true',

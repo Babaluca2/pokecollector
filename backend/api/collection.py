@@ -40,6 +40,7 @@ from services.printing_detail_tags import (
     printing_detail_keys,
 )
 from services.card_values import effective_market_price, normalize_price_field
+from services.price_context import build_price_context
 from services.product_sources import annotate_product_sources, product_sources_by_collection_item
 import datetime
 import csv
@@ -141,7 +142,27 @@ def _annotate_collection_items(db: Session, current_user: User, items: list[Coll
         item.available_quantity = max(int(item.quantity or 0) - allocated, 0)
     _annotate_standard_legality(items, _collection_standard_legal_fingerprints(db))
     _annotate_scan_photos(db, current_user, items)
+    _annotate_price_choice(db, current_user, items)
     return annotate_product_sources(db, current_user, items)
+
+
+def _annotate_price_choice(db: Session, current_user: User, items: list[CollectionItem]) -> list[CollectionItem]:
+    """Expose both market prices and the market used, plus whether a choice is pending."""
+    price_ctx = build_price_context(db, current_user.id)
+    for item in items:
+        if not item.card:
+            item.price_comparison = None
+            item.price_used_market = None
+            item.effective_price = None
+            item.needs_price_choice = False
+            continue
+        comparison = price_ctx.comparison(item)
+        item.price_comparison = comparison
+        price, market = price_ctx.resolve(item)
+        item.price_used_market = market
+        item.effective_price = round(price, 4)
+        item.needs_price_choice = bool(comparison["diverges"] and item.price_source is None)
+    return items
 
 
 def _annotate_collection_item(db: Session, current_user: User, item: CollectionItem) -> CollectionItem:
@@ -308,6 +329,13 @@ def _upsert_collection_item(
         CollectionItem.purchase_price == item.purchase_price,
         CollectionItem.user_id == current_user.id,
     )
+    if item.price_source is not None:
+        # An explicit valuation choice only merges into a copy with the same choice.
+        candidates_query = candidates_query.filter(
+            CollectionItem.price_source == item.price_source,
+            CollectionItem.price_override.is_(None) if item.price_override is None
+            else CollectionItem.price_override == item.price_override,
+        )
     if requested_tag_keys:
         candidates = candidates_query.all()
         existing = next(
@@ -330,12 +358,38 @@ def _upsert_collection_item(
         variant=item_variant,
         purchase_price=item.purchase_price,
         lang=item_lang,
+        price_source=item.price_source,
+        price_override=item.price_override,
         user_id=current_user.id,
         added_at=datetime.datetime.utcnow(),
     )
     created.printing_detail_tags = requested_tags
     db.add(created)
     return "added", created
+
+
+def _normalize_price_choice_update(update_data: dict, item: CollectionItem) -> None:
+    """Keep price_source/price_override consistent when a valuation choice changes.
+
+    Valuation choices do not change which physical copy a row represents, so they
+    are allowed even while the row is linked to a product.
+    """
+    if "price_source" not in update_data and "price_override" not in update_data:
+        return
+    if "price_source" not in update_data:
+        # Only an override was sent: that means "use this manual price".
+        if update_data.get("price_override") is None:
+            update_data.pop("price_override", None)
+            return
+        update_data["price_source"] = "manual"
+    source = update_data["price_source"]
+    if source == "manual":
+        override = update_data.get("price_override", item.price_override)
+        if override is None:
+            raise HTTPException(status_code=422, detail="price_override is required when price_source is 'manual'")
+        update_data["price_override"] = override
+    else:
+        update_data["price_override"] = None
 
 
 def _add_collection_item(db: Session, current_user: User, item: CollectionItemCreate, commit: bool = True) -> str:
@@ -882,6 +936,8 @@ def update_collection_item(
             detail="Collection item changed while updating; please try again",
         )
 
+    _normalize_price_choice_update(update_data, item)
+
     active_linked_quantity = _active_product_link_quantity(db, current_user, item.id)
     allocated_quantity = collection_item_allocated_quantity(db, current_user.id, item.id)
     if "quantity" in update_data and update_data["quantity"] is not None:
@@ -1157,8 +1213,9 @@ def get_collection_stats(
     total_cards = sum(item.quantity for item in items)
     unique_cards = len(set(item.card_id for item in items))
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
     total_value = sum(
-        _get_item_price(item, price_field) * item.quantity
+        price_ctx.price(item) * item.quantity
         for item in items
         if item.card
     )

@@ -1397,7 +1397,13 @@
     "min180": "Every 3 hours",
     "min360": "Every 6 hours",
     "min720": "Every 12 hours",
-    "min1440": "Every 24 hours"
+    "min1440": "Every 24 hours",
+    "priceMarket": "Default price market",
+    "priceMarketDesc": "Which market values your cards unless a card has its own choice",
+    "priceMarketCardmarket": "Cardmarket (EUR)",
+    "priceMarketTcgplayer": "TCGPlayer (USD, converted)",
+    "priceDivergence": "Price gap warning",
+    "priceDivergenceDesc": "Ask which price to keep when Cardmarket and TCGPlayer differ by at least this much"
   },
   "publicProfiles": {
     "directory": "Public profiles",
@@ -1909,5 +1915,25 @@
     "traderDesc": "Sell 10 products",
     "rareFinder": "Rare Finder",
     "rareFinderDesc": "Own an Illustration Rare card"
+  },
+  "priceChoice": {
+    "title": "Prices differ",
+    "message": "{name}: Cardmarket and TCGPlayer differ by {percent}%. Which price should be used for this card?",
+    "cardmarket": "Cardmarket",
+    "tcgplayer": "TCGPlayer",
+    "default": "Default",
+    "manualLabel": "Or enter your own price",
+    "useManual": "Use this price",
+    "changeLater": "You can change this at any time from the card's Manage tab. Closing keeps the default market.",
+    "keepDefault": "Keep {market} (default)",
+    "saved": "Price choice saved",
+    "saveFailed": "Could not save the price choice",
+    "label": "Price used",
+    "followDefault": "Default market",
+    "manual": "Manual price",
+    "manualPrice": "Manual price",
+    "needsChoice": "Prices differ — choose one",
+    "usedMarket": "Used: {market}",
+    "otherMarket": "{market}: {price}"
   }
 }

@@ -23,6 +23,7 @@ import PrintingDetailBadges from './PrintingDetailBadges'
 import PrintingDetailSelector from './PrintingDetailSelector'
 import ProductSourceList from './ProductSourceList'
 import ActionErrorNotice, { productLinkErrorNotice } from './ActionErrorNotice'
+import { usePriceChoicePrompt } from '../contexts/PriceChoiceContext'
 
 const RARITY_COLORS = {
   'Common': 'text-text-secondary',
@@ -627,13 +628,15 @@ export function CardModal({ card, onClose, onEdit, defaultLang = 'en', ownedItem
     }
   }, [card.id, availableVariantKey, variant])
 
+  const promptPriceChoice = usePriceChoicePrompt()
   const addMutation = useMutation({
     mutationFn: (data) => addToCollection(data),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success(`${t('common.add')} ${quantity}x ${card.name}!`)
       invalidateCardState(queryClient)
       invalidateTcgdexFilterLanguages(queryClient)
       onClose()
+      promptPriceChoice(response?.data)
     },
     onError: () => toast.error(t('card.addFailed')),
   })

@@ -809,7 +809,13 @@
     "min180": "Toutes les 3 heures",
     "min360": "Toutes les 6 heures",
     "min720": "Toutes les 12 heures",
-    "min1440": "Toutes les 24 heures"
+    "min1440": "Toutes les 24 heures",
+    "priceMarket": "Marché de prix par défaut",
+    "priceMarketDesc": "Marché utilisé pour valoriser tes cartes sauf si une carte a son propre choix",
+    "priceMarketCardmarket": "Cardmarket (EUR)",
+    "priceMarketTcgplayer": "TCGPlayer (USD, converti)",
+    "priceDivergence": "Alerte d'écart de prix",
+    "priceDivergenceDesc": "Demander quel prix garder quand Cardmarket et TCGPlayer diffèrent d'au moins ce pourcentage"
   },
   "period": {
     "label": "Période",
@@ -1148,5 +1154,25 @@
     "traderDesc": "Vendez 10 produits",
     "rareFinder": "Chercheur Rare",
     "rareFinderDesc": "Possédez une carte Illustration Rare"
+  },
+  "priceChoice": {
+    "title": "Les prix divergent",
+    "message": "{name} : Cardmarket et TCGPlayer diffèrent de {percent} %. Quel prix retenir pour cette carte ?",
+    "cardmarket": "Cardmarket",
+    "tcgplayer": "TCGPlayer",
+    "default": "Par défaut",
+    "manualLabel": "Ou saisis ton propre prix",
+    "useManual": "Utiliser ce prix",
+    "changeLater": "Tu pourras changer à tout moment dans l'onglet Gérer de la carte. Fermer conserve le marché par défaut.",
+    "keepDefault": "Garder {market} (par défaut)",
+    "saved": "Choix du prix enregistré",
+    "saveFailed": "Impossible d'enregistrer le choix du prix",
+    "label": "Prix retenu",
+    "followDefault": "Marché par défaut",
+    "manual": "Prix manuel",
+    "manualPrice": "Prix manuel",
+    "needsChoice": "Les prix divergent — à choisir",
+    "usedMarket": "Utilisé : {market}",
+    "otherMarket": "{market} : {price}"
   }
 }

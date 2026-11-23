@@ -1,7 +1,20 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Optional, List, Any, Literal, Dict, Annotated
 from datetime import datetime, date
 from services.collection_variants import CollectionVariant
+from services.card_values import normalize_item_price_source
+
+
+def _validate_price_source(value):
+    try:
+        return normalize_item_price_source(value)
+    except ValueError as exc:
+        raise ValueError(str(exc)) from exc
+
+
+def _check_manual_price_pair(price_source, price_override):
+    if price_source == "manual" and price_override is None:
+        raise ValueError("price_override is required when price_source is 'manual'")
 
 
 class SetBase(BaseModel):
@@ -162,6 +175,22 @@ class CollectionItemCreate(BaseModel):
     printing_details: List[str] = Field(default_factory=list, max_length=10)
     purchase_price: Optional[float] = None
     lang: str = "en"  # fixed TCGdex language of this card item
+    # Optional valuation choice for this copy: "cardmarket", "tcgplayer" or
+    # "manual" (then price_override, in EUR, is required).
+    price_source: Optional[str] = None
+    price_override: Optional[float] = Field(default=None, ge=0)
+
+    @field_validator("price_source", mode="before")
+    @classmethod
+    def _normalize_price_source(cls, value):
+        return _validate_price_source(value)
+
+    @model_validator(mode="after")
+    def _check_manual_price(self):
+        _check_manual_price_pair(self.price_source, self.price_override)
+        if self.price_source != "manual":
+            self.price_override = None
+        return self
 
 
 class CollectionItemUpdate(BaseModel):
@@ -171,6 +200,14 @@ class CollectionItemUpdate(BaseModel):
     printing_details: Optional[List[str]] = Field(default=None, max_length=10)
     purchase_price: Optional[float] = None
     lang: Optional[str] = None
+    # Send price_source=null to go back to the user's default market.
+    price_source: Optional[str] = None
+    price_override: Optional[float] = Field(default=None, ge=0)
+
+    @field_validator("price_source", mode="before")
+    @classmethod
+    def _normalize_price_source(cls, value):
+        return _validate_price_source(value)
 
 
 class BulkCollectionAddRequest(BaseModel):
@@ -215,6 +252,17 @@ class CollectionItemResponse(BaseModel):
     # listings stay small.
     has_scan_photo: bool = False
     product_sources: List[CollectionProductSourceResponse] = Field(default_factory=list)
+    # Valuation choice for this copy (None = follows the user's default market).
+    price_source: Optional[str] = None
+    price_override: Optional[float] = None
+    # Both markets in EUR, e.g. {"cardmarket": 4.2, "tcgplayer": 7.9,
+    # "difference_pct": 88.1, "diverges": true}; plus the market actually used.
+    price_comparison: Optional[Dict[str, Any]] = None
+    price_used_market: Optional[str] = None
+    # Unit price in EUR actually used to value this copy (market, pinned market or manual).
+    effective_price: Optional[float] = None
+    # True when the two markets diverge and the user never chose one.
+    needs_price_choice: bool = False
     card: Optional[CardWithSet] = None
 
     class Config:

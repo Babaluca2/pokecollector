@@ -66,3 +66,28 @@ export function getPrimaryCardPrice(card, variant, pricePrimary = 'trend', price
   if (effectivePrice > 0) return effectivePrice
   return getCardPriceValue(card, pricePrimary)
 }
+
+export const PRICE_SOURCES = ['cardmarket', 'tcgplayer', 'manual']
+
+/**
+ * Unit price (EUR) of one owned copy.
+ *
+ * The API values each copy from its pinned market, a manual price, or the
+ * user's default market (`effective_price`). That answer only applies to the
+ * user's saved price statistic, so an explicit different `priceField`
+ * (e.g. sorting by trend) falls back to the Cardmarket card prices.
+ */
+export function getCollectionItemPrice(item, priceField = 'price_trend', primaryField = priceField) {
+  if (!item) return 0
+  const isPrimaryField = priceField === primaryField
+  if (isPrimaryField && item.effective_price != null && Number.isFinite(Number(item.effective_price))) {
+    return Number(item.effective_price)
+  }
+  if (item.price_source === 'manual' && item.price_override != null) return Number(item.price_override)
+  return getEffectiveCardPrice(item.card, item.variant, priceField)
+}
+
+/** True when the item's two market prices differ a lot and the user never chose one. */
+export function needsPriceChoice(item) {
+  return Boolean(item?.needs_price_choice)
+}

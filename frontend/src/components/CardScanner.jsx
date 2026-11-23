@@ -6,6 +6,7 @@ import { recognizeCard, addToCollection, enqueueScanJob, getScannerConfiguration
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSettings } from '../contexts/SettingsContext'
 import { useConfirmDialog } from '../contexts/ConfirmDialogContext'
+import { usePriceChoicePrompt } from '../contexts/PriceChoiceContext'
 import toast from 'react-hot-toast'
 import { CARD_VARIANTS, getDefaultVariant } from '../utils/cardVariants'
 import TcgdexLanguageSelect from './TcgdexLanguageSelect'
@@ -59,6 +60,7 @@ export function ScanAddModal({
   const [purchasePrice, setPurchasePrice] = useState('')
   const [adding, setAdding] = useState(false)
   const queryClient = useQueryClient()
+  const promptPriceChoice = usePriceChoicePrompt()
   const { dialogRef, onDialogKeyDown } = useDialogBehavior(true, onClose)
 
   useEffect(() => {
@@ -98,6 +100,7 @@ export function ScanAddModal({
         getPhoto: retainedPhoto ? () => Promise.resolve(retainedPhoto) : getPhoto,
       })
       invalidateCardState(queryClient)
+      promptPriceChoice(created)
       invalidateTcgdexFilterLanguages(queryClient)
       toast.success(`${match.name} ${t('scanner.addedToCollection')}!`)
       onAdded && onAdded(created)

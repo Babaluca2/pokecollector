@@ -78,6 +78,7 @@ HOLO_EFFECTS_SETTING_KEY = "holo_effects_enabled"
 
 PER_USER_KEYS = {
     "language", "currency", "price_primary", "price_display",
+    "price_market", "price_divergence_pct",
     "set_overview_filters", "hidden_set_ids",
     "telegram_bot_token", "telegram_chat_id", "telegram_enabled",
     "price_alerts_enabled", "price_alert_threshold",
@@ -172,6 +173,8 @@ DEFAULT_SETTINGS = {
     "language": "en",
     "currency": "EUR",
     "price_primary": "trend",
+    "price_market": "cardmarket",
+    "price_divergence_pct": "40",
     "portfolio_display_mode": "portfolio_value",
     "price_display": '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
     "set_overview_filters": "{}",
@@ -207,6 +210,19 @@ def _coerce_setting_value(key: str, value) -> str:
         SCANNER_GEMINI_FALLBACK_SETTING_KEY,
     }:
         return "true" if str(value).lower() in {"true", "1", "yes", "on"} else "false"
+    if key == "price_market":
+        normalized = str(value).strip().lower()
+        if normalized not in {"cardmarket", "tcgplayer"}:
+            raise HTTPException(status_code=422, detail="price_market must be cardmarket or tcgplayer")
+        return normalized
+    if key == "price_divergence_pct":
+        try:
+            pct = float(value)
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=422, detail="price_divergence_pct must be a number")
+        if not 5 <= pct <= 500:
+            raise HTTPException(status_code=422, detail="price_divergence_pct must be between 5 and 500")
+        return f"{pct:g}"
     if key == "portfolio_display_mode":
         normalized = str(value).strip().lower()
         if normalized not in {"portfolio_value", "capital_invested"}:

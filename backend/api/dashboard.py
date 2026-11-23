@@ -5,6 +5,7 @@ from api.collection import _annotate_scan_photos
 from database import get_db
 from models import CollectionItem, Card, Set, PortfolioSnapshot, SyncLog, User
 from services.card_values import effective_market_price, normalize_price_field
+from services.price_context import build_price_context
 from services.card_visibility import visible_any_card_filter, visible_set_filter
 from services.portfolio_valuation import (
     PORTFOLIO_CALCULATION_VERSION,
@@ -24,6 +25,7 @@ def get_dashboard(
 ):
     """Get dashboard statistics."""
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
 
     # Collection stats
     items = db.query(CollectionItem).join(Card, Card.id == CollectionItem.card_id).options(
@@ -60,7 +62,7 @@ def get_dashboard(
     def card_value(item):
         if not item.card:
             return 0
-        return effective_market_price(item.card, item.variant, price_field) * item.quantity
+        return price_ctx.price(item) * item.quantity
 
     top_cards = sorted(
         [item for item in items if item.card],
@@ -71,7 +73,7 @@ def get_dashboard(
     top_cards_data = []
     for item in top_cards:
         card = item.card
-        display_price = effective_market_price(card, item.variant, price_field)
+        display_price = price_ctx.price(item)
         top_cards_data.append({
             "id": card.id,
             "collection_item_id": item.id,
@@ -144,7 +146,7 @@ def get_dashboard(
                 "condition": item.condition,
                 "lang": item.lang,
                 "added_at": item.added_at.isoformat() if item.added_at else None,
-                "price_market": effective_market_price(item.card, item.variant, price_field),
+                "price_market": price_ctx.price(item),
                 "is_custom": item.card.is_custom,
                 "custom_image_url": item.card.custom_image_url,
                 "data_source_lang": item.card.data_source_lang,

@@ -21,7 +21,8 @@ import clsx from 'clsx'
 import { cardImageUrl, hasCatalogueImage, resolveCardImageUrl } from '../utils/imageUrl'
 import { cardNumberMatches } from '../utils/cardNumbers'
 import { normalizeSearchText, textIncludes } from '../utils/textSearch'
-import { getEffectiveCardPrice } from '../utils/prices'
+import { getEffectiveCardPrice, getCollectionItemPrice } from '../utils/prices'
+import { usePriceChoicePrompt } from '../contexts/PriceChoiceContext'
 import TcgdexLanguageSelect from '../components/TcgdexLanguageSelect'
 import { tcgdexLanguageLabel } from '../utils/tcgdexLanguages'
 import { invalidateCardState, invalidateCollectionPhotoState, invalidateTcgdexFilterLanguages } from '../utils/queryInvalidation'
@@ -310,6 +311,9 @@ function CollectionEditModal({ item, onClose }) {
   const [printingDetails, setPrintingDetails] = useState(() => printingDetailNames(item.printing_details))
   const [lang, setLang] = useState(item.lang || 'en')
   const [price, setPrice] = useState(itemPriceInput)
+  // '' = follow the default market; otherwise cardmarket | tcgplayer | manual.
+  const [priceSource, setPriceSource] = useState(item.price_source || '')
+  const [manualPrice, setManualPrice] = useState(formatMoneyInputValue(item.price_override, exchangeRate))
   const [showAddVersionForm, setShowAddVersionForm] = useState(false)
   const [newVersionQuantity, setNewVersionQuantity] = useState(1)
   const [newVersionCondition, setNewVersionCondition] = useState(item.condition || 'NM')
@@ -401,6 +405,11 @@ function CollectionEditModal({ item, onClose }) {
     prevItemRef.current = nextItem
   }, [item.id, item.quantity, item.condition, item.variant, item.lang, item.purchase_price, item.printing_details, itemPriceInput, card?.custom_image_url])
 
+  useEffect(() => {
+    setPriceSource(item.price_source || '')
+    setManualPrice(formatMoneyInputValue(item.price_override, exchangeRate))
+  }, [item.id, item.price_source, item.price_override, exchangeRate])
+
   const { data: binders = [] } = useQuery({
     queryKey: ['binders'],
     queryFn: () => getBinders().then(r => r.data),
@@ -439,6 +448,8 @@ function CollectionEditModal({ item, onClose }) {
       printing_details: printingDetails,
       lang,
       purchase_price: parseMoneyInputValue(price, exchangeRate, null),
+      price_source: priceSource || null,
+      ...(priceSource === 'manual' ? { price_override: parseMoneyInputValue(manualPrice, exchangeRate, null) } : {}),
     }),
     onSuccess: () => {
       setActionError(null)
@@ -472,6 +483,7 @@ function CollectionEditModal({ item, onClose }) {
     },
   })
 
+  const promptPriceChoice = usePriceChoicePrompt()
   const cloneMutation = useMutation({
     mutationFn: () => addToCollection({
       card_id: item.card_id,
@@ -482,11 +494,12 @@ function CollectionEditModal({ item, onClose }) {
       lang: newVersionLang,
       purchase_price: parseMoneyInputValue(newVersionPrice, exchangeRate),
     }),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success(t('collection.versionAdded'))
       invalidateCardState(queryClient)
       invalidateTcgdexFilterLanguages(queryClient)
       onClose()
+      promptPriceChoice(response?.data)
     },
     onError: () => toast.error(t('card.addFailed')),
   })
@@ -590,7 +603,9 @@ function CollectionEditModal({ item, onClose }) {
     )
   )
 
-  const marketPrice = getEffectiveCardPrice(card, item.variant, pricePrimaryField)
+  const marketPrice = getCollectionItemPrice(item, pricePrimaryField)
+  const comparison = item.price_comparison
+  const manualPriceInvalid = priceSource === 'manual' && parseMoneyInputValue(manualPrice, exchangeRate, null) == null
   const dialogTabs = [
     { id: 'overview', label: t('cardTabs.overview') },
     { id: 'prices', label: t('cardTabs.prices') },
@@ -835,6 +850,35 @@ function CollectionEditModal({ item, onClose }) {
                 />
               </div>
 
+              <div className="space-y-2">
+                <label className="text-xs text-text-muted mb-1 block" htmlFor="collection-price-source">{t('priceChoice.label')}</label>
+                <select
+                  id="collection-price-source"
+                  className="select w-full"
+                  value={priceSource}
+                  onChange={e => setPriceSource(e.target.value)}
+                >
+                  <option value="">{t('priceChoice.followDefault')}</option>
+                  <option value="cardmarket">
+                    {t('priceChoice.cardmarket')}{comparison?.cardmarket != null ? ` · ${formatPrice(comparison.cardmarket)}` : ''}
+                  </option>
+                  <option value="tcgplayer">
+                    {t('priceChoice.tcgplayer')}{comparison?.tcgplayer != null ? ` · ${formatPrice(comparison.tcgplayer)}` : ''}
+                  </option>
+                  <option value="manual">{t('priceChoice.manual')}</option>
+                </select>
+                {priceSource === 'manual' && (
+                  <MoneyInput
+                    aria-label={t('priceChoice.manualPrice')}
+                    value={manualPrice}
+                    onChange={e => setManualPrice(e.target.value)}
+                  />
+                )}
+                {item.needs_price_choice && (
+                  <p className="text-xs font-semibold text-yellow">{t('priceChoice.needsChoice')}</p>
+                )}
+              </div>
+
               {canEditCustomImage && (
                 <div className="bg-bg-card rounded-xl p-3 space-y-2 border border-border">
                   {!hasOwnPhoto && (
@@ -913,7 +957,7 @@ function CollectionEditModal({ item, onClose }) {
             <div className="flex gap-2 mt-5">
               <button
                 onClick={() => updateMutation.mutate()}
-                disabled={updateMutation.isPending || !exchangeRateReady}
+                disabled={updateMutation.isPending || !exchangeRateReady || manualPriceInvalid}
                 className="btn-primary flex-1"
               >
                 <Check size={16} /> {updateMutation.isPending ? t('common.saving') : t('common.save')}
@@ -1211,7 +1255,7 @@ export default function Collection() {
   const filtered = useMemo(() => {
     let result = items.filter(item => {
       const card = item.card
-      const marketPrice = getEffectivePrice(card, item.variant)
+      const marketPrice = getCollectionItemPrice(item, pricePrimaryField)
       if (filterRarity && card?.rarity !== filterRarity) return false
       if (filterCondition && item.condition !== filterCondition) return false
       if (filterVariant && item.variant !== filterVariant) return false
@@ -1267,7 +1311,7 @@ export default function Collection() {
         case 'added_at': valA = a.added_at || ''; valB = b.added_at || ''; break
         case 'quantity': valA = a.quantity; valB = b.quantity; break
         case 'purchase_price': valA = a.purchase_price ?? -1; valB = b.purchase_price ?? -1; break
-        case 'market_price': valA = getEffectivePrice(a.card, a.variant); valB = getEffectivePrice(b.card, b.variant); break
+        case 'market_price': valA = getCollectionItemPrice(a, pricePrimaryField); valB = getCollectionItemPrice(b, pricePrimaryField); break
         case 'price_trend': valA = getEffectivePrice(a.card, a.variant, 'price_trend'); valB = getEffectivePrice(b.card, b.variant, 'price_trend'); break
         case 'set': valA = a.card?.set_ref?.name || ''; valB = b.card?.set_ref?.name || ''; break
         case 'card_id': valA = collectionCardIdKey(a); valB = collectionCardIdKey(b); break
@@ -1611,7 +1655,7 @@ export default function Collection() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2">
                 {filtered.map(item => {
                   const card = item.card
-                  const marketPrice = getEffectivePrice(card, item.variant)
+                  const marketPrice = getCollectionItemPrice(item, pricePrimaryField)
                   const cardState = {
                     ...withCollectionItemState(card, item),
                     wishlisted: [
@@ -1682,7 +1726,7 @@ export default function Collection() {
                   <tbody>
                     {filtered.map((item) => {
                       const card = item.card
-                      const marketPrice = getEffectivePrice(card, item.variant)
+                      const marketPrice = getCollectionItemPrice(item, pricePrimaryField)
                       const totalVal = marketPrice * item.quantity
                       const buyTotal = (item.purchase_price || 0) * item.quantity
                       const pnl = item.purchase_price ? totalVal - buyTotal : null
@@ -1768,7 +1812,7 @@ export default function Collection() {
               <div className="md:hidden space-y-2 p-2">
                 {filtered.map((item) => {
                   const card = item.card
-                  const marketPrice = getEffectivePrice(card, item.variant)
+                  const marketPrice = getCollectionItemPrice(item, pricePrimaryField)
                   const totalVal = marketPrice * item.quantity
                   const buyTotal = (item.purchase_price || 0) * item.quantity
                   const pnl = item.purchase_price ? totalVal - buyTotal : null

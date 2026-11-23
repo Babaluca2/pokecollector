@@ -37,6 +37,8 @@ DEFAULT_SETTINGS = {
     "language": "en",
     "price_display": '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
     "price_primary": "trend",
+    "price_market": "cardmarket",
+    "price_divergence_pct": "40",
     "portfolio_display_mode": "portfolio_value",
     "multi_user_mode": "false",
     "tcgdex_sync_languages": "en,de",
@@ -122,6 +124,8 @@ def _run_migrations(conn):
         "ALTER TABLE product_cards ALTER COLUMN variant SET DEFAULT 'Normal'",
         # v32: Add grade column to collection table (PSA/BGS/CGC grade)
         "ALTER TABLE collection ADD COLUMN IF NOT EXISTS grade VARCHAR DEFAULT 'raw'",
+        "ALTER TABLE collection ADD COLUMN IF NOT EXISTS price_source VARCHAR",
+        "ALTER TABLE collection ADD COLUMN IF NOT EXISTS price_override FLOAT",
         # v32: Add ebay_app_id to settings table
         "ALTER TABLE settings ADD COLUMN IF NOT EXISTS ebay_app_id VARCHAR",
         # v41: Add Pokemon avatar selection to users
@@ -1162,6 +1166,7 @@ def init_db():
         if admin:
             per_user_keys = {
                 "language", "currency", "price_primary", "price_display",
+                "price_market", "price_divergence_pct",
                 "telegram_bot_token", "telegram_chat_id", "telegram_enabled",
                 "price_alerts_enabled", "price_alert_threshold",
                 "gemini_api_key", "trainer_name", "portfolio_display_mode",

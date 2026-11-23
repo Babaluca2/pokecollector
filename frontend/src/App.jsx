@@ -11,6 +11,7 @@ import Layout from './components/Layout'
 import { useSettings } from './contexts/SettingsContext'
 import PublicHomeButton from './components/PublicHomeButton'
 import { ConfirmDialogProvider } from './contexts/ConfirmDialogContext'
+import { PriceChoiceProvider } from './contexts/PriceChoiceContext'
 
 const HomeScreen = lazy(() => import('./pages/HomeScreen'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -203,6 +204,7 @@ export default function App() {
       <SettingsProvider>
         <HoloDeviceMotionController />
         <ConfirmDialogProvider>
+          <PriceChoiceProvider>
           <BrowserRouter>
             <Routes>
               {import.meta.env.DEV && <Route path="/__card-system" element={lazyRoute(<CardSystemGallery />)} />}
@@ -218,6 +220,7 @@ export default function App() {
               <Route path="/*" element={<ProtectedRoutes />} />
             </Routes>
           </BrowserRouter>
+          </PriceChoiceProvider>
         </ConfirmDialogProvider>
       </SettingsProvider>
     </AuthProvider>

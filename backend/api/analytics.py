@@ -5,6 +5,7 @@ from api.auth import get_current_user
 from api.collection import _annotate_scan_photos
 from database import get_db
 from services.card_values import effective_market_price, normalize_price_field
+from services.price_context import build_price_context
 from services.card_visibility import visible_any_card_filter, visible_set_filter
 from services.analytics import sort_top_movers
 from services.portfolio_valuation import (
@@ -51,6 +52,7 @@ def get_duplicates(
     ).all()
 
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
     # Each row is exactly one owned CollectionItem (not an aggregate), so the
     # owner's own photo can win over the catalogue scan here the same as on
     # the collection page — needs the same has_scan_photo + nested card shape.
@@ -59,7 +61,7 @@ def get_duplicates(
     result = []
     for item in items:
         if item.card:
-            price = _get_item_price(item, price_field)
+            price = price_ctx.price(item)
             result.append({
                 "id": item.id,
                 "card_id": item.card_id,
@@ -173,6 +175,7 @@ def get_rarity_stats(
     ).all()
 
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
     rarity_counts = {}
     rarity_values = {}
 
@@ -181,7 +184,7 @@ def get_rarity_stats(
             rarity = item.card.rarity or "Unknown"
             rarity_counts[rarity] = rarity_counts.get(rarity, 0) + item.quantity
             rarity_values[rarity] = rarity_values.get(rarity, 0) + (
-                _get_item_price(item, price_field) * item.quantity
+                price_ctx.price(item) * item.quantity
             )
 
     total = sum(rarity_counts.values())

@@ -24,7 +24,7 @@ import toast from 'react-hot-toast'
 import { TCGDEX_LANGUAGES, normalizeTcgdexLanguageCsv, tcgdexLanguageLabel } from '../utils/tcgdexLanguages'
 import { APP_LANGUAGES } from '../utils/appLanguages'
 import { currencyOptionsFor } from '../utils/currencyOptions'
-import { invalidateCollectionPhotoState, invalidateTcgdexFilterLanguages } from '../utils/queryInvalidation'
+import { invalidateCardState, invalidateCollectionPhotoState, invalidateTcgdexFilterLanguages } from '../utils/queryInvalidation'
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -687,6 +687,26 @@ export default function Settings() {
     }
   }
 
+  const handlePriceMarketChange = async (val) => {
+    try {
+      await updateSettings({ price_market: val })
+      invalidateCardState(queryClient)
+      toast.success(t('settings.saved'))
+    } catch {
+      toast.error(t('settings.saveFailed'))
+    }
+  }
+
+  const handlePriceDivergenceChange = async (val) => {
+    try {
+      await updateSettings({ price_divergence_pct: val })
+      invalidateCardState(queryClient)
+      toast.success(t('settings.saved'))
+    } catch {
+      toast.error(t('settings.saveFailed'))
+    }
+  }
+
   const handleTcgdexSyncLanguagesChange = async (val) => {
     try {
       await updateSettings({ tcgdex_sync_languages: normalizeTcgdexLanguageCsv(val) })
@@ -1203,6 +1223,23 @@ export default function Settings() {
                     { value: 'low', label: t('settings.priceLow') },
                   ]}
                   onChange={handlePriceTypeChange}
+                />
+              </SettingsRow>
+              <SettingsRow label={t('settings.priceMarket')} description={t('settings.priceMarketDesc')}>
+                <SelectControl
+                  value={settings.price_market === 'tcgplayer' ? 'tcgplayer' : 'cardmarket'}
+                  options={[
+                    { value: 'cardmarket', label: t('settings.priceMarketCardmarket') },
+                    { value: 'tcgplayer', label: t('settings.priceMarketTcgplayer') },
+                  ]}
+                  onChange={handlePriceMarketChange}
+                />
+              </SettingsRow>
+              <SettingsRow label={t('settings.priceDivergence')} description={t('settings.priceDivergenceDesc')}>
+                <SelectControl
+                  value={String(settings.price_divergence_pct || '40')}
+                  options={['20', '30', '40', '60', '100'].map(pct => ({ value: pct, label: `${pct} %` }))}
+                  onChange={handlePriceDivergenceChange}
                 />
               </SettingsRow>
               <SettingsRow

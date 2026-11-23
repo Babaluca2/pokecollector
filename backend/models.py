@@ -250,6 +250,10 @@ class CollectionItem(Base):
     variant = Column(String, nullable=False, default="Normal")  # Normal/Holo/Reverse Holo/First Edition
     purchase_price = Column(Float)
     lang = Column(String, default="en")  # fixed TCGdex card language
+    # Per-copy valuation choice: NULL follows the user's default market,
+    # otherwise "cardmarket", "tcgplayer" or "manual" (uses price_override, EUR).
+    price_source = Column(String, nullable=True)
+    price_override = Column(Float, nullable=True)
     added_at = Column(DateTime, default=func.now())
 
     card = relationship("Card", back_populates="collection_items")

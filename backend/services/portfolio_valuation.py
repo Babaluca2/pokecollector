@@ -15,6 +15,7 @@ from models import (
     ProductPurchase,
 )
 from services.card_values import effective_market_price, normalize_price_field
+from services.price_context import build_price_context
 from services.card_visibility import visible_card_filter
 from services.product_ledger import product_effective_value, product_lifecycle_status
 
@@ -141,9 +142,10 @@ def calculate_portfolio_valuation(
     """
     price_field = normalize_price_field(price_field)
     items = list(collection_items) if collection_items is not None else _collection_items(db, user_id)
+    price_ctx = build_price_context(db, user_id, price_field=price_field)
 
     card_value = sum(
-        effective_market_price(item.card, item.variant, price_field) * int(item.quantity or 0)
+        price_ctx.price(item) * int(item.quantity or 0)
         for item in items
         if item.card
     )

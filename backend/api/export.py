@@ -3,7 +3,8 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session, joinedload
 from api.auth import get_current_user
 from database import get_db
-from services.card_values import effective_market_price, normalize_price_field
+from services.card_values import normalize_price_field
+from services.price_context import build_price_context
 from services.card_visibility import visible_any_card_filter
 from services.printing_details import format_printing_details_csv
 from services.exchange_rates import (
@@ -56,6 +57,7 @@ def export_csv(
 ):
     """Export collection as CSV in the requested display currency."""
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
     currency, conversion_rate = _export_currency_and_rate(currency)
     items = db.query(CollectionItem).join(Card, Card.id == CollectionItem.card_id).options(
         joinedload(CollectionItem.card).joinedload(Card.set_ref)
@@ -82,7 +84,7 @@ def export_csv(
         if not card:
             continue
         set_name = card.set_ref.name if card.set_ref else ""
-        current_price = effective_market_price(card, item.variant, price_field)
+        current_price = price_ctx.price(item)
         display_current_price = _convert_eur(current_price, conversion_rate)
         display_purchase_price = _convert_eur(item.purchase_price, conversion_rate)
         total_value = round((display_current_price or 0) * item.quantity, 2)
@@ -124,6 +126,7 @@ def export_pdf(
 ):
     """Export collection as PDF in the requested display currency."""
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
     currency, conversion_rate = _export_currency_and_rate(currency)
     try:
         from reportlab.lib import colors
@@ -183,7 +186,7 @@ def export_pdf(
                 continue
             set_name = (card.set_ref.name[:20] if card.set_ref else "")
             current_price = _convert_eur(
-                effective_market_price(card, item.variant, price_field), conversion_rate
+                price_ctx.price(item), conversion_rate
             )
             purchase_price = _convert_eur(item.purchase_price, conversion_rate)
             val = round((current_price or 0) * item.quantity, 2)
