@@ -45,7 +45,7 @@ export default function Login() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg-primary">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(227,0,11,0.18),_transparent_28%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(183,155,99,0.18),_transparent_28%)]" />
       <div className="absolute inset-0 backdrop-blur-[2px]" />
 
       <div className="relative flex min-h-screen items-center justify-center p-4 sm:p-6">
@@ -54,7 +54,7 @@ export default function Login() {
           style={{ backgroundColor: 'rgba(26, 26, 46, 0.78)' }}
         >
           <div className="mb-8 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-text-muted">PokéCollector</p>
+            <p className="text-xs font-semibold   text-text-muted">PokéCollector</p>
             <h1 className="mt-4 text-3xl font-semibold text-text-primary">
               {lastUser && !showSwitchUser ? t('auth.welcomeBack') : t('auth.login')}
             </h1>

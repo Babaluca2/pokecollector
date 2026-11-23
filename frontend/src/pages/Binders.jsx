@@ -122,7 +122,7 @@ function BinderForm({ initial = {}, onSubmit, onCancel, loading }) {
             <button
               type="button"
               onClick={() => setShowIconPicker(true)}
-              className="w-24 h-24 rounded-2xl border border-border bg-bg-surface flex items-center justify-center flex-shrink-0 hover:border-brand-red/50 transition-colors"
+              className="w-24 h-24 rounded-xl border border-border bg-bg-surface flex items-center justify-center flex-shrink-0 hover:border-brand-red/50 transition-colors"
               aria-label={t('binders.chooseIcon')}
               title={t('binders.chooseIcon')}
             >

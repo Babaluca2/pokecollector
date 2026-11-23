@@ -551,7 +551,7 @@ export function CardZoomModal({
           <button
             type="button"
             onClick={() => onAccept(card)}
-            className="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-black text-white transition-all"
+            className="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-semibold text-white transition-all"
             style={{ background: 'var(--color-brand-red)', color: '#19191B', boxShadow: 'none' }}
           >
             <Check size={18} />{t('scanner.acceptMatch')}
@@ -657,7 +657,7 @@ function CandidateGrid({ jobId, itemId, matches, onSelect, onZoom, t }) {
               )}
               {match.printed_total_mismatch && (
                 <span
-                  className="absolute left-1 top-1 rounded border border-amber-400 bg-amber-500/90 px-1 py-0.5 text-[8px] font-black leading-none text-black"
+                  className="absolute left-1 top-1 rounded border border-amber-400 bg-amber-500/90 px-1 py-0.5 text-[8px] font-semibold leading-none text-black"
                   title={t('scanner.printedTotalMismatch')}
                   aria-label={t('scanner.printedTotalMismatch')}
                 >
@@ -744,7 +744,7 @@ export function ScanItemPanel({ jobId, item, onAdd, onRetry, onDismiss, onReview
         type="button"
         onClick={() => setExpanded(true)}
         title={t('scanner.showDetails')}
-        className="flex w-full items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-left transition-colors hover:bg-white/[0.06]"
+        className="flex w-full items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-left transition-colors hover:bg-white/[0.06]"
       >
         <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border border-green/40 bg-green/20">
           <Check size={13} className="text-green" />
@@ -759,7 +759,7 @@ export function ScanItemPanel({ jobId, item, onAdd, onRetry, onDismiss, onReview
   }
 
   return (
-    <article className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+    <article className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
       {photoExpanded && (
         <CardZoomModal card={null} photoUrl={photoUrl} onClose={() => {
           setPhotoExpanded(false)
@@ -780,7 +780,7 @@ export function ScanItemPanel({ jobId, item, onAdd, onRetry, onDismiss, onReview
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">
+              <p className="text-[10px] font-semibold   text-text-muted">
                 {t('scanner.photoNumber')} {item.position + 1}
               </p>
               {item.recognized?.name && (
@@ -849,7 +849,7 @@ export function ScanItemPanel({ jobId, item, onAdd, onRetry, onDismiss, onReview
 
       {item.status === 'done' && item.matches?.length > 0 && (
         <div className="mt-4">
-          <p className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+          <p className="mb-3 text-[10px] font-semibold   text-text-muted">
             {t('scanner.bestMatches')} ({item.matches.length})
           </p>
           <CandidateGrid

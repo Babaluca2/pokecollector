@@ -158,7 +158,7 @@ export default function ScannerSettingsCard({ t }) {
   const busy = saving || testing
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+    <div className="rounded-xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
       <div className="px-4 py-4 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
           <div>

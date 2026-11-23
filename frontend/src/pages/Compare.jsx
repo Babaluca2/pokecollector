@@ -26,7 +26,7 @@ function TrainerAvatar({ avatarId, username }) {
 function StatBlock({ label, value, accent }) {
   return (
     <div className="rounded-xl border border-border bg-bg-primary/70 p-3">
-      <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted">{label}</p>
+      <p className="text-[11px]   text-text-muted">{label}</p>
       <p className={`mt-1 text-lg font-semibold ${accent || 'text-text-primary'}`}>{value}</p>
     </div>
   )
@@ -53,18 +53,18 @@ function TrainerPanel({ trainer, formatPrice, t, onCardClick }) {
         <StatBlock label={t('leaderboard.setsCompleted')} value={Number(trainer?.sets_completed ?? 0).toLocaleString()} />
       </div>
 
-      <div className="rounded-2xl border border-border bg-bg-primary/60 p-4">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-text-muted">{t('leaderboard.pnl')}</p>
-        <p className={`mt-2 text-2xl font-black ${pnl >= 0 ? 'text-green' : 'text-brand-red'}`}>
+      <div className="rounded-xl border border-border bg-bg-primary/60 p-4">
+        <p className="text-[11px]   text-text-muted">{t('leaderboard.pnl')}</p>
+        <p className={`mt-2 text-2xl font-semibold ${pnl >= 0 ? 'text-green' : 'text-brand-red'}`}>
           {pnl >= 0 ? '+' : ''}{formatPrice(pnl)}
         </p>
       </div>
 
       <div>
-        <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-text-muted">{t('leaderboard.bestCard')}</p>
+        <p className="mb-2 text-[11px]   text-text-muted">{t('leaderboard.bestCard')}</p>
         {bestCard ? (
           <CardIdentity
-            className="w-full rounded-2xl border border-border bg-bg-primary/60 p-3"
+            className="w-full rounded-xl border border-border bg-bg-primary/60 p-3"
             card={bestCard}
             image={resolveCardImageUrl(bestCard)}
             name={bestCard.name}
@@ -72,7 +72,7 @@ function TrainerPanel({ trainer, formatPrice, t, onCardClick }) {
             onClick={() => onCardClick(bestCard)}
           />
         ) : (
-          <div className="rounded-2xl border border-border bg-bg-primary/60 p-3 text-sm text-text-muted">-</div>
+          <div className="rounded-xl border border-border bg-bg-primary/60 p-3 text-sm text-text-muted">-</div>
         )}
       </div>
     </div>
@@ -120,7 +120,7 @@ export default function Compare() {
 
       {isLoading ? (
         <div className="space-y-3">
-          {[...Array(3)].map((_, index) => <div key={index} className="skeleton h-48 rounded-2xl" />)}
+          {[...Array(3)].map((_, index) => <div key={index} className="skeleton h-48 rounded-xl" />)}
         </div>
       ) : error ? (
         <div className="card text-sm text-brand-red">{t('compare.loadFailed')}</div>
@@ -131,13 +131,13 @@ export default function Compare() {
 
             <div className="card flex flex-col items-center justify-center gap-4 text-center">
               <div className="relative flex h-44 w-full max-w-[260px] items-center justify-center">
-                <div className="absolute left-4 top-1/2 flex h-28 w-28 -translate-y-1/2 items-center justify-center rounded-full border border-blue/30 bg-blue/10 text-3xl font-black text-blue">
+                <div className="absolute left-4 top-1/2 flex h-28 w-28 -translate-y-1/2 items-center justify-center rounded-full border border-blue/30 bg-blue/10 text-3xl font-semibold text-blue">
                   {data.only_a}
                 </div>
-                <div className="absolute right-4 top-1/2 flex h-28 w-28 -translate-y-1/2 items-center justify-center rounded-full border border-brand-red/30 bg-brand-red/10 text-3xl font-black text-brand-red">
+                <div className="absolute right-4 top-1/2 flex h-28 w-28 -translate-y-1/2 items-center justify-center rounded-full border border-brand-red/30 bg-brand-red/10 text-3xl font-semibold text-brand-red">
                   {data.only_b}
                 </div>
-                <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border border-yellow/30 bg-yellow/10 text-3xl font-black text-yellow">
+                <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border border-yellow/30 bg-yellow/10 text-3xl font-semibold text-yellow">
                   {data.overlap}
                 </div>
               </div>
@@ -147,7 +147,7 @@ export default function Compare() {
                 <StatBlock label={t('compare.onlyA')} value={Number(data.only_a ?? 0).toLocaleString()} accent="text-blue" />
                 <StatBlock label={t('compare.onlyB')} value={Number(data.only_b ?? 0).toLocaleString()} accent="text-brand-red" />
                 <div>
-                  <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-text-muted">{t('compare.overlap')}</p>
+                  <p className="mb-2 text-[11px]   text-text-muted">{t('compare.overlap')}</p>
                   <div className="h-2 overflow-hidden rounded-full bg-bg-primary">
                     <div className="h-full rounded-full bg-yellow transition-all" style={{ width: `${overlapRatio}%` }} />
                   </div>
@@ -167,7 +167,7 @@ export default function Compare() {
             {data.trade_suggestions?.length ? (
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {data.trade_suggestions.map((trade) => (
-                  <div key={`${trade.card_id}-${trade.owner_username}-${trade.wants_username}`} className="rounded-2xl border border-border bg-bg-primary/60 p-3">
+                  <div key={`${trade.card_id}-${trade.owner_username}-${trade.wants_username}`} className="rounded-xl border border-border bg-bg-primary/60 p-3">
                     <CardIdentity
                       className="w-full"
                       card={trade}
@@ -180,7 +180,7 @@ export default function Compare() {
                 ))}
               </div>
             ) : (
-              <div className="rounded-2xl border border-dashed border-border bg-bg-primary/50 p-6 text-center text-text-muted">
+              <div className="rounded-xl border border-dashed border-border bg-bg-primary/50 p-6 text-center text-text-muted">
                 {t('compare.noTrades')}
               </div>
             )}

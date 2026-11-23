@@ -214,7 +214,7 @@ function CsvImportModal({ t, onClose, onChooseFile, onDownloadTemplate, isImport
         className={[
           'fixed bottom-0 left-0 right-0 rounded-t-2xl max-h-[90dvh] overflow-y-auto',
           'bg-bg-surface border-t border-border more-sheet-enter',
-          'md:static md:rounded-2xl md:border md:max-w-lg md:w-full md:max-h-[85vh] md:animate-none',
+          'md:static md:rounded-xl md:border md:max-w-lg md:w-full md:max-h-[85vh] md:animate-none',
         ].join(' ')}
         onClick={e => e.stopPropagation()}
       >
@@ -617,7 +617,7 @@ function CollectionEditModal({ item, onClose }) {
   const ownPhotoControls = (
     <div className="space-y-2">
       <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-text-muted">
+        <p className="text-xs font-medium  tracking-wide text-text-muted">
           {t('collection.ownPhotoLabel')}
         </p>
         <p className="mt-1 text-xs text-text-secondary">{t('collection.ownPhotoDesc')}</p>
@@ -748,15 +748,15 @@ function CollectionEditModal({ item, onClose }) {
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl border border-border bg-bg-card p-3">
                 <p className="text-xs text-text-muted">{t('collection.marketPrice')}</p>
-                <p className="mt-1 text-xl font-black text-green">{marketPrice > 0 ? formatPrice(marketPrice) : '—'}</p>
+                <p className="mt-1 text-xl font-semibold text-green">{marketPrice > 0 ? formatPrice(marketPrice) : '—'}</p>
               </div>
               <div className="rounded-xl border border-border bg-bg-card p-3">
                 <p className="text-xs text-text-muted">{t('collection.buyPrice')}</p>
-                <p className="mt-1 text-xl font-black text-text-primary">{item.purchase_price ? formatPrice(item.purchase_price) : '—'}</p>
+                <p className="mt-1 text-xl font-semibold text-text-primary">{item.purchase_price ? formatPrice(item.purchase_price) : '—'}</p>
               </div>
               <div className="rounded-xl border border-border bg-bg-card p-3">
                 <p className="text-xs text-text-muted">{t('collection.totalVal')}</p>
-                <p className="mt-1 text-xl font-black text-text-primary">{marketPrice > 0 ? formatPrice(marketPrice * item.quantity) : '—'}</p>
+                <p className="mt-1 text-xl font-semibold text-text-primary">{marketPrice > 0 ? formatPrice(marketPrice * item.quantity) : '—'}</p>
               </div>
             </div>
           )}
@@ -884,7 +884,7 @@ function CollectionEditModal({ item, onClose }) {
                   {!hasOwnPhoto && (
                     <>
                       <div>
-                        <label htmlFor={customImageInputId} className="text-xs text-text-muted font-medium uppercase tracking-wide block">
+                        <label htmlFor={customImageInputId} className="text-xs text-text-muted font-medium  tracking-wide block">
                           {t('card.customImageUrl')}
                         </label>
                         <p className="text-xs text-text-secondary mt-1">

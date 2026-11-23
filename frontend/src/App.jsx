@@ -82,7 +82,7 @@ function ForcePasswordChangeScreen() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-bg-primary px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-md rounded-2xl border border-border bg-bg-secondary p-6 shadow-xl space-y-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-md rounded-xl border border-border bg-bg-secondary p-6 shadow-xl space-y-4">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold text-text-primary">{t('settings.users.changePassword')}</h1>
           <p className="text-sm text-text-muted">{t('settings.users.forcePasswordChange')}</p>

@@ -118,7 +118,7 @@ export default function Sidebar() {
 
       <div className="p-3 border-t border-border">
         <div className="px-3 py-2">
-          <p className="text-[11px] uppercase tracking-[0.18em] text-text-muted">
+          <p className="text-[11px]   text-text-muted">
             {t('auth.username')}
           </p>
           <p className="mt-1 text-sm font-medium text-text-primary truncate">

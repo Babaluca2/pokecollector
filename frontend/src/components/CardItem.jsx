@@ -200,7 +200,7 @@ export function CustomCardModal({ onClose, onCreated, sets: setsProp = [], autoA
       <div className={[
         'fixed bottom-0 left-0 right-0 rounded-t-2xl max-h-[90dvh] overflow-y-auto',
         'bg-bg-surface border-t border-border more-sheet-enter',
-        'md:static md:rounded-2xl md:border md:max-w-lg md:w-full md:max-h-[85vh] md:animate-none',
+        'md:static md:rounded-xl md:border md:max-w-lg md:w-full md:max-h-[85vh] md:animate-none',
       ].join(' ')} onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-center pt-3 pb-1 md:hidden">
           <div className="w-10 h-1 bg-border rounded-full" />
@@ -814,7 +814,7 @@ export function CardModal({ card, onClose, onEdit, defaultLang = 'en', ownedItem
             {activeTab === 'overview' && canEditCustomImage && (
               <div className="bg-bg-card rounded-xl p-3 space-y-2 border border-border">
                 <div>
-                  <label htmlFor={customImageInputId} className="text-xs text-text-muted font-medium uppercase tracking-wide block">
+                  <label htmlFor={customImageInputId} className="text-xs text-text-muted font-medium  tracking-wide block">
                     {t('card.customImageUrl')}
                   </label>
                   <p className="text-xs text-text-secondary mt-1">

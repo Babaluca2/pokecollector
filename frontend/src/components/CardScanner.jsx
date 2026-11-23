@@ -125,7 +125,7 @@ export function ScanAddModal({
       onClick={onClose}
     >
       <div
-        className="relative max-h-[calc(100dvh-1rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-bg-surface shadow-2xl sm:max-h-[calc(100dvh-1.5rem)]"
+        className="relative max-h-[calc(100dvh-1rem)] w-full max-w-md overflow-y-auto rounded-xl border border-border bg-bg-surface shadow-2xl sm:max-h-[calc(100dvh-1.5rem)]"
         onClick={e => e.stopPropagation()}
       >
         <div className="mx-auto mt-2 h-1 w-10 rounded-full bg-white/20 sm:hidden" aria-hidden />
@@ -204,7 +204,7 @@ export function ScanAddModal({
             <button
               onClick={handleAdd}
               disabled={adding || !exchangeRateReady}
-              className="flex-1 py-3 rounded-xl font-black text-white flex items-center justify-center gap-2 transition-all"
+              className="flex-1 py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all"
               style={{ background: adding ? '#555' : 'var(--color-brand-red)', boxShadow: 'none' }}
             >
               {adding ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
@@ -370,8 +370,8 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-6 pb-4 flex-shrink-0">
         <div>
-          <p className="text-[10px] text-text-muted uppercase tracking-[0.2em]">{t('scanner.title')}</p>
-          <h2 className="text-lg font-black text-white">{t('scanner.subtitle')}</h2>
+          <p className="text-[10px] text-text-muted  ">{t('scanner.title')}</p>
+          <h2 className="text-lg font-semibold text-white">{t('scanner.subtitle')}</h2>
         </div>
         <button onClick={closeScanner}
           className="w-9 h-9 rounded-full flex items-center justify-center"
@@ -385,8 +385,8 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
         {/* CAPTURE */}
         {phase === 'capture' && (
           <div className="flex flex-col items-center gap-5 pt-4">
-            <div className="w-full max-w-xs aspect-[2.5/3.5] rounded-2xl flex flex-col items-center justify-center relative"
-              style={{ border: '2px dashed rgba(227,0,11,0.4)', background: 'rgba(227,0,11,0.04)' }}>
+            <div className="w-full max-w-xs aspect-[2.5/3.5] rounded-xl flex flex-col items-center justify-center relative"
+              style={{ border: '2px dashed rgba(183,155,99,0.4)', background: 'rgba(183,155,99,0.04)' }}>
               <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-brand-red rounded-tl" />
               <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-brand-red rounded-tr" />
               <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-brand-red rounded-bl" />
@@ -401,7 +401,7 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
               className="hidden" onChange={e => { handleFile(e.target.files?.[0]); e.target.value = '' }} />
 
             <button onClick={() => cameraRef.current?.click()}
-              className="w-full max-w-xs py-4 rounded-2xl font-black text-white text-base flex items-center justify-center gap-3"
+              className="w-full max-w-xs py-4 rounded-xl font-semibold text-white text-base flex items-center justify-center gap-3"
               style={{ background: 'var(--color-brand-red)', color: '#19191B', boxShadow: 'none' }}>
               <Camera size={20} /> {t('scanner.takePhoto')}
             </button>
@@ -434,7 +434,7 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
 
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+                <p className="text-[10px] font-semibold   text-text-muted">
                   {t('scanner.batchStaging')}
                 </p>
                 <p className="text-sm text-text-secondary">{stagedFiles.length}/50 {t('scanner.photos')}</p>
@@ -464,7 +464,7 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
                 ))}
               </div>
             ) : (
-              <div className="rounded-2xl border-2 border-dashed border-white/10 py-12 text-center text-sm text-text-muted">
+              <div className="rounded-xl border-2 border-dashed border-white/10 py-12 text-center text-sm text-text-muted">
                 {t('scanner.noPhotosStaged')}
               </div>
             )}
@@ -508,8 +508,8 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
         {phase === 'results' && results && (
           <div className="mx-auto max-w-6xl space-y-4 pb-24 sm:pb-4">
             <div className="grid gap-4 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.2fr)]">
-              <div className="hidden rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:block">
-                <p className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+              <div className="hidden rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:block">
+                <p className="mb-3 text-[10px] font-semibold   text-text-muted">
                   {t('scanner.yourScan')}
                 </p>
                 {scanPreviewUrl ? (
@@ -529,12 +529,12 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
               </div>
 
               <div className="space-y-4">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">{t('scanner.detected')}</p>
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="mb-2 text-[10px] font-semibold   text-text-muted">{t('scanner.detected')}</p>
                   <p className="text-lg font-bold text-white">{results.recognized?.name || '—'}</p>
                   {results.recognized?.number && <p className="text-sm text-text-muted">Nr. {results.recognized.number}</p>}
                   {results.recognized?.language && (
-                    <p className="mt-0.5 text-xs uppercase tracking-wider text-text-muted">
+                    <p className="mt-0.5 text-xs   text-text-muted">
                       {t('scanner.detectedLanguage')} {results.recognized.language}
                     </p>
                   )}
@@ -542,7 +542,7 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
 
                 {results.matches?.length > 0 ? (
                   <div>
-                    <p className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+                    <p className="mb-3 text-[10px] font-semibold   text-text-muted">
                       {t('scanner.bestMatches')} ({results.matches.length})
                     </p>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -581,9 +581,9 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
             </button>
 
             {selectedMatch && (
-              <div className="fixed bottom-3 left-3 right-3 z-20 rounded-2xl border border-white/15 bg-bg-surface/95 p-3 shadow-2xl backdrop-blur sm:sticky sm:bottom-3 sm:mx-auto sm:flex sm:max-w-xl sm:items-center sm:gap-3">
+              <div className="fixed bottom-3 left-3 right-3 z-20 rounded-xl border border-white/15 bg-bg-surface/95 p-3 shadow-2xl backdrop-blur sm:sticky sm:bottom-3 sm:mx-auto sm:flex sm:max-w-xl sm:items-center sm:gap-3">
                 <div className="mb-2 min-w-0 flex-1 sm:mb-0">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted">{t('scanner.selectedMatch')}</p>
+                  <p className="text-[10px] font-bold   text-text-muted">{t('scanner.selectedMatch')}</p>
                   <p className="truncate text-sm font-bold text-text-primary">{selectedMatch.name}</p>
                 </div>
                 <button

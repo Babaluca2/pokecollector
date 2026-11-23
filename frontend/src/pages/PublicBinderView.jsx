@@ -38,9 +38,9 @@ export default function PublicBinderView() {
         <Link to={`/u/${handle}`} className="btn-ghost inline-flex py-1.5 text-sm">
           <ArrowLeft size={14} /> {t('publicProfiles.backToProfile')}
         </Link>
-        <div className="my-4 flex flex-wrap items-baseline justify-between gap-2 rounded-2xl border border-border bg-bg-secondary p-4 shadow-xs">
+        <div className="my-4 flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-border bg-bg-secondary p-4 shadow-xs">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-text-muted">{t('publicProfiles.sharedBinder')}</p>
+            <p className="text-xs font-bold   text-text-muted">{t('publicProfiles.sharedBinder')}</p>
             <h1 className="text-2xl font-bold">{binder.name}</h1>
             <p className="mt-1 text-sm text-text-secondary">
               {formatBinderCountSummary(binder.card_count, binder.unique_card_count, t)}
@@ -68,7 +68,7 @@ export default function PublicBinderView() {
         </div>
         {badgeLegendOpen && (
           <div id="public-card-badge-legend" className="card mb-4 p-3">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
+            <p className="mb-3 text-xs font-semibold  tracking-wide text-text-muted">
               {t('setDetail.badgeLegend')}
             </p>
             <CardLegend collapsible={false} showWishlist={false} />

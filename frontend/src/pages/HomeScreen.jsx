@@ -39,7 +39,7 @@ function ChartTooltip({ active, payload, label, formatPrice }) {
     <div className="rounded-xl px-3 py-2 text-xs shadow-xl"
       style={{ background: 'var(--color-elevated)', border: '1px solid var(--color-border)' }}>
       <p className="text-text-muted mb-1">{tooltipLabel}</p>
-      <p className="font-black" style={{ color: '#f5c842' }}>
+      <p className="font-semibold" style={{ color: '#f5c842' }}>
         {formatPrice(Number(payload[0].value))}
       </p>
       {payload[0]?.payload?.legacy && (

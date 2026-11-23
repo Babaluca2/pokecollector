@@ -345,7 +345,7 @@ export function UnifiedCardDialog({
         inert={imageZoomOpen ? '' : undefined}
         aria-label={card.name}
         className={clsx(
-          'relative max-h-[calc(100dvh-1.5rem)] w-full max-w-6xl overflow-y-auto rounded-2xl border border-white/10 bg-bg-surface shadow-2xl sm:max-h-[calc(100dvh-3rem)]',
+          'relative max-h-[calc(100dvh-1.5rem)] w-full max-w-6xl overflow-y-auto rounded-xl border border-white/10 bg-bg-surface shadow-2xl sm:max-h-[calc(100dvh-3rem)]',
           className,
         )}
         onClick={event => event.stopPropagation()}
@@ -389,14 +389,14 @@ export function UnifiedCardDialog({
                 )}
               </div>
               <div className="min-w-0 flex-1 pr-9 sm:mt-4 sm:pr-0">
-                <h2 className="break-words text-base font-black text-text-primary sm:text-xl">{card.name}</h2>
+                <h2 className="break-words text-base font-semibold text-text-primary sm:text-xl">{card.name}</h2>
                 {card.is_custom && (
                   <span className="badge-yellow mt-1.5 inline-flex px-2 py-0.5 text-[10px]">Custom</span>
                 )}
                 {(setNumber || price) && (
                   <div className="mt-1.5 flex min-w-0 items-center justify-between gap-2">
-                    <span className="truncate font-mono text-xs font-black text-brand-red">{setNumber}</span>
-                    {price && <span className="shrink-0 text-sm font-black text-green">{price}</span>}
+                    <span className="truncate font-mono text-xs font-semibold text-brand-red">{setNumber}</span>
+                    {price && <span className="shrink-0 text-sm font-semibold text-green">{price}</span>}
                   </div>
                 )}
                 {card.rarity && <p className="mt-1 text-xs text-text-muted">{card.rarity}</p>}
@@ -438,7 +438,7 @@ export function UnifiedCardDialog({
                     className={clsx(
                       'inline-flex min-h-9 shrink-0 items-center justify-center rounded-lg px-3 py-2 text-center text-xs font-bold leading-tight transition-colors',
                       activeTab === tab.id
-                        ? 'bg-brand-red text-[#19191B] shadow-[0_0_14px_rgba(227,0,11,0.3)]'
+                        ? 'bg-brand-red text-[#19191B] shadow-[0_0_14px_rgba(183,155,99,0.3)]'
                         : 'bg-bg-card text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
                     )}
                   >

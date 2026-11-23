@@ -283,7 +283,7 @@ export default function SetDetail() {
 
       {badgeLegendOpen && (
         <div id="card-badge-legend" className="card p-3">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
+          <p className="mb-3 text-xs font-semibold  tracking-wide text-text-muted">
             {t('setDetail.badgeLegend')}
           </p>
           <CardLegend collapsible={false} />
@@ -359,7 +359,7 @@ export default function SetDetail() {
             className={[
               'fixed bottom-0 left-0 right-0 rounded-t-2xl max-h-[90dvh] overflow-y-auto',
               'bg-bg-surface border-t border-border more-sheet-enter',
-              'md:static md:w-full md:max-w-md md:rounded-2xl md:border md:max-h-[85vh] md:animate-none',
+              'md:static md:w-full md:max-w-md md:rounded-xl md:border md:max-h-[85vh] md:animate-none',
             ].join(' ')}
             onClick={(e) => e.stopPropagation()}
           >
@@ -385,7 +385,7 @@ export default function SetDetail() {
                 <p className="text-sm text-text-secondary">{t('setDetail.addOwnedToBinderEmpty')}</p>
               ) : (
                 <>
-                  <p className="text-xs font-semibold text-text-muted mb-2 uppercase tracking-wide">
+                  <p className="text-xs font-semibold text-text-muted mb-2  tracking-wide">
                     {t('setDetail.addOwnedToBinderPick')}
                   </p>
                   <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">

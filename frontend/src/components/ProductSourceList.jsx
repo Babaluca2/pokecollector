@@ -32,7 +32,7 @@ export default function ProductSourceList({ sources = [], t, className = '' }) {
       aria-label={t('collection.foundIn')}
       className={clsx('space-y-1 rounded-xl border border-border/70 bg-bg-card/40 p-3', className)}
     >
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
+      <div className="flex items-center gap-2 text-xs font-semibold  tracking-wide text-text-muted">
         <Package size={14} aria-hidden="true" />
         <span>{t('collection.foundIn')}</span>
       </div>

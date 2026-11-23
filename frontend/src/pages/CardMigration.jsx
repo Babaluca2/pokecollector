@@ -17,7 +17,7 @@ function CardPreview({ card, label, match = false }) {
   ].filter(Boolean).join(' ').toUpperCase()
 
   return (
-    <div className="rounded-2xl border border-border bg-bg-card/60 p-3 md:p-4">
+    <div className="rounded-xl border border-border bg-bg-card/60 p-3 md:p-4">
       <div className="mb-3 flex justify-center">
         <span className={match
           ? 'rounded-md border border-green/40 bg-green/15 px-2 py-1 text-[10px] font-bold text-green'

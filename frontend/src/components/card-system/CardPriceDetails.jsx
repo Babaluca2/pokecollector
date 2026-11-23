@@ -69,7 +69,7 @@ export default function CardPriceDetails({ card, variant = 'Normal', summary = n
 
       {cardmarketPrices.length > 0 && (
         <div className="bg-bg-card rounded-xl p-3 space-y-3">
-          <p className="text-xs text-text-muted font-medium uppercase tracking-wide">
+          <p className="text-xs text-text-muted font-medium  tracking-wide">
             {t('prices.cardmarketTitle')} · {variant}
           </p>
           {selectedPrimaryPrice != null && (
@@ -90,7 +90,7 @@ export default function CardPriceDetails({ card, variant = 'Normal', summary = n
 
       {!card?.is_custom && marketLinks.length > 0 && (
         <div className="bg-bg-card rounded-xl p-3 space-y-2 border border-border">
-          <p className="text-xs text-text-muted font-medium uppercase tracking-wide">
+          <p className="text-xs text-text-muted font-medium  tracking-wide">
             {t('cardmarket.buy')}
           </p>
           <div className="flex flex-wrap gap-2">
@@ -117,7 +117,7 @@ export default function CardPriceDetails({ card, variant = 'Normal', summary = n
 
       {tcgplayerPrices.length > 0 && (
         <div className="bg-bg-card rounded-xl p-3 space-y-2">
-          <p className="text-xs text-text-muted font-medium uppercase tracking-wide">TCGPlayer</p>
+          <p className="text-xs text-text-muted font-medium  tracking-wide">TCGPlayer</p>
           <div className="grid grid-cols-3 gap-2 text-xs">
             {tcgplayerPrices.map(({ key, val, label }) => (
               <div key={key}>
@@ -131,7 +131,7 @@ export default function CardPriceDetails({ card, variant = 'Normal', summary = n
 
       {safePriceHistory.length > 0 && (
         <div className="bg-bg-card rounded-xl p-3 space-y-2">
-          <p className="text-xs text-text-muted font-medium uppercase tracking-wide">
+          <p className="text-xs text-text-muted font-medium  tracking-wide">
             {t('prices.history')}
           </p>
           <div className="h-[140px]">

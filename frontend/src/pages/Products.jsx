@@ -1041,22 +1041,22 @@ export default function Products() {
       {products.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="stat-card">
-            <p className="stat-label uppercase tracking-wide">{t('products.totalInvested')}</p>
+            <p className="stat-label  tracking-wide">{t('products.totalInvested')}</p>
             <p className="stat-value">{formatPrice(periodStats.totalInvested)}</p>
             <p className="text-xs text-text-muted">{periodStats.count} {t('products.items')}</p>
           </div>
           <div className="stat-card">
-            <p className="stat-label uppercase tracking-wide">{t('products.currentValue')}</p>
+            <p className="stat-label  tracking-wide">{t('products.currentValue')}</p>
             <p className="stat-value">{formatPrice(periodStats.totalValue)}</p>
           </div>
           <div className="stat-card">
-            <p className="stat-label uppercase tracking-wide">{t('products.totalPnl')}</p>
+            <p className="stat-label  tracking-wide">{t('products.totalPnl')}</p>
             <p className={clsx('text-xl font-bold', periodStats.totalPnl >= 0 ? 'text-green' : 'text-brand-red')}>
               {periodStats.totalPnl >= 0 ? '+' : ''}{formatPrice(periodStats.totalPnl)}
             </p>
           </div>
           <div className="stat-card">
-            <p className="stat-label uppercase tracking-wide">{t('products.return')}</p>
+            <p className="stat-label  tracking-wide">{t('products.return')}</p>
             <div className={clsx('flex items-center gap-1 whitespace-nowrap text-lg font-bold sm:text-xl', periodStats.pnlPct >= 0 ? 'text-green' : 'text-brand-red')}>
               {periodStats.pnlPct >= 0 ? <TrendingUp size={18} className="shrink-0" /> : <TrendingDown size={18} className="shrink-0" />}
               {periodStats.pnlPct >= 0 ? '+' : ''}{periodStats.pnlPct.toFixed(2)}%

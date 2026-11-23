@@ -140,14 +140,14 @@ export default function PokedexSpecies() {
         <ArrowLeft size={16} /> {t('common.back')}
       </button>
 
-      <section className="overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-bg-card to-bg-surface p-5 sm:p-7">
+      <section className="overflow-hidden rounded-xl border border-border bg-gradient-to-br from-bg-card to-bg-surface p-5 sm:p-7">
         <div className="grid gap-6 md:grid-cols-[auto_1fr] md:items-center">
-          <div className="flex justify-center rounded-3xl bg-bg-elevated/60 p-4">
+          <div className="flex justify-center rounded-xl bg-bg-elevated/60 p-4">
             <SpeciesArtwork species={species} name={name} />
           </div>
           <div>
-            <p className="text-sm font-black tracking-[0.2em] text-brand-red">{species.display_number}</p>
-            <h1 className="mt-1 text-4xl font-black text-text-primary">{name}</h1>
+            <p className="text-sm font-semibold  text-brand-red">{species.display_number}</p>
+            <h1 className="mt-1 text-4xl font-semibold text-text-primary">{name}</h1>
             {secondaryName && secondaryName !== name && <p className="text-lg text-text-secondary">{secondaryName}</p>}
             <p className="mt-2 text-sm text-text-muted">Gen {species.generation} · {species.region}</p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -194,7 +194,7 @@ export default function PokedexSpecies() {
       <section className="space-y-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-2xl font-black text-text-primary">{t('pokedex.availableCards')}</h2>
+            <h2 className="text-2xl font-semibold text-text-primary">{t('pokedex.availableCards')}</h2>
             <p className="text-sm text-text-muted">{cardsQuery.data?.total_count ?? cards.length} {t('pokedex.printings')}</p>
           </div>
           <div className="flex min-w-0 flex-col gap-2 sm:items-end">
@@ -237,7 +237,7 @@ export default function PokedexSpecies() {
         {cards.length > 0 && <CardLegend />}
         {cardsQuery.isLoading && <div className="flex justify-center py-16"><PokeBallLoader size={44} /></div>}
         {!cardsQuery.isLoading && cards.length === 0 && (
-          <p className="rounded-2xl border border-border bg-bg-card p-6 text-center text-text-muted">{t('pokedex.noCards')}</p>
+          <p className="rounded-xl border border-border bg-bg-card p-6 text-center text-text-muted">{t('pokedex.noCards')}</p>
         )}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {cards.map((card) => <CardItem key={card.id} card={card} dimWhenUnowned />)}

@@ -70,7 +70,7 @@ export default function Achievements() {
               <p className="mt-1 text-sm text-text-secondary">{data?.username || user?.username}</p>
             </div>
           </div>
-          <div className="rounded-2xl border border-border bg-bg-primary/70 px-4 py-3 text-sm font-semibold text-yellow">
+          <div className="rounded-xl border border-border bg-bg-primary/70 px-4 py-3 text-sm font-semibold text-yellow">
             {earnedLabel}
           </div>
         </div>
@@ -78,7 +78,7 @@ export default function Achievements() {
 
       {isLoading ? (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {[...Array(6)].map((_, index) => <div key={index} className="skeleton h-48 rounded-2xl" />)}
+          {[...Array(6)].map((_, index) => <div key={index} className="skeleton h-48 rounded-xl" />)}
         </div>
       ) : error ? (
         <div className="card text-sm text-brand-red">{t('achievements.loadFailed')}</div>
@@ -91,7 +91,7 @@ export default function Achievements() {
             return (
               <div
                 key={achievement.id}
-                className={`rounded-2xl border p-4 transition-all ${
+                className={`rounded-xl border p-4 transition-all ${
                   achievement.unlocked
                     ? 'border-yellow/40 bg-bg-card shadow-[0_0_24px_rgba(255,213,79,0.12)]'
                     : 'border-border bg-bg-card opacity-70'

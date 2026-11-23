@@ -21,7 +21,7 @@ const isWebcamSupported = () => (
 function PhotoPositionGuide({ title, description }) {
   return (
     <div className="space-y-3">
-      <div className="mx-auto w-36 rounded-2xl border-2 border-text-muted/50 bg-bg-surface p-3 shadow-inner">
+      <div className="mx-auto w-36 rounded-xl border-2 border-text-muted/50 bg-bg-surface p-3 shadow-inner">
         <div className="relative mx-auto aspect-[2.5/3.5] w-20 rounded-md border-2 border-brand-yellow bg-bg-elevated">
           <span className="absolute left-1 top-1 h-3 w-3 rounded-xs border-l-2 border-t-2 border-white" />
           <span className="absolute right-1 top-1 h-3 w-3 rounded-xs border-r-2 border-t-2 border-white" />
@@ -229,7 +229,7 @@ export default function UnifiedCardScanner({ isOpen, onClose }) {
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+              <p className="text-[10px] font-semibold   text-text-muted">
                 {t('scanner.photos')}
               </p>
               <p className="text-sm text-text-secondary">{stagedFiles.length}/50 {t('scanner.photos')}</p>
@@ -288,13 +288,13 @@ export default function UnifiedCardScanner({ isOpen, onClose }) {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border-2 border-dashed border-white/10 py-12 text-center text-sm text-text-muted">
+            <div className="rounded-xl border-2 border-dashed border-white/10 py-12 text-center text-sm text-text-muted">
               {t('scanner.noPhotosStaged')}
             </div>
           )}
 
           {mode === 'camera-choice' && (
-            <div role="group" aria-label={t('scanner.takePhotos')} className="space-y-3 rounded-2xl border border-border bg-bg-surface p-4">
+            <div role="group" aria-label={t('scanner.takePhotos')} className="space-y-3 rounded-xl border border-border bg-bg-surface p-4">
               <p className="text-sm font-semibold text-text-primary">{t('scanner.takePhotos')}</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-2">
@@ -378,7 +378,7 @@ export default function UnifiedCardScanner({ isOpen, onClose }) {
                 <div
                   id="scanner-photo-guide"
                   role="tooltip"
-                  className={`absolute bottom-12 right-0 w-72 rounded-2xl border border-border bg-bg-card p-4 shadow-xl transition-all group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
+                  className={`absolute bottom-12 right-0 w-72 rounded-xl border border-border bg-bg-card p-4 shadow-xl transition-all group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 ${
                     photoGuidePinned || photoGuideHovered
                       ? 'visible translate-y-0 opacity-100'
                       : 'invisible translate-y-1 opacity-0'

@@ -216,7 +216,7 @@ export default function WebcamCapture({ onCapture, onExit, maxReached }) {
 
   return (
     <div className="space-y-3">
-      <div className="relative h-[clamp(6rem,calc(85dvh-16rem),34rem)] sm:aspect-video sm:h-auto sm:max-h-[calc(85dvh-16rem)] overflow-hidden rounded-2xl border border-white/10 bg-black">
+      <div className="relative h-[clamp(6rem,calc(85dvh-16rem),34rem)] sm:aspect-video sm:h-auto sm:max-h-[calc(85dvh-16rem)] overflow-hidden rounded-xl border border-white/10 bg-black">
         <video
           ref={videoRef}
           muted
@@ -228,7 +228,7 @@ export default function WebcamCapture({ onCapture, onExit, maxReached }) {
         {status === 'live' && (
           <>
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div ref={guideRef} data-camera-guide className="relative aspect-[2.5/3.5] h-[84%] max-w-[90%] rounded-2xl border-2 border-yellow/80">
+              <div ref={guideRef} data-camera-guide className="relative aspect-[2.5/3.5] h-[84%] max-w-[90%] rounded-xl border-2 border-yellow/80">
                 <span className="absolute left-2 top-2 h-5 w-5 border-l-2 border-t-2 border-white" />
                 <span className="absolute right-2 top-2 h-5 w-5 border-r-2 border-t-2 border-white" />
                 <span className="absolute bottom-2 left-2 h-5 w-5 border-b-2 border-l-2 border-white" />

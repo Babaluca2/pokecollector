@@ -31,7 +31,7 @@ import { invalidateCardState, invalidateCollectionPhotoState, invalidateTcgdexFi
 
 function SectionHeader({ title }) {
   return (
-    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted px-1 mb-3">
+    <p className="text-[10px] font-semibold   text-text-muted px-1 mb-3">
       {title}
     </p>
   )
@@ -40,7 +40,7 @@ function SectionHeader({ title }) {
 function SettingsCard({ children }) {
   return (
     <div
-      className="rounded-2xl overflow-hidden"
+      className="rounded-xl overflow-hidden"
       style={{
         background: 'rgba(255,255,255,0.04)',
         border: '1px solid rgba(255,255,255,0.07)',
@@ -919,7 +919,7 @@ export default function Settings() {
   return (
     <div className="space-y-6 py-6">
       <div className="px-1">
-        <h1 className="text-2xl font-black text-text-primary tracking-tight">{t('settings.title')}</h1>
+        <h1 className="text-2xl font-semibold text-text-primary tracking-tight">{t('settings.title')}</h1>
         <p className="text-sm text-text-muted mt-1">{t('settings.appConfig')}</p>
       </div>
       <div className="flex border-b border-border overflow-x-auto scrollbar-none -mx-4 px-4" style={{WebkitOverflowScrolling:"touch"}}>
@@ -955,7 +955,7 @@ export default function Settings() {
                 <button
                   type="button"
                   onClick={() => setShowAvatarPicker(true)}
-                  className="flex items-center gap-3 rounded-2xl border border-border bg-bg-primary px-3 py-2 transition-colors hover:border-brand-red/50"
+                  className="flex items-center gap-3 rounded-xl border border-border bg-bg-primary px-3 py-2 transition-colors hover:border-brand-red/50"
                 >
                   <div className="flex h-16 w-16 items-center justify-center rounded-full border border-border bg-bg-card">
                     {user?.avatar_id ? (
@@ -1401,7 +1401,7 @@ export default function Settings() {
                   onClick={() => syncMutation.mutate()}
                   disabled={isRunning}
                   className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-opacity disabled:opacity-50"
-                  style={{ background: 'rgba(227,0,11,0.15)', color: '#e3000b', border: '1px solid rgba(227,0,11,0.3)' }}
+                  style={{ background: 'rgba(183,155,99,0.15)', color: 'var(--color-brand-red)', border: '1px solid rgba(183,155,99,0.3)' }}
                 >
                   <RefreshCw size={13} className={isRunning ? 'animate-spin' : ''} />
                   {isRunning ? t('settings.running') : t('settings.syncButton')}
@@ -1481,7 +1481,7 @@ export default function Settings() {
                   onClick={() => allPriceSyncMutation.mutate()}
                   disabled={isRunning}
                   className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-opacity disabled:opacity-50"
-                  style={{ background: 'rgba(227,0,11,0.15)', color: '#e3000b', border: '1px solid rgba(227,0,11,0.3)' }}
+                  style={{ background: 'rgba(183,155,99,0.15)', color: 'var(--color-brand-red)', border: '1px solid rgba(183,155,99,0.3)' }}
                 >
                   <RefreshCw size={13} className={isRunning ? 'animate-spin' : ''} />
                   {isRunning ? t('settings.running') : t('settings.syncButton')}
@@ -1644,7 +1644,7 @@ export default function Settings() {
                 ) : (
                   <span
                     className="text-xs font-bold px-2.5 py-1 rounded-full"
-                    style={{ background: 'rgba(227,0,11,0.1)', color: '#e3000b', border: '1px solid rgba(227,0,11,0.25)' }}
+                    style={{ background: 'rgba(183,155,99,0.1)', color: 'var(--color-brand-red)', border: '1px solid rgba(183,155,99,0.25)' }}
                   >
                     {t('settings.telegramNotConfigured')}
                   </span>
@@ -1858,7 +1858,7 @@ function UsersTab({ t, queryClient }) {
     <>
       <section className="space-y-1">
         <div className="flex items-center justify-between px-1 mb-3">
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">{t('settings.users.title')}</p>
+          <p className="text-[10px] font-semibold   text-text-muted">{t('settings.users.title')}</p>
           <button onClick={openCreate} className="flex items-center gap-1 text-xs font-semibold text-brand-red hover:text-brand-red/80">
             <Plus size={14} /> {t('settings.users.addUser')}
           </button>

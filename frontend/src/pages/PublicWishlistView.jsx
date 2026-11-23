@@ -60,7 +60,7 @@ export default function PublicWishlistView() {
 
   return (
     <PublicProfileShell profile={profile} handle={handle} activeSection="wishlist" t={t}>
-      <div className="mb-4 rounded-2xl border border-border bg-bg-secondary p-4 shadow-xs">
+      <div className="mb-4 rounded-xl border border-border bg-bg-secondary p-4 shadow-xs">
         <div className="mb-4"><h2 className="text-xl font-bold">{t('publicProfiles.wishlist')}</h2><p className="text-sm text-text-secondary">{t('publicProfiles.wishlistCount').replace('{count}', wishlist.total)}</p></div>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
           <label className="relative lg:col-span-2"><Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" /><input className="input pl-9" value={search} onChange={event => changeFilter(setSearch)(event.target.value)} placeholder={t('publicProfiles.searchWishlist')} /></label>
@@ -71,7 +71,7 @@ export default function PublicWishlistView() {
           </select>
         </div>
       </div>
-      {wishlist.cards.length ? <CardListGallery entries={wishlist.cards} mode="public" t={t} formatPrice={formatPrice} publicQuantityLabel={quantity => t('publicProfiles.wantedQuantity').replace('{count}', quantity)} publicDetailLabel={publicWishlistDate} /> : <div className="rounded-2xl border border-border bg-bg-secondary p-8 text-center text-text-secondary">{t('publicProfiles.noWishlistCards')}</div>}
+      {wishlist.cards.length ? <CardListGallery entries={wishlist.cards} mode="public" t={t} formatPrice={formatPrice} publicQuantityLabel={quantity => t('publicProfiles.wantedQuantity').replace('{count}', quantity)} publicDetailLabel={publicWishlistDate} /> : <div className="rounded-xl border border-border bg-bg-secondary p-8 text-center text-text-secondary">{t('publicProfiles.noWishlistCards')}</div>}
       {pages > 1 && <div className="mt-5 flex items-center justify-center gap-3"><button className="btn-ghost" disabled={page <= 1} onClick={() => setPage(value => value - 1)}><ChevronLeft size={16} /> {t('publicProfiles.previous')}</button><span className="text-sm text-text-secondary">{page} / {pages}</span><button className="btn-ghost" disabled={page >= pages} onClick={() => setPage(value => value + 1)}>{t('publicProfiles.next')} <ChevronRight size={16} /></button></div>}
     </PublicProfileShell>
   )

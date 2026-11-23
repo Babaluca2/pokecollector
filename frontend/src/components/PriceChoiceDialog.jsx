@@ -66,9 +66,9 @@ export default function PriceChoiceDialog({ item, onChoose, onKeepDefault, isPen
               className="btn-secondary flex-col items-center justify-center gap-1 py-3"
             >
               <span className="text-xs text-text-muted">{marketLabel(market)}</span>
-              <span className="text-lg font-black text-text-primary">{value != null ? formatPrice(value) : '—'}</span>
+              <span className="text-lg font-semibold text-text-primary">{value != null ? formatPrice(value) : '—'}</span>
               {market === defaultMarket && (
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">{t('priceChoice.default')}</span>
+                <span className="text-[10px] font-semibold  tracking-wide text-text-muted">{t('priceChoice.default')}</span>
               )}
             </button>
           ))}

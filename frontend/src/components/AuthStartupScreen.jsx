@@ -8,7 +8,7 @@ export default function AuthStartupScreen({ connectionError = false, onRetry }) 
   return (
     <main className="min-h-screen bg-bg-primary px-4 flex items-center justify-center">
       <section
-        className="w-full max-w-md rounded-2xl border border-border bg-bg-card p-6 text-center shadow-xl sm:p-8"
+        className="w-full max-w-md rounded-xl border border-border bg-bg-card p-6 text-center shadow-xl sm:p-8"
         aria-live="polite"
       >
         {connectionError ? (

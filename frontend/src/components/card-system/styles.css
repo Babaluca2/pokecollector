@@ -120,8 +120,8 @@
     height: 44px;
     border: 2px solid rgba(255,255,255,0.75);
     border-radius: 9999px;
-    background: rgba(227,0,11,0.92);
-    box-shadow: 0 0 18px rgba(227,0,11,0.55);
+    background: rgba(183,155,99,0.92);
+    box-shadow: 0 0 18px rgba(183,155,99,0.55);
   }
   .unified-card-add > svg { position: relative; z-index: 1; }
   @media (hover: hover) and (pointer: fine) {

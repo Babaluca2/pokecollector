@@ -474,8 +474,8 @@ export default function Sets() {
             <div className="set-hero-glow" />
             <div className="relative z-10 flex items-center justify-between p-6 gap-4">
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] text-brand-red font-black uppercase tracking-[0.2em] mb-2">{t('sets.topSet')}</p>
-                <p className="text-2xl font-black text-white leading-tight mb-1 break-words">{hero.name}</p>
+                <p className="text-[10px] text-brand-red font-semibold   mb-2">{t('sets.topSet')}</p>
+                <p className="text-2xl font-semibold text-white leading-tight mb-1 break-words">{hero.name}</p>
                 <p className="text-sm text-text-muted mb-4">{hero.series}</p>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-sm text-text-secondary">{heroOwned}/{heroTotal} {t('sets.heroCards')}</span>
@@ -500,7 +500,7 @@ export default function Sets() {
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="rounded-2xl overflow-hidden border border-border">
+            <div key={i} className="rounded-xl overflow-hidden border border-border">
               <div className="skeleton h-32" />
               <div className="p-4 space-y-2">
                 <div className="skeleton h-4 rounded w-2/3" />
@@ -524,7 +524,7 @@ export default function Sets() {
                 key={set.id}
                 id={`set-${set.id}`}
                 data-scroll-anchor={`set-${set.id}`}
-                className={`bg-bg-card border rounded-2xl overflow-hidden cursor-pointer hover:border-brand-red/40 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)] group relative ${
+                className={`bg-bg-card border rounded-xl overflow-hidden cursor-pointer hover:border-brand-red/40 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)] group relative ${
                   isHidden ? 'border-border/70 opacity-60' : 'border-border'
                 }`}
                 onClick={() => openSet(set)}
@@ -599,7 +599,7 @@ export default function Sets() {
                   )}
 
                   {pct === 100 && !isHidden && (
-                    <span className="absolute top-2 right-2 z-10 bg-green/20 text-green text-[10px] font-black px-2 py-0.5 rounded-full border border-green/30">
+                    <span className="absolute top-2 right-2 z-10 bg-green/20 text-green text-[10px] font-semibold px-2 py-0.5 rounded-full border border-green/30">
                       ★ {t('sets.filterComplete')}
                     </span>
                   )}
@@ -611,7 +611,7 @@ export default function Sets() {
                     <SetName set={set} language={settings.language || 'en'} />
                     {/* Language badge - supported TCGdex language, never "both" */}
                     {set.lang && (
-                      <span className={`flex-shrink-0 text-[9px] font-black px-1.5 py-0.5 rounded leading-none ${tcgdexLanguageBadgeClass(set.lang)}`}>
+                      <span className={`flex-shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded leading-none ${tcgdexLanguageBadgeClass(set.lang)}`}>
                         {tcgdexLanguageLabel(set.lang)}
                       </span>
                     )}

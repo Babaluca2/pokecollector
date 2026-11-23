@@ -23,12 +23,12 @@ function DeckIdentity({ deck, side, t }) {
   const progress = Math.min((Number(deck.current_card_count || 0) / Math.max(Number(deck.target_size || 0), 1)) * 100, 100)
   const accent = DECK_COMPARISON_COLORS[side]
   return (
-    <article className={`relative overflow-hidden rounded-2xl border border-border bg-bg-card p-4 shadow-card ${side === 'left' ? 'text-right' : ''}`} data-comparison-deck={side}>
+    <article className={`relative overflow-hidden rounded-xl border border-border bg-bg-card p-4 shadow-card ${side === 'left' ? 'text-right' : ''}`} data-comparison-deck={side}>
       <span className="absolute inset-x-0 top-0 h-1" style={{ backgroundColor: accent }} />
       <div className={`flex flex-col gap-2 sm:items-start sm:gap-3 ${side === 'left' ? 'items-end sm:flex-row-reverse' : 'items-start sm:flex-row'}`}>
         <div className="min-w-0 w-full flex-1">
-          <p className={`text-[11px] font-black uppercase tracking-wider ${side === 'left' ? 'text-blue' : 'text-violet-400'}`}>{side === 'left' ? t('decks.deckA') : t('decks.deckB')}</p>
-          <h2 className="mt-1 break-words text-lg font-black leading-tight text-text-primary sm:text-xl">{deck.name}</h2>
+          <p className={`text-[11px] font-semibold   ${side === 'left' ? 'text-blue' : 'text-violet-400'}`}>{side === 'left' ? t('decks.deckA') : t('decks.deckB')}</p>
+          <h2 className="mt-1 break-words text-lg font-semibold leading-tight text-text-primary sm:text-xl">{deck.name}</h2>
         </div>
         <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${valid ? 'bg-green/10 text-green' : 'bg-brand-red/10 text-brand-red'}`}>
           {valid ? <CheckCircle2 size={13} aria-hidden /> : <ShieldCheck size={13} aria-hidden />}
@@ -36,7 +36,7 @@ function DeckIdentity({ deck, side, t }) {
         </span>
       </div>
       <div className={`mt-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3 ${side === 'left' ? 'items-end sm:flex-row-reverse' : 'items-start'}`}>
-        <div><span className="whitespace-nowrap"><strong className="text-2xl font-black text-text-primary">{deck.current_card_count}</strong><span className="text-sm text-text-muted"> / {deck.target_size}</span></span><span className="block text-xs text-text-muted sm:inline sm:text-sm"> {t('decks.cards')}</span></div>
+        <div><span className="whitespace-nowrap"><strong className="text-2xl font-semibold text-text-primary">{deck.current_card_count}</strong><span className="text-sm text-text-muted"> / {deck.target_size}</span></span><span className="block text-xs text-text-muted sm:inline sm:text-sm"> {t('decks.cards')}</span></div>
         <span className="rounded-lg bg-bg-elevated px-2 py-1 text-xs font-medium text-text-secondary">{formatText(deck, t)}</span>
       </div>
       <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-bg-elevated"><div className={`h-full rounded-full ${side === 'left' ? 'ml-auto' : ''}`} style={{ width: `${progress}%`, backgroundColor: accent }} /></div>
@@ -46,7 +46,7 @@ function DeckIdentity({ deck, side, t }) {
 
 const StatusPill = ({ check, t }) => <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${check?.status === 'pass' ? 'bg-green/10 text-green' : 'bg-brand-red/10 text-brand-red'}`}>{statusText(check, t)}</span>
 
-const DeckFlowValue = ({ left, right }) => <span className="inline-flex max-w-full items-center gap-1 text-sm font-black sm:text-base"><span className="inline-flex items-center gap-0.5 text-blue"><small className="text-[8px] font-bold">A</small>{left}</span><span className="text-xs font-normal text-text-muted">→</span><span className="inline-flex items-center gap-0.5 text-violet-400"><small className="text-[8px] font-bold">B</small>{right}</span></span>
+const DeckFlowValue = ({ left, right }) => <span className="inline-flex max-w-full items-center gap-1 text-sm font-semibold sm:text-base"><span className="inline-flex items-center gap-0.5 text-blue"><small className="text-[8px] font-bold">A</small>{left}</span><span className="text-xs font-normal text-text-muted">→</span><span className="inline-flex items-center gap-0.5 text-violet-400"><small className="text-[8px] font-bold">B</small>{right}</span></span>
 
 export default function DeckCompare() {
   const navigate = useNavigate()
@@ -80,9 +80,9 @@ export default function DeckCompare() {
   return <div className="space-y-5 pb-8">
     <button className="btn-ghost" onClick={() => navigate(leftId ? `/decks/${leftId}` : '/binders')}><ArrowLeft size={16} /> {leftId ? t('common.back') : t('decks.backToCardLists')}</button>
 
-    <header className="relative overflow-hidden rounded-2xl border border-border bg-bg-card p-5 shadow-card" data-testid="deck-comparison-hero">
+    <header className="relative overflow-hidden rounded-xl border border-border bg-bg-card p-5 shadow-card" data-testid="deck-comparison-hero">
       <div className="pointer-events-none absolute -right-12 -top-20 h-56 w-56 rounded-full bg-brand-red/10 blur-3xl" />
-      <div className="relative flex items-start gap-4"><span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-brand-red/10 text-brand-red"><GitCompare size={24} aria-hidden /></span><div><h1 className="text-2xl font-black text-text-primary">{t('decks.compare')}</h1><p className="mt-1 max-w-2xl text-sm text-text-secondary">{t('decks.compareIntro')}</p></div></div>
+      <div className="relative flex items-start gap-4"><span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-red/10 text-brand-red"><GitCompare size={24} aria-hidden /></span><div><h1 className="text-2xl font-semibold text-text-primary">{t('decks.compare')}</h1><p className="mt-1 max-w-2xl text-sm text-text-secondary">{t('decks.compareIntro')}</p></div></div>
       <div className="relative mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-2 sm:gap-3">
         <label className="min-w-0 text-right text-sm text-blue">{t('decks.deckA')}<select aria-label={t('decks.deckA')} className="select mt-1 w-full text-left" value={leftId || ''} onChange={event => choose('left', event.target.value)}><option value="">{t('decks.chooseDeck')}</option>{decks.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
         <button type="button" className="btn-secondary mb-0.5 justify-self-center px-2 sm:px-3" onClick={swap} disabled={!leftId || !rightId} aria-label={t('decks.swapDecks')} title={t('decks.swapDecks')}><ArrowLeftRight size={17} aria-hidden /></button>
@@ -93,7 +93,7 @@ export default function DeckCompare() {
     {isLoading ? <div className="grid grid-cols-2 gap-3"><div className="skeleton h-40 rounded-xl" /><div className="skeleton h-40 rounded-xl" /></div> : !deck ? <p className="rounded-xl border border-dashed border-border bg-bg-card px-4 py-12 text-center text-sm text-text-muted">{t('decks.chooseDifferentDecks')}</p> : <>
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
         <DeckIdentity deck={deck.left} side="left" t={t} />
-        <span className="grid h-9 w-9 place-items-center rounded-full border border-border bg-bg-elevated text-[10px] font-black text-text-muted">VS</span>
+        <span className="grid h-9 w-9 place-items-center rounded-full border border-border bg-bg-elevated text-[10px] font-semibold text-text-muted">VS</span>
         <DeckIdentity deck={deck.right} side="right" t={t} />
       </div>
 

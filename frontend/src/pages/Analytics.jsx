@@ -87,7 +87,7 @@ function AddExpenseModal({ onClose, onSuccess }) {
       <div className={[
         'w-full rounded-t-2xl max-h-[90dvh] overflow-y-auto',
         'bg-bg-surface border-t border-border',
-        'md:rounded-2xl md:border md:max-w-md md:max-h-[80vh]',
+        'md:rounded-xl md:border md:max-w-md md:max-h-[80vh]',
       ].join(' ')} onClick={e => e.stopPropagation()}>
         <div className="flex justify-center pt-3 pb-1 md:hidden">
           <div className="w-10 h-1 bg-border rounded-full" />
@@ -535,7 +535,7 @@ export default function Analytics() {
                 <div key={stat.label} className="rounded-xl p-3 text-center"
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <p className="text-xs text-text-muted mb-1 leading-tight">{stat.label}</p>
-                  <p className="text-sm font-black" style={{ color: stat.color }}>{stat.value}</p>
+                  <p className="text-sm font-semibold" style={{ color: stat.color }}>{stat.value}</p>
                 </div>
               ))}
             </div>
@@ -598,14 +598,14 @@ export default function Analytics() {
                 ].map(stat => (
                   <div key={stat.label} className="rounded-xl p-3 text-center bg-bg-elevated/60 border border-border/70">
                     <p className="text-xs text-text-muted mb-1 leading-tight">{stat.label}</p>
-                    <p className="text-sm font-black" style={{ color: stat.color }}>{stat.value}</p>
+                    <p className="text-sm font-semibold" style={{ color: stat.color }}>{stat.value}</p>
                   </div>
                 ))}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="rounded-xl bg-bg-elevated/40 border border-border/60 p-3">
-                  <p className="text-xs uppercase text-text-muted mb-2">{t('analytics.tradeGiven')}</p>
+                  <p className="text-xs  text-text-muted mb-2">{t('analytics.tradeGiven')}</p>
                   <div className="flex justify-between gap-3">
                     <span className="text-text-secondary">{t('analytics.tradeCards')}</span>
                     <span className="font-semibold text-text-primary">{formatPrice(tradeStats.outgoing_card_value)}</span>
@@ -616,7 +616,7 @@ export default function Analytics() {
                   </div>
                 </div>
                 <div className="rounded-xl bg-bg-elevated/40 border border-border/60 p-3">
-                  <p className="text-xs uppercase text-text-muted mb-2">{t('analytics.tradeReceived')}</p>
+                  <p className="text-xs  text-text-muted mb-2">{t('analytics.tradeReceived')}</p>
                   <div className="flex justify-between gap-3">
                     <span className="text-text-secondary">{t('analytics.tradeCards')}</span>
                     <span className="font-semibold text-text-primary">{formatPrice(tradeStats.incoming_card_value)}</span>

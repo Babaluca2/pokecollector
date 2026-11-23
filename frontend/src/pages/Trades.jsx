@@ -96,9 +96,9 @@ function TradeHealthBar({ outgoingValue, incomingValue, scoreOutgoingValue, miss
             <ArrowRightLeft size={17} className="text-brand-red flex-shrink-0" />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-text-muted">{t('trades.tradeMeter')}</p>
-            <p className="text-sm font-black text-text-primary truncate">{label}</p>
-            <p className={clsx('text-xs font-black', delta >= 0 ? 'text-green' : 'text-brand-red')}>
+            <p className="text-[10px] font-semibold   text-text-muted">{t('trades.tradeMeter')}</p>
+            <p className="text-sm font-semibold text-text-primary truncate">{label}</p>
+            <p className={clsx('text-xs font-semibold', delta >= 0 ? 'text-green' : 'text-brand-red')}>
               {delta >= 0 ? '+' : ''}{formatPrice(delta)}
             </p>
           </div>
@@ -109,14 +109,14 @@ function TradeHealthBar({ outgoingValue, incomingValue, scoreOutgoingValue, miss
         </div>
       </div>
       <div className="flex items-center gap-2 rounded-full border border-border bg-bg-elevated px-2 py-1">
-        <span className="text-[10px] font-black leading-none text-brand-red">{t('trades.profitLossShort')}</span>
+        <span className="text-[10px] font-semibold leading-none text-brand-red">{t('trades.profitLossShort')}</span>
         <div className="h-4 flex-1 rounded-full border border-black/50 bg-black/50 p-[3px]">
           <div
             className="h-full rounded-full transition-all duration-300"
             style={{ width: `${barWidth}%`, backgroundColor: barColor }}
           />
         </div>
-        <span className="w-14 text-right text-[10px] font-black tabular-nums text-text-secondary">{score}/100</span>
+        <span className="w-14 text-right text-[10px] font-semibold tabular-nums text-text-secondary">{score}/100</span>
       </div>
     </div>
   )
@@ -226,7 +226,7 @@ function DraftItem({ item, side, onUpdate, onRemove, t, formatPrice, exchangeRat
 function CashInput({ value, onChange, t }) {
   return (
     <div className="rounded-lg border border-dashed border-border bg-bg-elevated/40 p-3">
-      <label className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+      <label className="mb-2 flex items-center gap-2 text-xs font-bold   text-text-muted">
         <Wallet size={14} />
         {t('trades.cashAmount')}
       </label>
@@ -252,9 +252,9 @@ function CashHistoryRow({ item, t, formatPrice }) {
 
 function SelectedPanel({ title, total, children, formatPrice }) {
   return (
-    <div className="rounded-lg border-2 border-brand-red/30 bg-bg-card p-3 space-y-3 shadow-[0_0_0_1px_rgba(227,0,11,0.08)]">
+    <div className="rounded-lg border-2 border-brand-red/30 bg-bg-card p-3 space-y-3 shadow-[0_0_0_1px_rgba(183,155,99,0.08)]">
       <div className="flex items-center justify-between gap-2 border-b border-border pb-2">
-        <h3 className="text-xs font-black uppercase tracking-[0.14em] text-brand-red">{title}</h3>
+        <h3 className="text-xs font-semibold   text-brand-red">{title}</h3>
         <span className="text-sm font-bold text-text-primary">{formatPrice(total)}</span>
       </div>
       {children}
@@ -572,7 +572,7 @@ export default function Trades() {
             <section className="space-y-3">
               <div className="rounded-lg border border-border bg-bg-elevated/30 p-3 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between gap-2">
-                  <h2 className="text-sm font-bold uppercase tracking-[0.14em] text-text-muted">{t('trades.give')}</h2>
+                  <h2 className="text-sm font-bold   text-text-muted">{t('trades.give')}</h2>
                   <span className="text-sm font-bold text-text-primary">{formatPrice(totals.outgoingValue)}</span>
                 </div>
                 <div className="relative">
@@ -628,7 +628,7 @@ export default function Trades() {
             <section className="space-y-3">
               <div className="rounded-lg border border-border bg-bg-elevated/30 p-3 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between gap-2">
-                  <h2 className="text-sm font-bold uppercase tracking-[0.14em] text-text-muted">{t('trades.receive')}</h2>
+                  <h2 className="text-sm font-bold   text-text-muted">{t('trades.receive')}</h2>
                   <span className="text-sm font-bold text-text-primary">{formatPrice(totals.incomingValue)}</span>
                 </div>
                 <div className="flex gap-2">
@@ -716,7 +716,7 @@ export default function Trades() {
           </div>
 
           {(outgoing.length > 0 || incoming.length > 0) && !isFinalizeVisible && (
-            <div className="fixed bottom-20 left-3 right-3 z-40 flex items-center gap-3 rounded-2xl border border-white/15 bg-bg-surface/95 p-3 shadow-2xl backdrop-blur md:hidden">
+            <div className="fixed bottom-20 left-3 right-3 z-40 flex items-center gap-3 rounded-xl border border-white/15 bg-bg-surface/95 p-3 shadow-2xl backdrop-blur md:hidden">
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-text-primary">
                   {outgoing.length + incoming.length} {t('trades.selectedCards')}
@@ -764,7 +764,7 @@ export default function Trades() {
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 {['outgoing', 'incoming'].map(direction => (
                   <div key={direction} className="space-y-2">
-                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+                    <p className="text-xs font-bold   text-text-muted">
                       {direction === 'outgoing' ? t('trades.give') : t('trades.receive')}
                     </p>
                     {(trade.items || []).filter(item => item.direction === direction).map(item => (

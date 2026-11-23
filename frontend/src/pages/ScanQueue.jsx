@@ -47,7 +47,7 @@ function JobRow({ job, onOpen, retryNow, t }) {
   const waitingOnly = Number(job.retrying || 0) > 0 && Number(job.active || 0) === Number(job.retrying || 0)
   return (
     <button type="button" onClick={() => onOpen(job.id)}
-      className="w-full rounded-2xl border border-border bg-bg-surface p-4 text-left transition-colors hover:border-brand-red/40">
+      className="w-full rounded-xl border border-border bg-bg-surface p-4 text-left transition-colors hover:border-brand-red/40">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-sm font-bold text-text-primary">
@@ -71,7 +71,7 @@ function JobRow({ job, onOpen, retryNow, t }) {
             <Loader2 size={13} className="animate-spin" /> {t('scanner.processing')}
           </span>
         ) : (
-          <span className="rounded-full bg-brand-red/15 px-2 py-1 text-[10px] font-black uppercase tracking-wider text-brand-red">
+          <span className="rounded-full bg-brand-red/15 px-2 py-1 text-[10px] font-semibold   text-brand-red">
             {job.attention} {t('scanner.ready')}
           </span>
         )}
@@ -198,7 +198,7 @@ function JobDetail({ jobId, onObscuredChange }) {
         </button>
       </div>
 
-      <div className="rounded-2xl border border-border bg-bg-surface p-4">
+      <div className="rounded-xl border border-border bg-bg-surface p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="font-bold text-text-primary">{job.processed}/{job.total} {t('scanner.processed')}</p>

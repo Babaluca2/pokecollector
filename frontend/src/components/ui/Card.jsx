@@ -18,7 +18,7 @@ export default function Card({ className = '', onClick, padding = 'md', variant 
 
   const variantStyles = {
     default: 'card',
-    solid: 'bg-bg-card border border-border rounded-2xl',
+    solid: 'bg-bg-card border border-border rounded-xl',
     elevated: 'stat-card',
   }
 

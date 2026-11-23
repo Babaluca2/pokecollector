@@ -172,7 +172,7 @@ export function CardStateLegendDisclosure({
       </div>
       {open && (
         <div id={contentId} className="card p-3">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
+          <p className="mb-3 text-xs font-semibold  tracking-wide text-text-muted">
             {t('setDetail.badgeLegend')}
           </p>
           <CardStateLegend className={legendClassName} {...legendProps} />

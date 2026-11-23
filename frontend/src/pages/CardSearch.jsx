@@ -813,7 +813,7 @@ export default function CardSearch() {
             </div>
           )}
           {selectMode && (
-            <div className="fixed bottom-20 left-3 right-3 z-40 flex items-center gap-2 rounded-2xl border border-white/15 bg-bg-surface/95 p-3 shadow-2xl backdrop-blur sm:hidden">
+            <div className="fixed bottom-20 left-3 right-3 z-40 flex items-center gap-2 rounded-xl border border-white/15 bg-bg-surface/95 p-3 shadow-2xl backdrop-blur sm:hidden">
               <span className="min-w-0 flex-1 text-sm font-semibold text-brand-red">
                 {selectedItems.size} {t('cardSearch.selected')}
               </span>

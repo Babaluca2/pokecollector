@@ -72,21 +72,21 @@ const FALLBACK_COMBINATIONS = [
 ]
 
 function GalleryExample({ label, children, testId }) {
-  return <div className="min-w-0 space-y-2 rounded-2xl border border-white/5 bg-black/20 p-2.5 shadow-[0_14px_35px_rgba(0,0,0,0.2)] sm:p-3" data-testid={testId}>
-    <p className="truncate text-[10px] font-black uppercase tracking-[0.12em] text-text-secondary" title={label}>{label}</p>
+  return <div className="min-w-0 space-y-2 rounded-xl border border-white/5 bg-black/20 p-2.5 shadow-[0_14px_35px_rgba(0,0,0,0.2)] sm:p-3" data-testid={testId}>
+    <p className="truncate text-[10px] font-semibold   text-text-secondary" title={label}>{label}</p>
     {children}
   </div>
 }
 
 function GalleryHeading({ eyebrow, title, description }) {
   return <div className="space-y-1">
-    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-red">{eyebrow}</p>
-    <h2 className="text-lg font-black text-text-primary sm:text-xl">{title}</h2>
+    <p className="text-[10px] font-semibold   text-brand-red">{eyebrow}</p>
+    <h2 className="text-lg font-semibold text-text-primary sm:text-xl">{title}</h2>
     <p className="max-w-3xl text-xs leading-relaxed text-text-secondary sm:text-sm">{description}</p>
   </div>
 }
 
-const sectionClassName = 'space-y-5 rounded-3xl border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(227,0,11,0.10),transparent_35%),linear-gradient(145deg,rgba(22,23,36,0.98),rgba(8,9,15,0.98))] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:p-6'
+const sectionClassName = 'space-y-5 rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(183,155,99,0.10),transparent_35%),linear-gradient(145deg,rgba(22,23,36,0.98),rgba(8,9,15,0.98))] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.35)] sm:p-6'
 
 const binderProgress = (value, complete = false) => (
   <span
@@ -143,7 +143,7 @@ function HomeRankingExample({ formatPrice }) {
             loading="eager"
           />
           <span
-            className="absolute bottom-1 left-1 z-20 rounded bg-black/85 px-1 text-[9px] font-black leading-4 text-gold"
+            className="absolute bottom-1 left-1 z-20 rounded bg-black/85 px-1 text-[9px] font-semibold leading-4 text-gold"
             data-testid="ranking-position"
           >
             #{index + 1}
@@ -171,8 +171,8 @@ export default function CardSystemGallery() {
     <main className="min-h-screen bg-bg-primary p-4 text-text-primary sm:p-8" data-testid="card-system-gallery">
       <div className="mx-auto max-w-6xl space-y-8">
         <header className="space-y-2">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-brand-red">Contributor preview</p>
-          <h1 className="text-2xl font-black">PokéCollector card system</h1>
+          <p className="text-xs font-semibold   text-brand-red">Contributor preview</p>
+          <h1 className="text-2xl font-semibold">PokéCollector card system</h1>
           <p className="max-w-3xl text-sm text-text-secondary">
             Approved variants and states. New visual ideas should extend this system and add a gallery example.
           </p>
@@ -319,7 +319,7 @@ export default function CardSystemGallery() {
             title="A shared legend for the whole collection"
             description="Every badge, border, and contextual state is explained in one consistent vocabulary."
           />
-          <div className="rounded-2xl border border-border bg-bg-card/90 p-4 shadow-inner sm:p-5">
+          <div className="rounded-xl border border-border bg-bg-card/90 p-4 shadow-inner sm:p-5">
             <CardLegend collapsible={false} showSelection showBinderProgress showProductSource />
           </div>
         </section>

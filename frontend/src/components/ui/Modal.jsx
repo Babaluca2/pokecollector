@@ -146,7 +146,7 @@ function DesktopModal({ isOpen, onClose, title, children, sizeClass, className =
           className={[
             'relative w-full mx-4',
             sizeClass,
-            'bg-bg-card border border-border rounded-2xl',
+            'bg-bg-card border border-border rounded-xl',
             'max-h-[85vh] flex flex-col',
             'animate-slide-up',
             className,

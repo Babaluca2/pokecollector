@@ -69,7 +69,7 @@ export default function Dashboard() {
         <AnalyticsSectionNav />
         <div className="space-y-5 animate-pulse">
           {/* Trainer card skeleton */}
-          <div className="rounded-2xl overflow-hidden border-2 border-gold/20" style={{ background: 'linear-gradient(135deg, #1a2040, #0d1530)' }}>
+          <div className="rounded-xl overflow-hidden border-2 border-gold/20" style={{ background: 'linear-gradient(135deg, #1a2040, #0d1530)' }}>
             <div className="h-9 bg-brand-red/70" />
             <div className="p-4 space-y-3">
               <div className="flex gap-4">
@@ -85,11 +85,11 @@ export default function Dashboard() {
               <div className="skeleton h-2 rounded-full w-full mt-2" />
             </div>
           </div>
-          <div className="skeleton h-36 rounded-2xl" />
+          <div className="skeleton h-36 rounded-xl" />
           <div className="grid grid-cols-3 gap-2">
             {[...Array(3)].map((_, i) => <div key={i} className="skeleton h-20 rounded-xl" />)}
           </div>
-          <div className="skeleton h-56 rounded-2xl" />
+          <div className="skeleton h-56 rounded-xl" />
         </div>
       </div>
     )
@@ -151,7 +151,7 @@ export default function Dashboard() {
       {data?.recent_additions?.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider">
+            <h2 className="text-sm font-bold text-text-primary  ">
               {t('dashboard.recentAdditions')}
             </h2>
             <button
@@ -193,10 +193,10 @@ export default function Dashboard() {
             { label: t('dashboard.sets'), value: `${ownedSets}/${totalSets}` },
           ].map(stat => (
             <div key={stat.label} className="bg-bg-card border border-border rounded-xl p-3 text-center">
-              <p className={`whitespace-nowrap text-base font-black leading-none tracking-tight sm:text-xl ${stat.gold ? 'text-gold' : 'text-white'}`}>
+              <p className={`whitespace-nowrap text-base font-semibold leading-none tracking-tight sm:text-xl ${stat.gold ? 'text-gold' : 'text-white'}`}>
                 {stat.value}
               </p>
-              <p className="text-[10px] text-text-muted uppercase tracking-wider mt-1">{stat.label}</p>
+              <p className="text-[10px] text-text-muted   mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -206,7 +206,7 @@ export default function Dashboard() {
       {data?.top_cards?.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider">
+            <h2 className="text-sm font-bold text-text-primary  ">
               {t('dashboard.topValuable')}
             </h2>
 
@@ -224,7 +224,7 @@ export default function Dashboard() {
                     overlay={<PrintingDetailBadges details={card.printing_details} limit={1} className="absolute bottom-1 right-1 z-20 max-w-[calc(100%-2rem)]" />}
                     stateIndicatorProps={{ card: withCollectionItemState(card, card), alwaysShowQuantity: true }}
                   />
-                  <span className="absolute bottom-1 left-1 z-20 bg-black/80 text-gold text-[9px] font-black rounded px-1 leading-4">
+                  <span className="absolute bottom-1 left-1 z-20 bg-black/80 text-gold text-[9px] font-semibold rounded px-1 leading-4">
                     #{i + 1}
                   </span>
                 </div>
@@ -245,16 +245,16 @@ export default function Dashboard() {
         <div className="bg-bg-card border border-border rounded-xl p-4">
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1">{t('dashboard.invested')}</p>
-              <p className="text-lg font-black text-white">{formatPrice(data.total_cost || 0)}</p>
+              <p className="text-[10px] text-text-muted   mb-1">{t('dashboard.invested')}</p>
+              <p className="text-lg font-semibold text-white">{formatPrice(data.total_cost || 0)}</p>
             </div>
             <div>
-              <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1">{t('home.portfolioValue')}</p>
-              <p className="text-lg font-black text-gold">{formatPrice(Number(totalValue))}</p>
+              <p className="text-[10px] text-text-muted   mb-1">{t('home.portfolioValue')}</p>
+              <p className="text-lg font-semibold text-gold">{formatPrice(Number(totalValue))}</p>
             </div>
             <div>
-              <p className="text-[10px] text-text-muted uppercase tracking-wider mb-1">{t('dashboard.pnl')}</p>
-              <p className={`text-lg font-black flex items-center gap-1 ${pnl >= 0 ? 'text-green' : 'text-brand-red'}`}>
+              <p className="text-[10px] text-text-muted   mb-1">{t('dashboard.pnl')}</p>
+              <p className={`text-lg font-semibold flex items-center gap-1 ${pnl >= 0 ? 'text-green' : 'text-brand-red'}`}>
                 {pnl >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                 {pnl >= 0 ? '+' : ''}{formatPrice(pnl)}
                 <span className="text-[11px] font-normal opacity-70">
@@ -268,9 +268,9 @@ export default function Dashboard() {
 
       {/* ─── 6. PORTFOLIO CHART ─────────────────────────────────────── */}
       <section>
-        <div className="bg-bg-card border border-border rounded-2xl p-4">
+        <div className="bg-bg-card border border-border rounded-xl p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider">
+            <h2 className="text-sm font-bold text-text-primary  ">
               {t('dashboard.portfolioHistory')}
             </h2>
             <div className="flex gap-1">

@@ -15,7 +15,7 @@ export default function DeckCompositionBar({ entries, compositionCounts, progres
     <div className={compact ? 'space-y-2' : 'card space-y-3'}>
       {!compact && <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xl font-black text-text-primary">{progress.current} <span className="text-text-muted">/ {progress.target}</span></p>
+          <p className="text-xl font-semibold text-text-primary">{progress.current} <span className="text-text-muted">/ {progress.target}</span></p>
           <p className={`mt-1 text-xs font-medium ${progress.status === 'over' ? 'text-brand-red' : progress.status === 'complete' ? 'text-green' : 'text-yellow'}`}>
             {progress.status === 'complete' ? t('decks.complete') : progress.status === 'over' ? label('decks.over', { count: progress.over }) : label('decks.remaining', { count: progress.remaining })}
           </p>

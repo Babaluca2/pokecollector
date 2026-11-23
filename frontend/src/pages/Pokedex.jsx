@@ -56,7 +56,7 @@ function PokemonTile({ entry, onClick, language, t }) {
       data-scroll-anchor={`pokemon-${entry.entry_id}`}
       onClick={onClick}
       className={clsx(
-        'group relative rounded-2xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg focus:outline-hidden focus:ring-2 focus:ring-brand-red',
+        'group relative rounded-xl border p-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg focus:outline-hidden focus:ring-2 focus:ring-brand-red',
         entry.owned
           ? 'border-green/30 bg-gradient-to-b from-green/10 to-bg-card'
           : 'border-border bg-bg-card hover:border-text-muted'
@@ -71,7 +71,7 @@ function PokemonTile({ entry, onClick, language, t }) {
       <div className={clsx('flex justify-center transition-opacity', !entry.owned && 'opacity-65 group-hover:opacity-90')}>
         <SpeciesImage entry={entry} name={name} />
       </div>
-      <p className="text-[10px] font-black tracking-[0.15em] text-text-muted">
+      <p className="text-[10px] font-semibold  text-text-muted">
         {entry.display_number}
       </p>
       <h3 className="mt-0.5 truncate text-sm font-bold text-text-primary">{name}</h3>
@@ -164,18 +164,18 @@ export default function Pokedex() {
 
   return (
     <div data-scroll-list="pokedex" className="mx-auto w-full max-w-7xl space-y-5 px-4 pb-28 pt-2 sm:px-6 lg:px-8">
-      <section className="rounded-3xl border border-border bg-gradient-to-br from-bg-card to-bg-surface p-5 sm:p-6">
+      <section className="rounded-xl border border-border bg-gradient-to-br from-bg-card to-bg-surface p-5 sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-brand-red">PokéCollector</p>
-            <h1 className="mt-1 text-3xl font-black text-text-primary">
+            <p className="text-xs font-semibold   text-brand-red">PokéCollector</p>
+            <h1 className="mt-1 text-3xl font-semibold text-text-primary">
               {scope ? `${scope.region} Pokédex` : t('pokedex.title')}
             </h1>
             <p className="mt-1 text-sm text-text-secondary">{t('pokedex.subtitle')}</p>
           </div>
-          <div className="min-w-52 rounded-2xl border border-border bg-bg-card p-3">
+          <div className="min-w-52 rounded-xl border border-border bg-bg-card p-3">
             <div className="flex items-end justify-between gap-3">
-              <span className="text-2xl font-black text-text-primary">{summary.owned}/{summary.total}</span>
+              <span className="text-2xl font-semibold text-text-primary">{summary.owned}/{summary.total}</span>
               <span className="text-xs font-semibold text-text-muted">{progress}% {t('pokedex.collected')}</span>
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-bg-elevated">
@@ -185,7 +185,7 @@ export default function Pokedex() {
         </div>
       </section>
 
-      <section className="space-y-3 rounded-2xl border border-border bg-bg-surface p-3 sm:p-4">
+      <section className="space-y-3 rounded-xl border border-border bg-bg-surface p-3 sm:p-4">
         <label className="relative block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
           <input
@@ -264,7 +264,7 @@ export default function Pokedex() {
             {!generation && !search.trim() && info && (
               <div className="flex items-end justify-between border-b border-border pb-2">
                 <div>
-                  <h2 className="text-xl font-black text-text-primary">{info.region}</h2>
+                  <h2 className="text-xl font-semibold text-text-primary">{info.region}</h2>
                   <p className="text-xs text-text-muted">Gen {info.id} · {info.range}</p>
                 </div>
               </div>

@@ -17,7 +17,7 @@ export default function AvatarPicker({ isOpen, onClose, onSelect, currentAvatarI
       className="bg-bg-card sm:w-auto sm:min-w-[24rem]"
     >
       <div className="space-y-4 p-4">
-        <div className="max-h-[70vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border bg-bg-primary p-3">
+        <div className="max-h-[70vh] overflow-y-auto overflow-x-hidden rounded-xl border border-border bg-bg-primary p-3">
           <div className="grid grid-cols-[repeat(3,64px)] justify-center gap-3 sm:grid-cols-[repeat(4,64px)]">
             {POKEMON_IDS.map((pokemonId) => {
               const isSelected = currentAvatarId === pokemonId
