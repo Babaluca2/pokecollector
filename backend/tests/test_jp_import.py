@@ -36,5 +36,30 @@ class JpImportTests(unittest.TestCase):
         db.close()
 
 
+
+class SyncKeepsDatasetImageTests(unittest.TestCase):
+    def test_empty_tcgdex_sync_keeps_dataset_image_but_tcgdex_image_wins(self):
+        from services.card_upsert import upsert_card
+
+        engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+        Base.metadata.create_all(engine)
+        db = sessionmaker(bind=engine)()
+        db.add(Card(id="X-1_ja", tcg_card_id="X-1", name="a", set_id="X", number="1", lang="ja",
+                    images_small="https://r2/x.jpg", images_large="https://r2/x.jpg", image_source_lang="ja"))
+        db.commit()
+        base = {"id": "X-1_ja", "tcg_card_id": "X-1", "name": "a", "set_id": "X", "number": "1", "lang": "ja"}
+        upsert_card(db, {**base, "images_small": None, "images_large": None})
+        db.commit()
+        card = db.query(Card).one()
+        self.assertEqual(card.images_small, "https://r2/x.jpg")
+        upsert_card(db, {**base, "images_small": "https://assets.tcgdex.net/ja/X/1/low.webp",
+                         "images_large": "https://assets.tcgdex.net/ja/X/1/high.webp"})
+        db.commit()
+        card = db.query(Card).one()
+        self.assertEqual(card.images_small, "https://assets.tcgdex.net/ja/X/1/low.webp")
+        self.assertIsNone(card.image_source_lang)
+        db.close()
+
+
 if __name__ == "__main__":
     unittest.main()

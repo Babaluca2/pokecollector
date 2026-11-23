@@ -41,12 +41,22 @@ def update_existing_card(
     a missing TCGdex field. A native brief row explicitly clears that marker so
     later sibling-language fallback cannot overwrite the native row.
     """
+    incoming_has_image = bool(card_data.get("images_small") or card_data.get("images_large"))
     for key, value in card_data.items():
         if key == "id" or (metadata_only and _is_price_state_field(key)):
             continue
+        # TCGdex has no artwork for this card: keep an image added from another
+        # source (community datasets) instead of wiping it on every sync.
+        if key in ("images_small", "images_large") and not value and not incoming_has_image:
+            current = getattr(existing, key, None)
+            if current and "assets.tcgdex.net" not in current:
+                continue
         if partial and value is None and key not in PARTIAL_NULL_CLEAR_FIELDS:
             continue
         setattr(existing, key, value)
+    if incoming_has_image and "image_source_lang" not in card_data:
+        # Native TCGdex artwork replaces any borrowed or dataset image.
+        existing.image_source_lang = None
     return existing
 
 
