@@ -421,7 +421,7 @@ export default function Sets() {
               <button key={opt.value} onClick={() => updatePanelFilter('progressFilter', opt.value)}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                   progressFilter === opt.value
-                    ? 'bg-brand-red text-white'
+                    ? 'bg-brand-red text-[#19191B]'
                     : 'bg-bg-card text-text-secondary hover:text-text-primary border border-border'
                 }`}>
                 {opt.label}

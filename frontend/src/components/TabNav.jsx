@@ -22,7 +22,7 @@ export default function TabNav({ tabs }) {
             {tab.label}
             {tab.badge !== undefined && tab.badge !== null && (
               <span className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] leading-none ${
-                active ? 'bg-brand-red text-white' : 'bg-bg-elevated text-text-secondary'
+                active ? 'bg-brand-red text-[#19191B]' : 'bg-bg-elevated text-text-secondary'
               }`}>
                 {tab.badge}
               </span>

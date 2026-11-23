@@ -69,7 +69,7 @@ export default function Sidebar() {
                 <span className="flex-1 min-w-0 truncate">{label}</span>
                 {/* New sets badge */}
                 {label === t('nav.sets') && newSetsCount > 0 && (
-                  <span className="ml-auto bg-brand-red text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center flex-shrink-0">
+                  <span className="ml-auto bg-brand-red text-[#19191B] text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center flex-shrink-0">
                     {newSetsCount}
                   </span>
                 )}

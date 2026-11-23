@@ -1391,14 +1391,14 @@ export default function Collection() {
             <button
               onClick={() => setViewMode('grid')}
               title={t('collection.binderView')}
-              className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-brand-red text-white' : 'text-text-muted hover:text-text-primary'}`}
+              className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-brand-red text-[#19191B]' : 'text-text-muted hover:text-text-primary'}`}
             >
               <Grid2X2 size={15} />
             </button>
             <button
               onClick={() => setViewMode('list')}
               title={t('collection.listView')}
-              className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-brand-red text-white' : 'text-text-muted hover:text-text-primary'}`}
+              className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-brand-red text-[#19191B]' : 'text-text-muted hover:text-text-primary'}`}
             >
               <List size={15} />
             </button>
@@ -1477,7 +1477,7 @@ export default function Collection() {
           <button onClick={toggleFilters} aria-label={t('common.filter')}
             className={`btn-ghost text-sm py-1.5 ${showFilters || hasActiveFilters ? 'border-brand-red/30 text-brand-red' : ''}`}>
             <Filter size={14} /> {t('common.filter')}
-            {hasActiveFilters && <span className="ml-1 bg-brand-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">!</span>}
+            {hasActiveFilters && <span className="ml-1 bg-brand-red text-[#19191B] text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">!</span>}
           </button>
 
         </div>

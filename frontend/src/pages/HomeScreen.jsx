@@ -37,7 +37,7 @@ function ChartTooltip({ active, payload, label, formatPrice }) {
   const tooltipLabel = payload[0]?.payload?.tooltipLabel || label
   return (
     <div className="rounded-xl px-3 py-2 text-xs shadow-xl"
-      style={{ background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.12)' }}>
+      style={{ background: 'var(--color-elevated)', border: '1px solid rgba(255,255,255,0.12)' }}>
       <p className="text-text-muted mb-1">{tooltipLabel}</p>
       <p className="font-black" style={{ color: '#f5c842' }}>
         {formatPrice(Number(payload[0].value))}
@@ -578,7 +578,7 @@ export default function HomeScreen() {
               <p className="text-xs font-bold text-white uppercase tracking-wider">{t('home.recentlyAdded')}</p>
               <button onClick={() => navigate('/collection')}
                 className="text-[11px] font-semibold hover:opacity-80 transition-opacity"
-                style={{ color:'#e3000b' }}>{t('home.viewAll')} →</button>
+                style={{ color:'var(--color-brand-red)' }}>{t('home.viewAll')} →</button>
             </div>
             <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4">
               {recentCards.map(card => (

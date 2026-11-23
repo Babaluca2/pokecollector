@@ -683,7 +683,7 @@ export default function CardSearch() {
               {hasActiveFilters ? `${activeFilterCount} Filter` : t('cardSearch.filters')}
             </span>
             {hasActiveFilters && (
-              <span className="sm:hidden bg-brand-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">
+              <span className="sm:hidden bg-brand-red text-[#19191B] text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">
                 {activeFilterCount}
               </span>
             )}

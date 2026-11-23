@@ -1076,7 +1076,7 @@ export default function Products() {
             <button onClick={() => setShowFilters(current => !current)}
               className={`btn-ghost text-sm py-1.5 ${showFilters || hasActiveFilters ? 'border-brand-red/30 text-brand-red' : ''}`}>
               <Filter size={14} /> {t('common.filter')}
-              {hasActiveFilters && <span className="ml-1 bg-brand-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">!</span>}
+              {hasActiveFilters && <span className="ml-1 bg-brand-red text-[#19191B] text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">!</span>}
             </button>
 
             <div className="flex items-center gap-1 ml-auto">
@@ -1089,8 +1089,8 @@ export default function Products() {
                   className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
                     filterPnl === opt.value
                       ? opt.value === 'profit' ? 'bg-green text-white'
-                        : opt.value === 'loss' ? 'bg-brand-red text-white'
-                        : 'bg-brand-red text-white'
+                        : opt.value === 'loss' ? 'bg-brand-red text-[#19191B]'
+                        : 'bg-brand-red text-[#19191B]'
                       : 'bg-bg-card text-text-secondary hover:text-text-primary border border-border'
                   }`}>
                   {opt.label}

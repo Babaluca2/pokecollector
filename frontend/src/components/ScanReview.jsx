@@ -552,7 +552,7 @@ export function CardZoomModal({
             type="button"
             onClick={() => onAccept(card)}
             className="flex cursor-pointer items-center gap-2 rounded-xl px-6 py-3 font-black text-white transition-all"
-            style={{ background: '#e3000b', boxShadow: '0 0 16px rgba(227,0,11,0.35)' }}
+            style={{ background: 'var(--color-brand-red)', color: '#19191B', boxShadow: 'none' }}
           >
             <Check size={18} />{t('scanner.acceptMatch')}
           </button>
@@ -683,7 +683,7 @@ function CandidateGrid({ jobId, itemId, matches, onSelect, onZoom, t }) {
                   title={t('scanner.addToCollection')}
                   aria-label={t('scanner.addToCollection')}
                   className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-transform hover:scale-110 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-red"
-                  style={{ background: '#e3000b', boxShadow: '0 0 12px rgba(227,0,11,0.5)' }}
+                  style={{ background: 'var(--color-brand-red)', color: '#19191B', boxShadow: 'none' }}
                 >
                   <Plus size={15} className="text-white" />
                 </button>

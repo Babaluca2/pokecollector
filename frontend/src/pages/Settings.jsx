@@ -133,7 +133,7 @@ function TcgdexLanguageControl({ value, onChange, selectedLabel, fallbackNote })
             onClick={() => toggle(language.code)}
             className={`px-2 py-1.5 rounded-lg text-xs font-semibold text-left transition-colors border ${
               selected.has(language.code)
-                ? 'bg-brand-red text-white border-brand-red'
+                ? 'bg-brand-red text-[#19191B] border-brand-red'
                 : 'bg-bg-card text-text-muted border-border hover:text-text-primary'
             }`}
             title={language.name}
@@ -984,7 +984,7 @@ export default function Settings() {
                       autoFocus
                       maxLength={32}
                     />
-                    <button type="submit" disabled={usernameMutation.isPending} className="rounded-lg bg-brand-red px-2 py-1.5 text-xs font-semibold text-white">
+                    <button type="submit" disabled={usernameMutation.isPending} className="rounded-lg bg-brand-red px-2 py-1.5 text-xs font-semibold text-[#19191B]">
                       {usernameMutation.isPending ? '...' : '✓'}
                     </button>
                     <button type="button" onClick={() => setEditingUsername(false)} className="rounded-lg border border-border px-2 py-1.5 text-xs text-text-muted">
@@ -1764,7 +1764,7 @@ export default function Settings() {
                   href={supportPageUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-red text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-red text-[#19191B] text-sm font-semibold hover:opacity-90 transition-opacity"
                 >
                   🐾 Betterplace
                 </a>

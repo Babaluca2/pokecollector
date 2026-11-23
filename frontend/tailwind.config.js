@@ -16,34 +16,34 @@ export default {
           elevated: 'var(--color-elevated)',
         },
         border: {
-          DEFAULT: 'rgba(255,255,255,0.07)',
-          subtle: 'rgba(255,255,255,0.03)',
+          DEFAULT: 'var(--color-border)',
+          subtle: 'var(--color-border-subtle)',
         },
         text: {
-          primary: '#ffffff',
-          secondary: '#a0a0b8',
-          muted: '#606078',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+          muted: 'var(--color-text-muted)',
         },
         // Pokemon brand — richer, more saturated
         brand: {
           red: 'rgb(var(--color-brand-red-rgb) / <alpha-value>)',
           'red-light': 'var(--color-brand-red-light)',
           'red-dark': 'var(--color-brand-red-dark)',
-          'red-glow': 'rgba(227,0,11,0.35)',
+          'red-glow': 'rgba(183,155,99,0.2)',
         },
         // Status — keeping legacy names for backward compat
         pokemon: {
-          red: '#e3000b',
-          'red-dark': '#b80009',
-          'red-light': '#ff4d4d',
+          red: '#B79B63',
+          'red-dark': '#9A7F4C',
+          'red-light': '#CDB47E',
         },
         // Dark theme legacy aliases
         dark: {
-          bg: '#08080f',
-          surface: '#0f0f1a',
-          card: '#141422',
+          bg: '#19191B',
+          surface: '#1E1E21',
+          card: '#222226',
           border: 'rgba(255,255,255,0.07)',
-          hover: '#1a1a2e',
+          hover: '#2A2A2E',
         },
         // Semantic status colors
         green: {
@@ -77,7 +77,8 @@ export default {
       },
 
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        serif: ['Spectral', 'Georgia', 'serif'],
       },
 
       fontSize: {
@@ -143,9 +144,9 @@ export default {
       boxShadow: {
         card: '0 2px 8px rgba(0,0,0,0.4)',
         elevated: '0 4px 16px rgba(0,0,0,0.5)',
-        glow: '0 0 20px rgba(227,0,11,0.15)',
-        'glow-lg': '0 0 30px rgba(227,0,11,0.25)',
-        'glow-btn': '0 0 16px rgba(227,0,11,0.3)',
+        glow: 'none',
+        'glow-lg': 'none',
+        'glow-btn': 'none',
       },
     },
   },

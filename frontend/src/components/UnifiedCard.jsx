@@ -438,7 +438,7 @@ export function UnifiedCardDialog({
                     className={clsx(
                       'inline-flex min-h-9 shrink-0 items-center justify-center rounded-lg px-3 py-2 text-center text-xs font-bold leading-tight transition-colors',
                       activeTab === tab.id
-                        ? 'bg-brand-red text-white shadow-[0_0_14px_rgba(227,0,11,0.3)]'
+                        ? 'bg-brand-red text-[#19191B] shadow-[0_0_14px_rgba(227,0,11,0.3)]'
                         : 'bg-bg-card text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
                     )}
                   >

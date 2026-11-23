@@ -297,7 +297,7 @@ export default function Wishlist() {
               <button onClick={() => setShowFilters(current => !current)}
                 className={`btn-ghost text-sm py-1.5 ${showFilters || hasActiveFilters ? 'border-brand-red/30 text-brand-red' : ''}`}>
                 <Filter size={14} /> {t('common.filter')}
-                {hasActiveFilters && <span className="ml-1 bg-brand-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">!</span>}
+                {hasActiveFilters && <span className="ml-1 bg-brand-red text-[#19191B] text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">!</span>}
               </button>
 
               <span className="text-xs text-text-muted ml-auto">{filtered.length} / {items.length} · {totalCopies} {t('wishlist.copies')}</span>

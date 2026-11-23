@@ -118,7 +118,7 @@ export default function AppNav() {
         className="pokeball-home-button fixed bottom-6 left-4 z-40 w-12 h-12 rounded-full flex items-center justify-center
           transition-transform duration-200 active:scale-90"
         style={{
-          background: 'linear-gradient(180deg, #e3000b 50%, #f5f5f5 50%)',
+          background: 'linear-gradient(180deg, var(--color-brand-red) 50%, #E4E1DA 50%)',
           boxShadow: '0 4px 20px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.8), 0 0 16px rgba(227,0,11,0.3)',
           border: '2px solid #111',
         }}

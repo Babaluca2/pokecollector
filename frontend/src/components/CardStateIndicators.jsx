@@ -124,7 +124,7 @@ export function CardStateLegend({
         <span className="text-xs leading-tight text-text-secondary">{t('collection.foundIn')}</span>
       </div>}
       {showSelection && <div className="flex min-w-0 items-center gap-2">
-        <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-white/50 bg-brand-red text-white shadow-lg">
+        <span className="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-white/50 bg-brand-red text-[#19191B] shadow-lg">
           <Check size={12} strokeWidth={3} aria-hidden />
         </span>
         <span className="text-xs leading-tight text-text-secondary">{t('cardSearch.selected')}</span>

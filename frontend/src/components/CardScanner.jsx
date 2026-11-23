@@ -205,7 +205,7 @@ export function ScanAddModal({
               onClick={handleAdd}
               disabled={adding || !exchangeRateReady}
               className="flex-1 py-3 rounded-xl font-black text-white flex items-center justify-center gap-2 transition-all"
-              style={{ background: adding ? '#555' : '#e3000b', boxShadow: adding ? 'none' : '0 0 16px rgba(227,0,11,0.3)' }}
+              style={{ background: adding ? '#555' : 'var(--color-brand-red)', boxShadow: 'none' }}
             >
               {adding ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
               {adding ? t('scanner.adding') : t('scanner.addToCollection')}
@@ -402,7 +402,7 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
 
             <button onClick={() => cameraRef.current?.click()}
               className="w-full max-w-xs py-4 rounded-2xl font-black text-white text-base flex items-center justify-center gap-3"
-              style={{ background: '#e3000b', boxShadow: '0 0 24px rgba(227,0,11,0.35)' }}>
+              style={{ background: 'var(--color-brand-red)', color: '#19191B', boxShadow: 'none' }}>
               <Camera size={20} /> {t('scanner.takePhoto')}
             </button>
 
@@ -457,7 +457,7 @@ export default function CardScanner({ isOpen, onClose, onCardSelected }) {
                     </span>
                     <button type="button" onClick={() => removeStagedFile(item.id)}
                       aria-label={t('common.remove')}
-                      className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/75 text-white hover:bg-brand-red">
+                      className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/75 text-[#19191B] hover:bg-brand-red">
                       <X size={13} />
                     </button>
                   </div>

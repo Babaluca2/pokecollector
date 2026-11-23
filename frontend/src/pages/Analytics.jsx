@@ -362,7 +362,7 @@ export default function Analytics() {
                     className={clsx(
                       'min-w-10 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors',
                       moversSort === option.value
-                        ? 'bg-brand-red text-white'
+                        ? 'bg-brand-red text-[#19191B]'
                         : 'text-text-secondary hover:text-text-primary hover:bg-bg-elevated'
                     )}
                   >

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const THEMES = [
-  { id: 'default', label: 'Pokémon Red', color: '#e3000b', emoji: '🔴' },
+  { id: 'default', label: 'Galerie', color: '#B79B63', emoji: '🟡' },
   { id: 'fire', label: 'Fire', color: '#ff6b35', emoji: '🔥' },
   { id: 'water', label: 'Water', color: '#4fc3f7', emoji: '💧' },
   { id: 'grass', label: 'Grass', color: '#66bb6a', emoji: '🌿' },

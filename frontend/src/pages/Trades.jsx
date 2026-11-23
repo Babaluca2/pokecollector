@@ -547,7 +547,7 @@ export default function Trades() {
               onClick={() => setTab(id)}
               className={clsx(
                 'flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold transition-colors',
-                tab === id ? 'bg-brand-red text-white' : 'text-text-muted hover:text-text-primary'
+                tab === id ? 'bg-brand-red text-[#19191B]' : 'text-text-muted hover:text-text-primary'
               )}
             >
               <Icon size={15} />

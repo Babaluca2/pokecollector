@@ -265,7 +265,7 @@ export default function UnifiedCardScanner({ isOpen, onClose }) {
                       type="button"
                       onClick={() => removeFile(item.id)}
                       aria-label={t('common.remove')}
-                      className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/75 text-white hover:bg-brand-red"
+                      className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/75 text-[#19191B] hover:bg-brand-red"
                     >
                       <X size={13} />
                     </button>
