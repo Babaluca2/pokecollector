@@ -165,6 +165,22 @@ def mark_sets_seen(
     return {"message": "All new sets marked as seen"}
 
 
+@router.post("/import-chs")
+def import_chs(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Admin: import Simplified Chinese sets and cards from PTCG-CHS-Datasets."""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    from services.chs_import import import_chs_cards
+
+    try:
+        return import_chs_cards(db)
+    except Exception as exc:  # network or format problem
+        raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
+
+
 @router.post("/image-repair")
 def repair_images(
     db: Session = Depends(get_db),

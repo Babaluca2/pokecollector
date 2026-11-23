@@ -1,11 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getImageCoverage, repairImages } from '../api/client'
+import { getImageCoverage, importChsCards, repairImages } from '../api/client'
 import { useSettings } from '../contexts/SettingsContext'
 
 /** Compact audit of cards that have no artwork, per language and per set. */
 export default function ImageCoverage() {
   const { t } = useSettings()
   const queryClient = useQueryClient()
+  const importChs = useMutation({
+    mutationFn: importChsCards,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['image-coverage'] })
+      queryClient.invalidateQueries({ queryKey: ['sets'] })
+      queryClient.invalidateQueries({ queryKey: ['cards'] })
+    },
+  })
   const repair = useMutation({
     mutationFn: repairImages,
     onSuccess: () => {
@@ -25,10 +33,19 @@ export default function ImageCoverage() {
     <div className="px-1 py-3 text-sm">
       <p className="font-serif text-base">{t('settings.imageCoverage')}</p>
       <p className="text-xs text-text-muted mb-2">{t('settings.imageCoverageDesc')}</p>
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex flex-wrap items-center gap-3 mb-2">
         <button type="button" className="btn-secondary text-xs" disabled={repair.isPending} onClick={() => repair.mutate()}>
           {repair.isPending ? t('settings.imageRepairRunning') : t('settings.imageRepair')}
         </button>
+        <button type="button" className="btn-secondary text-xs" disabled={importChs.isPending} onClick={() => importChs.mutate()}>
+          {importChs.isPending ? t('settings.importChsRunning') : t('settings.importChs')}
+        </button>
+        {importChs.data && (
+          <span className="text-xs text-text-muted">
+            {t('settings.importChsResult', { sets: importChs.data.sets, cards: importChs.data.cards })}
+          </span>
+        )}
+        {importChs.isError && <span className="text-xs text-red">{t('settings.importChsError')}</span>}
         {repair.data && (
           <span className="text-xs text-text-muted">
             {t('settings.imageRepairResult', { repaired: repair.data.repaired, remaining: repair.data.still_missing })}

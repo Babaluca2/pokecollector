@@ -1433,7 +1433,11 @@
     "imageCoverageWorst": "Sets with the most missing images",
     "imageRepair": "Fill from another language",
     "imageRepairRunning": "Repairing…",
-    "imageRepairResult": "{{repaired}} fixed, {{remaining}} still without image"
+    "imageRepairResult": "{{repaired}} fixed, {{remaining}} still without image",
+    "importChs": "Import Chinese (CN) cards",
+    "importChsRunning": "Importing…",
+    "importChsResult": "{{sets}} sets, {{cards}} cards imported",
+    "importChsError": "Import failed"
   },
   "publicProfiles": {
     "directory": "Public profiles",

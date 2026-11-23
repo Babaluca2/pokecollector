@@ -845,7 +845,11 @@
     "imageCoverageWorst": "Sets avec le plus d'images manquantes",
     "imageRepair": "Réparer avec une autre langue",
     "imageRepairRunning": "Réparation…",
-    "imageRepairResult": "{{repaired}} réparées, {{remaining}} sans image"
+    "imageRepairResult": "{{repaired}} réparées, {{remaining}} sans image",
+    "importChs": "Importer les cartes chinoises (CN)",
+    "importChsRunning": "Import en cours…",
+    "importChsResult": "{{sets}} sets, {{cards}} cartes importés",
+    "importChsError": "Import impossible"
   },
   "period": {
     "label": "Période",
