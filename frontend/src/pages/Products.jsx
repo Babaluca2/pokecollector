@@ -5,7 +5,9 @@ import {
   ResponsiveContainer, Cell
 } from 'recharts'
 import { Plus, Trash2, Edit2, TrendingUp, TrendingDown, Package, Check, X, SortAsc, Filter, ChevronUp, ChevronDown, Link2, DollarSign, History, AlertCircle, Search, ExternalLink } from 'lucide-react'
-import { getProducts, createProductBatch, updateProduct, bulkUpdateProductLifecycle, deleteProduct, getProductsSummary, getCollection, linkProductCards, unlinkProductCard, sellProductCard, addProductLedgerEntry, getApiErrorMessage } from '../api/client'
+import { invalidateCardState } from '../utils/queryInvalidation'
+import OpenProductDialog from '../components/OpenProductDialog'
+import { getProducts, createProductBatch, updateProduct, bulkUpdateProductLifecycle, deleteProduct, getProductsSummary, getCollection, linkProductCards, openProduct, unlinkProductCard, sellProductCard, addProductLedgerEntry, getApiErrorMessage } from '../api/client'
 import { useSettings } from '../contexts/SettingsContext'
 import { useConfirmDialog } from '../contexts/ConfirmDialogContext'
 import { CardRow } from '../components/card-system'
@@ -710,9 +712,11 @@ function ProductCardsModal({
   onUnlink,
   onSell,
   onFlatGain,
+  onOpenProduct,
   loading,
 }) {
   const [linkPickerOpen, setLinkPickerOpen] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
 
   useEffect(() => {
     setLinkPickerOpen(false)
@@ -730,6 +734,20 @@ function ProductCardsModal({
       size="xl"
       isObscured={linkPickerOpen}
     >
+      {product.lifecycle_status !== 'sold' && (
+        <div className="mb-4">
+          <button type="button" onClick={() => setOpenDialog(true)} className="btn-secondary w-full sm:w-auto min-h-[44px]">
+            {t('products.openButton')}
+          </button>
+        </div>
+      )}
+      <OpenProductDialog
+        isOpen={openDialog}
+        product={product}
+        loading={loading}
+        onClose={() => setOpenDialog(false)}
+        onOpen={async (data) => { await onOpenProduct(product.id, data); setOpenDialog(false) }}
+      />
       <ProductLedgerPanel
         product={product}
         products={products}
@@ -857,6 +875,16 @@ export default function Products() {
       invalidateProducts()
     },
     onError: (error) => toast.error(getApiErrorMessage(error, t('products.cardLinkFailed'))),
+  })
+
+  const openProductMutation = useMutation({
+    mutationFn: ({ productId, data }) => openProduct(productId, data),
+    onSuccess: () => {
+      toast.success(t('products.opened'))
+      invalidateProducts()
+      invalidateCardState(queryClient)
+    },
+    onError: (error) => toast.error(getApiErrorMessage(error, t('products.openFailed'))),
   })
 
   const unlinkCardMutation = useMutation({
@@ -1508,8 +1536,9 @@ export default function Products() {
         formatPrice={formatPrice}
         t={t}
         onClose={closeProductCards}
-        loading={linkCardsMutation.isPending || unlinkCardMutation.isPending || sellCardMutation.isPending || flatGainMutation.isPending}
+        loading={openProductMutation.isPending || linkCardsMutation.isPending || unlinkCardMutation.isPending || sellCardMutation.isPending || flatGainMutation.isPending}
         onLink={(productId, items) => linkCardsMutation.mutateAsync({ productId, items })}
+        onOpenProduct={(productId, data) => openProductMutation.mutateAsync({ productId, data })}
         onUnlink={(productId, productCardId) => unlinkCardMutation.mutateAsync({ productId, productCardId })}
         onSell={(productId, productCardId, data) => sellCardMutation.mutateAsync({ productId, productCardId, data })}
         onFlatGain={(productId, data) => flatGainMutation.mutateAsync({ productId, data })}

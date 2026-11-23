@@ -15,6 +15,7 @@ from database import get_db
 from models import Card, CollectionItem, ProductCard, ProductLedgerEntry, ProductPurchase, User
 from schemas import (
     ProductCardBulkLinkCreate,
+    ProductOpenRequest,
     ProductCardLinkCreate,
     ProductCardResponse,
     ProductCardSaleCreate,
@@ -26,7 +27,9 @@ from schemas import (
     ProductPurchaseResponse,
     ProductPurchaseUpdate,
 )
+from services.auto_binders import sync_auto_binder
 from services.card_values import normalize_price_field
+from services.product_opening import allocate_unit_costs
 from services.binder_allocations import collection_item_allocated_quantity
 from services.image_url_security import validate_public_https_image_url
 from services.product_ledger import (
@@ -809,6 +812,64 @@ def link_collection_items_to_product(
     db.commit()
     db.refresh(product)
     return _refresh_product_response(db, current_user, product, normalize_price_field(price_field))
+
+
+@router.post("/{product_id}/open", response_model=ProductPurchaseResponse)
+def open_product(
+    product_id: int,
+    payload: ProductOpenRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+    price_field: str = Query(default="price_trend", description="Price field used to weight the cost split"),
+):
+    """Open a sealed product: add the pulled cards, spread its cost, mark it opened."""
+    from api.collection import _upsert_collection_item
+    from schemas import CollectionItemCreate
+
+    product = _get_product_or_404(db, current_user, product_id, lock=True)
+    has_activity = _product_has_activity(db, current_user, product.id)
+    if product_lifecycle_status(product, has_activity) == "sold":
+        raise HTTPException(status_code=409, detail="A sold sealed product cannot be opened")
+
+    price_field = normalize_price_field(price_field)
+    cards = {
+        card.id: card
+        for card in db.query(Card).filter(Card.id.in_([c.card_id for c in payload.cards])).all()
+    }
+    entries = [
+        {"quantity": c.quantity, "value": float(getattr(cards.get(c.card_id), price_field, None) or 0)}
+        for c in payload.cards
+    ]
+    unit_costs = allocate_unit_costs(float(product.purchase_price or 0), entries, payload.allocation)
+
+    links: list[ProductCardLinkCreate] = []
+    for opened, unit_cost in zip(payload.cards, unit_costs):
+        status, row = _upsert_collection_item(db, current_user, CollectionItemCreate(
+            card_id=opened.card_id,
+            quantity=opened.quantity,
+            variant=opened.variant,
+            condition=opened.condition,
+            lang=opened.lang,
+            purchase_price=unit_cost,
+        ))
+        db.flush()
+        links.append(ProductCardLinkCreate(collection_item_id=row.id, quantity=opened.quantity))
+
+    merged: dict[int, ProductCardLinkCreate] = {}
+    for link in links:
+        if link.collection_item_id in merged:
+            merged[link.collection_item_id].quantity += link.quantity
+        else:
+            merged[link.collection_item_id] = link
+    _link_collection_items(db, current_user, product, list(merged.values()))
+
+    db.commit()
+    for link in merged.values():
+        item = db.query(CollectionItem).filter(CollectionItem.id == link.collection_item_id).first()
+        if item:
+            sync_auto_binder(db, current_user, item)
+    db.refresh(product)
+    return _refresh_product_response(db, current_user, product, price_field)
 
 
 @router.post('/cards/bulk-unlink', response_model=BulkProductUnlinkResponse)

@@ -326,6 +326,7 @@ export const bulkUpdateProductLifecycle = (data) => api.put('/products/lifecycle
 export const deleteProduct = (id) => api.delete(`/products/${id}`)
 export const getProductsSummary = (params = {}) => api.get('/products/summary', { params })
 export const linkProductCard = (productId, data) => api.post(`/products/${productId}/cards`, data).then(r => r.data)
+export const openProduct = (productId, data) => api.post(`/products/${productId}/open`, data).then(r => r.data)
 export const linkProductCards = (productId, data) => api.post(`/products/${productId}/cards/bulk`, data).then(r => r.data)
 export const unlinkProductCard = (productId, productCardId, params = {}) => api.delete(`/products/${productId}/cards/${productCardId}`, { params }).then(r => r.data)
 export const bulkUnlinkProductCards = data => api.post('/products/cards/bulk-unlink', data).then(r => r.data)

@@ -542,6 +542,21 @@ class ProductCardBulkLinkCreate(BaseModel):
     items: List[ProductCardLinkCreate] = Field(min_length=1, max_length=200)
 
 
+class ProductOpenCard(BaseModel):
+    card_id: str
+    quantity: int = Field(default=1, ge=1, le=99)
+    variant: CollectionVariant = CollectionVariant.NORMAL
+    condition: str = "NM"
+    lang: str = "en"
+
+
+class ProductOpenRequest(BaseModel):
+    """Cards pulled from a sealed product, and how to spread its cost over them."""
+
+    cards: List[ProductOpenCard] = Field(min_length=1, max_length=200)
+    allocation: Literal["none", "equal", "value"] = "equal"
+
+
 class ProductCardSaleCreate(BaseModel):
     quantity: int = Field(default=1, ge=1, le=999)
     sold_price: float = Field(ge=0)
