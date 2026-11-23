@@ -28,6 +28,7 @@ from schemas import (
     ProductPurchaseUpdate,
 )
 from services.auto_binders import sync_auto_binder
+from services.price_context import build_price_context, use_price_context
 from services.card_values import normalize_price_field
 from services.product_opening import allocate_unit_costs
 from services.binder_allocations import collection_item_allocated_quantity
@@ -415,7 +416,8 @@ def _link_collection_items(
 def _refresh_product_response(db: Session, current_user: User, product: ProductPurchase, price_field: str) -> ProductPurchaseResponse:
     product_cards = _load_product_cards(db, current_user, product.id)
     flat_ledger_entries = _load_flat_ledger_entries(db, current_user, product.id)
-    return _product_response(product, product_cards, flat_ledger_entries, price_field)
+    with use_price_context(build_price_context(db, current_user.id, price_field=price_field)):
+        return _product_response(product, product_cards, flat_ledger_entries, price_field)
 
 
 def _product_responses(
@@ -426,6 +428,16 @@ def _product_responses(
 ) -> list[ProductPurchaseResponse]:
     if not products:
         return []
+    with use_price_context(build_price_context(db, current_user.id, price_field=price_field)):
+        return _product_responses_with_context(db, current_user, products, price_field)
+
+
+def _product_responses_with_context(
+    db: Session,
+    current_user: User,
+    products: list[ProductPurchase],
+    price_field: str,
+) -> list[ProductPurchaseResponse]:
     product_ids = [product.id for product in products]
     product_cards = db.query(ProductCard).options(
         joinedload(ProductCard.card).joinedload(Card.set_ref),

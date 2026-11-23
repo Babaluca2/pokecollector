@@ -16,6 +16,7 @@ from services import pokemon_api
 from services.card_fallbacks import apply_cross_language_fallbacks
 from services.card_upsert import upsert_card
 from services.card_values import effective_market_price, normalize_price_field
+from services.price_context import build_price_context
 from services.card_visibility import visible_any_card_filter, visible_set_filter
 from services.card_list_names import normalize_card_list_name
 from services.collection_csv import normalize_collection_variant
@@ -934,6 +935,7 @@ def get_binder_cards(
 
     binder_type = binder.binder_type or "collection"
     price_field = normalize_price_field(price_field)
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
 
     binder_cards_query = db.query(BinderCard).join(Card, Card.id == BinderCard.card_id).options(
         joinedload(BinderCard.card).joinedload(Card.set_ref),
@@ -1046,7 +1048,7 @@ def get_binder_cards(
             owned_quantity = int(available_collection_quantities.get(bc.card_id, 0) or 0)
         fulfilled_quantity = min(owned_quantity, required_quantity)
         missing_quantity = max(required_quantity - owned_quantity, 0)
-        price = effective_market_price(bc.card, col_item.variant if col_item else None, price_field) or 0
+        price = (price_ctx.price(col_item) if col_item else price_ctx.price_for_card(bc.card, None)) or 0
 
         total_required_count += required_quantity
         owned_count += fulfilled_quantity

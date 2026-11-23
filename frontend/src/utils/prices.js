@@ -37,8 +37,40 @@ function positivePrice(value) {
   return Number.isFinite(price) && price > 0 ? price : null
 }
 
+const TCGPLAYER_FIELDS_BY_VARIANT = {
+  'Reverse Holo': ['price_tcg_reverse_market', 'price_tcg_holo_market', 'price_tcg_normal_market'],
+  Holo: ['price_tcg_holo_market', 'price_tcg_normal_market', 'price_tcg_reverse_market'],
+  Normal: ['price_tcg_normal_market', 'price_tcg_holo_market', 'price_tcg_reverse_market'],
+  'First Edition': ['price_tcg_normal_market', 'price_tcg_holo_market', 'price_tcg_reverse_market'],
+}
+
+// The user's default market, set once by SettingsContext. Cards that are not
+// (yet) in the collection, such as wishlist or trade cards, follow it.
+let priceMarketConfig = { market: 'cardmarket', usdToEur: null }
+
+export function configurePriceMarket(market, usdToEur) {
+  priceMarketConfig = {
+    market: market === 'tcgplayer' ? 'tcgplayer' : 'cardmarket',
+    usdToEur: Number(usdToEur) > 0 ? Number(usdToEur) : null,
+  }
+}
+
+export function getTcgplayerCardPriceEur(card, variant, usdToEur) {
+  if (!card || !(usdToEur > 0)) return null
+  const fields = TCGPLAYER_FIELDS_BY_VARIANT[variant] || TCGPLAYER_FIELDS_BY_VARIANT.Normal
+  for (const field of fields) {
+    const usd = positivePrice(card[field])
+    if (usd != null) return usd * usdToEur
+  }
+  return null
+}
+
 export function getEffectiveCardPrice(card, variant, priceField = 'price_trend') {
   if (!card) return 0
+  if (priceMarketConfig.market === 'tcgplayer') {
+    const tcg = getTcgplayerCardPriceEur(card, variant, priceMarketConfig.usdToEur)
+    if (tcg != null) return tcg
+  }
   if (REVERSE_HOLO_VARIANTS.has(variant)) {
     const holoField = HOLO_FIELD_MAP[priceField]
     const candidates = [

@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import logging
+from contextlib import contextmanager
+from contextvars import ContextVar
 
 from sqlalchemy.orm import Session
 
@@ -17,6 +19,23 @@ from services.card_values import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+_ACTIVE_CONTEXT: ContextVar["PriceContext | None"] = ContextVar("active_price_context", default=None)
+
+
+@contextmanager
+def use_price_context(ctx: "PriceContext"):
+    """Make ``ctx`` the pricing choice for helpers that have no db/user at hand."""
+    token = _ACTIVE_CONTEXT.set(ctx)
+    try:
+        yield ctx
+    finally:
+        _ACTIVE_CONTEXT.reset(token)
+
+
+def active_price_context() -> "PriceContext | None":
+    return _ACTIVE_CONTEXT.get()
 
 
 class PriceContext:
@@ -48,6 +67,12 @@ class PriceContext:
 
     def price(self, item) -> float:
         return self.resolve(item)[0]
+
+    def price_for_card(self, card, variant=None) -> float:
+        """Unit price of a card that has no collection row, using the default market."""
+        from types import SimpleNamespace
+
+        return self.price(SimpleNamespace(card=card, variant=variant, price_source=None, price_override=None))
 
     def comparison(self, item) -> dict:
         return compare_markets(

@@ -237,8 +237,14 @@ def calculate_portfolio_valuation(
         product_returns += current_value
         product_cost_basis += purchase_price
 
+    items_by_id = {item.id: item for item in items}
+
+    def linked_unit_price(entry):
+        item = items_by_id.get(entry.collection_item_id)
+        return price_ctx.price(item) if item is not None else price_ctx.price_for_card(entry.card, entry.variant)
+
     linked_cards_value = sum(
-        effective_market_price(entry.card, entry.variant, price_field) * max(int(entry.active_quantity or 0), 0)
+        linked_unit_price(entry) * max(int(entry.active_quantity or 0), 0)
         for entry in product_cards
         if entry.card
     )

@@ -139,6 +139,17 @@ class PureMarketRulesTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             normalize_item_price_source("ebay")
 
+    def test_price_for_card_follows_the_default_market(self):
+        from services.price_context import PriceContext, use_price_context, active_price_context
+        card = make_card(price_trend=10.0, price_tcg_normal_market=20.0)
+        self.assertEqual(PriceContext("price_trend", "cardmarket", usd_to_eur=0.9).price_for_card(card, "Normal"), 10.0)
+        self.assertAlmostEqual(PriceContext("price_trend", "tcgplayer", usd_to_eur=0.9).price_for_card(card, "Normal"), 18.0)
+        ctx = PriceContext("price_trend", "tcgplayer", usd_to_eur=0.9)
+        self.assertIsNone(active_price_context())
+        with use_price_context(ctx):
+            self.assertIs(active_price_context(), ctx)
+        self.assertIsNone(active_price_context())
+
 
 @unittest.skipUnless(API_TEST_DEPS_AVAILABLE, "FastAPI/httpx are not installed in this lightweight test environment")
 class CollectionPriceChoiceApiTests(unittest.TestCase):

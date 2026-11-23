@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from services.card_values import effective_market_price, normalize_price_field
+from services.price_context import active_price_context
 
 
 PRODUCT_LIFECYCLE_STATUSES = {"sealed", "opened", "sold", "review"}
@@ -55,7 +56,12 @@ def entry_live_value(entry, price_field: str | None = "price_trend") -> float:
     if active_quantity <= 0:
         return 0
     card = getattr(entry, "card", None)
-    price = effective_market_price(card, getattr(entry, "variant", None), normalize_price_field(price_field))
+    variant = getattr(entry, "variant", None)
+    ctx = active_price_context()
+    if ctx is not None and ctx.price_field == normalize_price_field(price_field):
+        price = ctx.price_for_card(card, variant)
+    else:
+        price = effective_market_price(card, variant, normalize_price_field(price_field))
     return round(price * active_quantity, 2)
 
 

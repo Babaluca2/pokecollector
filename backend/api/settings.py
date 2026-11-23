@@ -286,6 +286,14 @@ def _get_user_settings(db: Session, user_id: int) -> dict:
     return result
 
 
+@router.get("/usd-eur-rate")
+def get_usd_eur_rate(current_user: User = Depends(get_current_user)):
+    """USD->EUR rate used to value TCGPlayer prices (None when unavailable)."""
+    from services.price_context import get_usd_to_eur_rate
+
+    return {"rate": get_usd_to_eur_rate()}
+
+
 @router.get("/")
 def get_settings(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return _get_user_settings(db, current_user.id)

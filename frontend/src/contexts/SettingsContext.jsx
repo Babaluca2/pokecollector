@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 import en from '../i18n/en'
-import { priceFieldFromPrimary } from '../utils/prices'
+import { configurePriceMarket, priceFieldFromPrimary } from '../utils/prices'
+import { getUsdEurRate } from '../api/client'
 import { normalizeTcgdexLanguageCsv } from '../utils/tcgdexLanguages'
 import { currencySymbolFor, formatSelectedCurrency, rateForSelectedCurrency } from '../utils/currencyFormatting'
 import { useAuth } from './AuthContext'
@@ -103,6 +104,10 @@ const SettingsContext = createContext(null)
 export function SettingsProvider({ children }) {
   const { user, loading: authLoading, multiUser } = useAuth()
   const [settings, setSettings] = useState(initialSettings)
+  const [usdToEur, setUsdToEur] = useState(null)
+  const tcgplayerIsDefault = settings.price_market === 'tcgplayer'
+  // Wishlist, trade and other cards outside the collection follow the default market.
+  configurePriceMarket(settings.price_market, usdToEur)
   const [loaded, setLoaded] = useState(false)
   const [exchangeRate, setExchangeRate] = useState(() => (
     (settings.currency || 'EUR').toUpperCase() === 'EUR' ? 1 : null
@@ -126,6 +131,15 @@ export function SettingsProvider({ children }) {
 
   // Load settings from backend once auth mode is known. Single-user mode has no
   // token, but the backend still auto-authenticates the bootstrap admin.
+  useEffect(() => {
+    if (!tcgplayerIsDefault) return undefined
+    let cancelled = false
+    getUsdEurRate()
+      .then(rate => { if (!cancelled) setUsdToEur(rate) })
+      .catch(() => { if (!cancelled) setUsdToEur(null) })
+    return () => { cancelled = true }
+  }, [tcgplayerIsDefault])
+
   useEffect(() => {
     if (authLoading) return
 

@@ -38,3 +38,16 @@ describe('getCollectionItemPrice', () => {
     expect(getCollectionItemPrice(null)).toBe(0)
   })
 })
+
+describe('default market for cards outside the collection', () => {
+  it('uses TCGPlayer converted to EUR when it is the default market', async () => {
+    const { configurePriceMarket, getEffectiveCardPrice } = await import('./prices')
+    const card = { price_trend: 10, price_tcg_normal_market: 20 }
+    configurePriceMarket('tcgplayer', 0.9)
+    expect(getEffectiveCardPrice(card, 'Normal', 'price_trend')).toBeCloseTo(18)
+    configurePriceMarket('tcgplayer', null)
+    expect(getEffectiveCardPrice(card, 'Normal', 'price_trend')).toBe(10)
+    configurePriceMarket('cardmarket', 0.9)
+    expect(getEffectiveCardPrice(card, 'Normal', 'price_trend')).toBe(10)
+  })
+})
