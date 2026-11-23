@@ -834,7 +834,10 @@
     "priceMarketCardmarket": "Cardmarket (EUR)",
     "priceMarketTcgplayer": "TCGPlayer (USD, converti)",
     "priceDivergence": "Alerte d'écart de prix",
-    "priceDivergenceDesc": "Demander quel prix garder quand Cardmarket et TCGPlayer diffèrent d'au moins ce pourcentage"
+    "priceDivergenceDesc": "Demander quel prix garder quand Cardmarket et TCGPlayer diffèrent d'au moins ce pourcentage",
+    "imageCoverage": "Images manquantes",
+    "imageCoverageDesc": "Cartes sans aucune image, par langue.",
+    "imageCoverageWorst": "Sets avec le plus d'images manquantes"
   },
   "period": {
     "label": "Période",

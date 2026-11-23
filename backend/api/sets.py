@@ -3,7 +3,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from sqlalchemy import text, func
+from sqlalchemy import case, text, func
 from api.auth import get_current_user
 from database import get_db
 from models import Set, Card, CollectionItem, User
@@ -17,7 +17,7 @@ from services.card_fallbacks import (
 )
 from services.card_numbers import natural_card_number_key
 from services.card_upsert import upsert_card
-from services.card_visibility import get_configured_sync_languages, visible_set_filter
+from services.card_visibility import get_configured_sync_languages, visible_any_card_filter, visible_set_filter
 from services.digital_sets import digital_sets_enabled
 from services.display_language import get_display_language, get_tcgdex_display_language
 from services.tcgdex_languages import DEFAULT_TCGDEX_SYNC_LANGUAGES, has_lang_suffix, is_supported_tcgdex_language, normalize_tcgdex_language
@@ -163,6 +163,42 @@ def mark_sets_seen(
     query.update({"is_new": False}, synchronize_session=False)
     db.commit()
     return {"message": "All new sets marked as seen"}
+
+
+@router.get("/image-coverage")
+def get_image_coverage(
+    only_missing: bool = Query(default=True, description="List only sets that have missing images"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Audit artwork coverage per language and per set (cards without any image)."""
+    has_image = (Card.images_small.isnot(None)) & (Card.images_small != "")
+    has_custom = (Card.custom_image_url.isnot(None)) & (Card.custom_image_url != "")
+    rows = (
+        db.query(
+            Card.lang,
+            Card.set_id,
+            func.count(Card.id),
+            func.sum(case((has_image | has_custom, 0), else_=1)),
+        )
+        .filter(visible_any_card_filter(db, current_user.id, "all"))
+        .group_by(Card.lang, Card.set_id)
+        .all()
+    )
+    languages: dict[str, dict] = {}
+    sets = []
+    for lang, set_id, total, missing in rows:
+        lang = lang or "en"
+        missing = int(missing or 0)
+        entry = languages.setdefault(lang, {"lang": lang, "total": 0, "missing": 0})
+        entry["total"] += int(total or 0)
+        entry["missing"] += missing
+        if missing or not only_missing:
+            sets.append({"lang": lang, "set_id": set_id, "total": int(total or 0), "missing": missing})
+    for entry in languages.values():
+        entry["missing_pct"] = round(100 * entry["missing"] / entry["total"], 1) if entry["total"] else 0
+    sets.sort(key=lambda row: (-row["missing"], row["lang"], row["set_id"] or ""))
+    return {"languages": sorted(languages.values(), key=lambda row: row["lang"]), "sets": sets[:200]}
 
 
 @router.get("/{set_id}", response_model=SetBase)

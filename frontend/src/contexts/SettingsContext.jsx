@@ -38,7 +38,7 @@ const DEFAULT_SETTINGS = {
   portfolio_display_mode: 'portfolio_value',
   tcgdex_sync_languages: 'en,fr,ja,zh-cn,zh-tw,ko',
   tcgdex_digital_sets_enabled: 'true',
-  cross_language_price_fallback: 'true',
+  cross_language_price_fallback: 'false',
   cross_language_image_fallback: 'true',
   set_overview_filters: '{}',
   hidden_set_ids: '[]',

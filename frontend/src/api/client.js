@@ -235,6 +235,7 @@ export const deleteDeckEntry = (deckId, entryId) => api.delete(`/decks/${deckId}
 export const getDeckProbability = (deckId, params = {}) => api.get(`/decks/${deckId}/probability`, { params })
 
 // Sets
+export const getImageCoverage = () => api.get('/sets/image-coverage').then(r => r.data)
 export const getSets = (params) => api.get('/sets/', { params })
 export const getSet = (id) => api.get(`/sets/${id}`)
 export const getSetChecklist = (id) => api.get(`/sets/${id}/checklist`)

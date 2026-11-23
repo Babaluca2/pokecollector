@@ -1,3 +1,4 @@
+import ImageCoverage from '../components/ImageCoverage'
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -1416,6 +1417,7 @@ export default function Settings() {
                   />
                 </SettingsRow>
               )}
+              {user?.role === 'admin' && <ImageCoverage />}
               {user?.role === 'admin' && (
                 <>
                   <SettingsRow label={t('settings.digitalSets')} description={t('settings.digitalSetsDesc')}>

@@ -1422,7 +1422,10 @@
     "priceMarketCardmarket": "Cardmarket (EUR)",
     "priceMarketTcgplayer": "TCGPlayer (USD, converted)",
     "priceDivergence": "Price gap warning",
-    "priceDivergenceDesc": "Ask which price to keep when Cardmarket and TCGPlayer differ by at least this much"
+    "priceDivergenceDesc": "Ask which price to keep when Cardmarket and TCGPlayer differ by at least this much",
+    "imageCoverage": "Missing images",
+    "imageCoverageDesc": "Cards with no artwork at all, per language.",
+    "imageCoverageWorst": "Sets with the most missing images"
   },
   "publicProfiles": {
     "directory": "Public profiles",
