@@ -82,9 +82,9 @@ export default function AppNav() {
       {/* Page title — subtle top strip with logout */}
       {title && (
         <div className="sticky top-0 z-40 px-4 pt-5 pb-3 flex items-center justify-between"
-          style={{ background: 'linear-gradient(to bottom, rgba(6,8,15,0.98) 70%, transparent)' }}>
+          style={{ background: 'linear-gradient(to bottom, var(--color-bg) 70%, transparent)' }}>
           <div className="w-8" />
-          <p className="text-[11px] font-semibold   text-text-muted text-center truncate flex-1 min-w-0">
+          <p className="font-serif text-sm text-text-secondary text-center truncate flex-1 min-w-0">
             {title}
           </p>
           {multiUser ? (
@@ -119,8 +119,8 @@ export default function AppNav() {
           transition-transform duration-200 active:scale-90"
         style={{
           background: 'linear-gradient(180deg, var(--color-brand-red) 50%, #E4E1DA 50%)',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.8), 0 0 16px rgba(183,155,99,0.3)',
-          border: '2px solid #111',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
+          border: '1px solid var(--color-border)',
         }}
       >
         {/* Pokeball center button */}

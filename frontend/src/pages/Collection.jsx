@@ -617,7 +617,7 @@ function CollectionEditModal({ item, onClose }) {
   const ownPhotoControls = (
     <div className="space-y-2">
       <div>
-        <p className="text-xs font-medium  tracking-wide text-text-muted">
+        <p className="text-xs font-medium text-text-muted">
           {t('collection.ownPhotoLabel')}
         </p>
         <p className="mt-1 text-xs text-text-secondary">{t('collection.ownPhotoDesc')}</p>
@@ -884,7 +884,7 @@ function CollectionEditModal({ item, onClose }) {
                   {!hasOwnPhoto && (
                     <>
                       <div>
-                        <label htmlFor={customImageInputId} className="text-xs text-text-muted font-medium  tracking-wide block">
+                        <label htmlFor={customImageInputId} className="text-xs text-text-muted font-medium block">
                           {t('card.customImageUrl')}
                         </label>
                         <p className="text-xs text-text-secondary mt-1">

@@ -614,7 +614,7 @@ export default function BinderDetail() {
           </div>
           {badgeLegendOpen && (
             <div id="private-binder-card-badge-legend" className="card p-3">
-              <p className="mb-3 text-xs font-semibold  tracking-wide text-text-muted">
+              <p className="mb-3 text-xs font-semibold text-text-muted">
                 {t('setDetail.badgeLegend')}
               </p>
               <CardLegend
@@ -772,7 +772,7 @@ export default function BinderDetail() {
                                 <div className="flex min-w-0 items-center gap-2 rounded-lg border border-border bg-bg-elevated/50 p-2">
                                   <CollectionCardDisplay variant="compact-artwork" item={{ id: item.current.collection_item_id, has_scan_photo: item.current.has_scan_photo, card: item.current.card }} card={item.current} image={resolveCardImageUrl(item.current)} alt={item.current.name} variantEffectSource={item.current.variant} />
                                   <div className="min-w-0">
-                                    <p className="text-[9px] font-bold  tracking-wide text-text-muted">{t('binderTypes.currentPrint')}</p>
+                                    <p className="text-[9px] font-semibold text-text-muted">{t('binderTypes.currentPrint')}</p>
                                     <p className="truncate text-xs font-semibold text-text-primary">{item.current.set_name || item.current.set_id} #{item.current.number}</p>
                                     <p className="text-[11px] text-text-muted">{item.current_price ? formatPrice(item.current_price) : t('binderTypes.noPriceDataShort')}</p>
                                     {(item.current.variant || item.current.condition) && <p className="truncate text-[10px] text-text-muted">{[item.current.variant, item.current.condition].filter(Boolean).join(' · ')}</p>}
@@ -785,7 +785,7 @@ export default function BinderDetail() {
                                 <div className="flex min-w-0 items-center gap-2 rounded-lg border border-green/30 bg-green/5 p-2">
                                   <CollectionCardDisplay variant="compact-artwork" item={{ id: item.suggested.collection_item_id, has_scan_photo: item.suggested.has_scan_photo, card: item.suggested.card }} card={item.suggested} image={resolveCardImageUrl(item.suggested)} alt={item.suggested.name} variantEffectSource={item.suggested.variant} />
                                   <div className="min-w-0">
-                                    <p className="text-[9px] font-bold  tracking-wide text-green">{t('binderTypes.suggestedPrint')}</p>
+                                    <p className="text-[9px] font-semibold text-green">{t('binderTypes.suggestedPrint')}</p>
                                     <p className="truncate text-xs font-semibold text-text-primary">{item.suggested.set_name || item.suggested.set_id} #{item.suggested.number}</p>
                                     <p className="text-[11px] text-green">{formatPrice(item.suggested_price)}</p>
                                     {(item.suggested.variant || item.suggested.condition) && <p className="truncate text-[10px] text-text-muted">{[item.suggested.variant, item.suggested.condition].filter(Boolean).join(' · ')}</p>}
