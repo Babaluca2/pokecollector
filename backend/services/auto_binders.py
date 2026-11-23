@@ -39,7 +39,7 @@ def _used_elsewhere(db: Session, item_id: int, binder_id: int) -> int:
     return int(used or 0)
 
 
-def sync_auto_binder(db: Session, user: User, item: CollectionItem) -> None:
+def sync_auto_binder(db: Session, user: User, item: CollectionItem, *, commit: bool = True) -> None:
     """Create or update the set binder entry for one collection item."""
     try:
         card = item.card or db.query(Card).filter(Card.id == item.card_id).first()
@@ -69,7 +69,8 @@ def sync_auto_binder(db: Session, user: User, item: CollectionItem) -> None:
             db.flush()
         available = max(int(item.quantity or 0) - _used_elsewhere(db, item.id, binder.id), 0)
         if available < 1:
-            db.rollback()
+            if commit:
+                db.rollback()
             return
         entry = (
             db.query(BinderCard)
@@ -86,7 +87,29 @@ def sync_auto_binder(db: Session, user: User, item: CollectionItem) -> None:
             ))
         else:
             entry.required_quantity = min(available, 99)
-        db.commit()
+        if commit:
+            db.commit()
+        else:
+            db.flush()
     except Exception:  # best-effort, never break the add
-        db.rollback()
-        logger.exception("Automatic set binder update failed")
+        if commit:
+            db.rollback()
+            logger.exception("Automatic set binder update failed")
+        else:
+            raise
+
+
+def sync_all_auto_binders(db: Session, user: User) -> dict:
+    """Catch up: file every owned copy into its set binder."""
+    items = (
+        db.query(CollectionItem)
+        .filter(CollectionItem.user_id == user.id, CollectionItem.quantity > 0)
+        .order_by(CollectionItem.id.asc())
+        .all()
+    )
+    before = db.query(Binder).filter(Binder.user_id == user.id, Binder.auto_owned_set_id.isnot(None)).count()
+    for item in items:
+        sync_auto_binder(db, user, item, commit=False)
+    db.commit()
+    after = db.query(Binder).filter(Binder.user_id == user.id, Binder.auto_owned_set_id.isnot(None)).count()
+    return {"items": len(items), "binders_created": after - before, "binders_total": after}

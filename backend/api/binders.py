@@ -1487,6 +1487,18 @@ def _add_owned_set_entries(
     }
 
 
+@router.post("/sync-auto")
+def sync_auto_binders_endpoint(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """File the whole existing collection into one automatic binder per set."""
+    from services.auto_binders import sync_all_auto_binders
+
+    lock_user_card_allocations(db, current_user.id)
+    return sync_all_auto_binders(db, current_user)
+
+
 @router.post("/add-owned-set")
 def add_owned_set_to_auto_binder(
     set_id: str,

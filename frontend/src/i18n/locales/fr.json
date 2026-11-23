@@ -404,7 +404,10 @@
     "deleted": "Classeur supprimé !",
     "createFailed": "Échec de la création du classeur",
     "updateFailed": "Échec de la mise à jour du classeur",
-    "deleteConfirm": "Supprimer ce classeur « {name} » ?"
+    "deleteConfirm": "Supprimer ce classeur « {name} » ?",
+    "syncAuto": "Ranger toute ma collection par set",
+    "syncAutoDone": "Terminé : {count} classeurs de sets",
+    "syncAutoFailed": "Impossible de ranger la collection"
   },
   "analytics": {
     "title": "Analyses",

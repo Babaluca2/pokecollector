@@ -39,7 +39,7 @@ from services.printing_detail_tags import (
     get_or_create_printing_detail_tags,
     printing_detail_keys,
 )
-from services.auto_binders import sync_auto_binder
+from services.auto_binders import sync_all_auto_binders, sync_auto_binder
 from services.card_values import effective_market_price, normalize_price_field
 from services.price_context import build_price_context
 from services.product_sources import annotate_product_sources, product_sources_by_collection_item
@@ -775,6 +775,11 @@ async def import_collection_csv(
             return BulkCollectionAddResponse(added=0, updated=0, failed=failed, errors=errors)
 
     db.commit()
+    try:
+        sync_all_auto_binders(db, current_user)
+    except Exception:
+        db.rollback()
+        logger.exception("Automatic set binders could not be updated after CSV import")
     return BulkCollectionAddResponse(added=added, updated=updated, failed=failed, errors=errors)
 
 

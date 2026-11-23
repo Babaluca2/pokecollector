@@ -53,5 +53,17 @@ class AutoBinderTests(unittest.TestCase):
         self.assertEqual(self.db.query(Binder).count(), 0)
 
 
+
+class SyncAllTests(AutoBinderTests):
+    def test_catch_up_files_the_whole_collection(self):
+        from services.auto_binders import sync_all_auto_binders
+        self._item(qty=2)
+        result = sync_all_auto_binders(self.db, self.user)
+        self.assertEqual(result["binders_created"], 1)
+        self.assertEqual(self.db.query(BinderCard).one().required_quantity, 2)
+        again = sync_all_auto_binders(self.db, self.user)
+        self.assertEqual(again["binders_created"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

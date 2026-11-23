@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Trash2, Edit2, BookOpen, Star, Package, PackageCheck, Check, X, Library, Heart, Globe, Lock, Copy, Layers3 } from 'lucide-react'
-import { getBinders, createBinder, updateBinder, updateDeck, deleteBinder, getWishlist, getProfile } from '../api/client'
+import { getBinders, createBinder, updateBinder, updateDeck, deleteBinder, getWishlist, getProfile, syncAutoBinders } from '../api/client'
 import { useSettings } from '../contexts/SettingsContext'
 import { useConfirmDialog } from '../contexts/ConfirmDialogContext'
 import TabNav from '../components/TabNav'
@@ -206,6 +206,15 @@ export default function Binders() {
     { to: '/wishlist', label: t('nav.wishlist'), icon: Heart, badge: wishlistItems.length },
   ]
 
+  const syncAutoMutation = useMutation({
+    mutationFn: syncAutoBinders,
+    onSuccess: (result) => {
+      toast.success(t('binders.syncAutoDone').replace('{count}', String(result?.binders_total ?? 0)))
+      queryClient.invalidateQueries({ queryKey: ['binders'] })
+    },
+    onError: (error) => toast.error(error.response?.data?.detail || t('binders.syncAutoFailed')),
+  })
+
   const createMutation = useMutation({
     mutationFn: createBinder,
     onSuccess: () => {
@@ -269,9 +278,14 @@ export default function Binders() {
           <h1 className="text-xl font-bold text-text-primary">{t('binders.title')}</h1>
           <p className="text-sm text-text-secondary mt-1">{t('binders.subtitle')}</p>
         </div>
-        <button onClick={() => setCreating(true)} className="btn-primary">
-          <Plus size={16} /> {t('binders.newCardList')}
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button onClick={() => syncAutoMutation.mutate()} disabled={syncAutoMutation.isPending} className="btn-secondary min-h-[44px]">
+            {t('binders.syncAuto')}
+          </button>
+          <button onClick={() => setCreating(true)} className="btn-primary min-h-[44px]">
+            <Plus size={16} /> {t('binders.newCardList')}
+          </button>
+        </div>
       </div>
 
       {creating && (

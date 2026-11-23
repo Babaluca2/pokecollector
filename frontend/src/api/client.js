@@ -235,6 +235,7 @@ export const deleteDeckEntry = (deckId, entryId) => api.delete(`/decks/${deckId}
 export const getDeckProbability = (deckId, params = {}) => api.get(`/decks/${deckId}/probability`, { params })
 
 // Sets
+export const syncAutoBinders = () => api.post('/binders/sync-auto').then(r => r.data)
 export const getUsdEurRate = () => api.get('/settings/usd-eur-rate').then(r => r.data?.rate ?? null)
 export const getImageCoverage = () => api.get('/sets/image-coverage').then(r => r.data)
 export const getSets = (params) => api.get('/sets/', { params })

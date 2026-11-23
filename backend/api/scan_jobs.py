@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from services.auto_binders import sync_auto_binder
 from api.auth import get_current_user
 from database import get_db
 from models import ScanJob, ScanJobItem, User
@@ -373,6 +374,7 @@ def resolve_and_add_scan_job_item(
     item.updated_at = datetime.datetime.utcnow()
     record_ground_truth(current_user.id, job_id, item_id, confirmed_card_id)
     db.commit()
+    sync_auto_binder(db, current_user, collection_item)
     db.refresh(item)
     db.refresh(collection_item)
     delete_scan_image(relative_path)

@@ -560,7 +560,10 @@
     "publicUpdated": "Sharing setting updated",
     "enablePublicProfileHint": "Enable your public profile in Settings to share",
     "copyPublicLink": "Copy public link",
-    "addCards": "Add cards"
+    "addCards": "Add cards",
+    "syncAuto": "File my whole collection by set",
+    "syncAutoDone": "Done: {count} set binders",
+    "syncAutoFailed": "Could not file the collection"
   },
   "cardListPicker": {
     "ownedCards": "My collection",
