@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   RefreshCw, LogOut,
-  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, ListOrdered, Info, Layers3,
+  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, Trophy, ListOrdered, Info, Layers3,
 } from 'lucide-react'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -236,12 +236,13 @@ export default function HomeScreen() {
       badge: scanAttention,
       active: scansActive,
     },
-    { to: '/sets',       icon: Grid2X2,    label: t('nav.sets'),        color: '#81c784' },
-    { to: '/pokedex',    icon: ListOrdered, label: t('nav.pokedex'),    color: '#ffb74d' },
-    { to: '/binders',    icon: Layers3,     label: t('nav.binders'),    color: '#7986cb' },
-    { to: '/analytics',  icon: BarChart3,  label: t('nav.analytics'),   color: '#f5c842' },
-    { to: '/trades',     icon: ArrowRightLeft, label: t('nav.trades'),   color: '#ff8a65' },
-    { to: '/settings',   icon: Settings,   label: t('nav.settings'),    color: '#b0bec5' },
+    { to: '/sets',       icon: Grid2X2,    label: t('nav.sets') },
+    { to: '/pokedex',    icon: ListOrdered, label: t('nav.pokedex') },
+    { to: '/binders',    icon: Layers3,     label: t('nav.binders') },
+    { to: '/analytics',  icon: BarChart3,  label: t('nav.analytics') },
+    { to: '/trades',     icon: ArrowRightLeft, label: t('nav.trades') },
+    ...(multiUser ? [{ to: '/leaderboard', icon: Trophy, label: t('nav.leaderboard') }] : []),
+    { to: '/settings',   icon: Settings,   label: t('nav.settings') },
   ]
 
   const gain = pnlPositive ? '#8DB596' : '#C8806F'
