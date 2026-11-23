@@ -8,7 +8,8 @@ export default function SetName({ set, language }) {
   const tooltip = useRef(null)
   const pointerType = useRef(null)
   const [anchor, setAnchor] = useState(null)
-  const translated = set.translated_name_lang === language && set.translated_name?.trim()
+  const byLanguage = set.translated_name_lang === language && set.translated_name?.trim()
+  const translated = byLanguage || set.native_name?.trim()
   const available = translated && translated !== set.name
   const show = () => setAnchor(trigger.current.getBoundingClientRect())
   const hide = () => setAnchor(null)
@@ -56,7 +57,7 @@ export default function SetName({ set, language }) {
       ref={tooltip}
       id={id}
       role="tooltip"
-      lang={language}
+      lang={byLanguage ? language : set.lang}
       className="fixed z-[100] rounded-lg border border-border bg-bg-elevated px-3 py-2 text-sm text-text-primary shadow-lg break-words"
       style={{
         width: 'max-content', maxWidth: Math.min(280, window.innerWidth - 16),

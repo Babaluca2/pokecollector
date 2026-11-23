@@ -18,6 +18,7 @@ class Set(Base):
     id = Column(String, primary_key=True)    # Composite DB key: "sv1_en" / "sv1_zh-tw"
     tcg_set_id = Column(String)              # Original TCGdex set ID: "sv1"
     name = Column(String, nullable=False)
+    native_name = Column(String, nullable=True)  # Original name when `name` was replaced by its English form
     series = Column(String)
     release_date = Column(String)
     total = Column(Integer, default=0)

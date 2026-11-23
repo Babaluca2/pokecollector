@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from models import Set
 from services.card_upsert import upsert_card
+from services.set_names import english_set_name
 
 LANG = "zh-cn"
 DATASET_BASE = "https://raw.githubusercontent.com/duanxr/PTCG-CHS-Datasets/main/"
@@ -69,7 +70,9 @@ def import_chs_cards(db: Session, infos: dict | None = None) -> dict:
         if row is None:
             row = Set(id=db_id, tcg_set_id=set_id, lang=LANG, name=collection.get("name") or code)
             db.add(row)
-        row.name = collection.get("name") or code
+        native = collection.get("name") or code
+        row.name = english_set_name(code, LANG, native)
+        row.native_name = native if row.name != native else None
         row.series = collection.get("seriesText")
         row.release_date = collection.get("salesDate")
         row.total = row.printed_total = len(rows)

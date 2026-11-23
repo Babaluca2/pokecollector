@@ -176,7 +176,11 @@ def import_chs(
     from services.chs_import import import_chs_cards
 
     try:
-        return import_chs_cards(db)
+        result = import_chs_cards(db)
+        from services.set_names import localize_set_names
+
+        result.update(localize_set_names(db))
+        return result
     except Exception as exc:  # network or format problem
         raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
 
@@ -192,7 +196,11 @@ def import_jp(
     from services.jp_import import import_jp_cards
 
     try:
-        return import_jp_cards(db)
+        result = import_jp_cards(db)
+        from services.set_names import localize_set_names
+
+        result.update(localize_set_names(db))
+        return result
     except Exception as exc:
         raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
 
@@ -207,7 +215,11 @@ def repair_images(
         raise HTTPException(status_code=403, detail="Admin access required")
     from services.image_repair import repair_missing_images
 
-    return repair_missing_images(db)
+    from services.set_names import localize_set_names
+
+    result = repair_missing_images(db)
+    result.update(localize_set_names(db))
+    return result
 
 
 @router.get("/image-coverage")

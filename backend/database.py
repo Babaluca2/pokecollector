@@ -426,6 +426,7 @@ def _run_migrations(conn):
         # provenance are held for review instead of being assumed sealed.
         "ALTER TABLE product_purchases ADD COLUMN IF NOT EXISTS lifecycle_status VARCHAR",
         "ALTER TABLE product_purchases ADD COLUMN IF NOT EXISTS value_updated_at DATE",
+        "ALTER TABLE sets ADD COLUMN IF NOT EXISTS native_name VARCHAR",
         """UPDATE product_purchases
            SET lifecycle_status = CASE
                WHEN EXISTS (

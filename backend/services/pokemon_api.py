@@ -670,10 +670,16 @@ def parse_set_for_db(set_data: Dict) -> Dict:
     original_id = set_data["id"]
     db_key = set_data.get("_db_key") or original_id  # composite key if available
 
+    from services.set_names import english_set_name
+
+    native_name = set_data.get("name", "")
+    english_name = english_set_name(original_id, set_data.get("_lang"), native_name)
+
     return {
         "id": db_key,
         "tcg_set_id": original_id,
-        "name": set_data.get("name", ""),
+        "name": english_name,
+        "native_name": native_name if english_name != native_name else None,
         "series": series_name,
         "release_date": set_data.get("releaseDate"),
         "total": card_count.get("total", 0),
