@@ -75,7 +75,7 @@ services:
       - ./data/scan-uploads:/app/data/scan-uploads
       - ./data/scan-traces:/app/data/scan-traces
     ports:
-      - "${BACKEND_PORT:-8000}:8000"
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
 
   frontend:
     image: ghcr.io/git-romer/pokecollector-frontend:${POKECOLLECTOR_VERSION:-1.57.9}

@@ -49,6 +49,14 @@ docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 - **Languages and artwork:** default languages EN, FR, JA, ZH-CN, ZH-TW, KO; admin tools in Settings to audit missing images, copy artwork from another language, import Simplified Chinese cards and complete Japanese cards; TCGdex data always wins and a sync never erases artwork added from the datasets below.
 - **Set names:** sets that are not in English or French are shown with their English name (original name kept as a tooltip). The table lives in `backend/data/set_names_en.json`; names missing from the datasets were translated by hand and may differ from official ones.
 
+**Before exposing this fork to the internet**
+
+- Turn on **multi-user mode** and create an admin account. In single-user mode every visitor is the administrator.
+- Set a strong `POSTGRES_PASSWORD`, `ADMIN_PASSWORD` and `JWT_SECRET_KEY`, and set `CORS_ORIGINS` to your own domain.
+- Publish only the frontend (port 3000) behind HTTPS (reverse proxy or tunnel). The fork binds the backend port to `127.0.0.1` so it is not reachable from the network; keep it that way.
+- The login limiter (5 attempts per minute) counts the address the backend sees. Behind nginx and a tunnel that is one shared address, so a flood of bad logins can briefly block everyone. Add rate limiting or access control in front (for example Cloudflare Access or a WAF rule on `/api/auth/login`), and forward the real client address to nginx.
+- Keep the imports (CN/JP) and backups admin-only, and keep your instance private: the Chinese dataset forbids redistribution.
+
 **Third-party data used by the fork** (nothing is bundled except set names; card data and images are downloaded on demand and cached on your server):
 
 - [duanxr/PTCG-CHS-Datasets](https://github.com/duanxr/PTCG-CHS-Datasets): Simplified Chinese cards and images. The README allows non-commercial use only and forbids redistribution, so keep your instance private.
