@@ -332,6 +332,28 @@ class OwnPhotoPriorityTests(unittest.TestCase):
         result = get_duplicates(price_field="price_trend", db=self.db, current_user=self.user)
         self.assertFalse(any(r["id"] == self.photographed_item.id for r in result))
 
+    def test_top_movers_follows_the_tcgplayer_market_when_chosen(self):
+        from models import UserSetting
+        self.photographed_card.price_trend = 100.0
+        self.photographed_card.price_tcg_normal_market = 20.0
+        self.db.add(UserSetting(user_id=self.user.id, key="price_market", value="tcgplayer"))
+        self.db.add(PriceHistory(
+            card_id=self.photographed_card.id,
+            date=datetime.date.today() - datetime.timedelta(days=1),
+            price_trend=50.0,
+            price_tcg_market=10.0,
+        ))
+        self.db.commit()
+        with patch("services.price_context.get_usd_to_eur_rate", return_value=1.0):
+            result = get_top_movers(
+                days=7, price_field="price_trend", sort_by="percentage",
+                db=self.db, current_user=self.user,
+            )
+        row = self._by_collection_item_id(result, self.photographed_item.id)
+        self.assertEqual(row["market"], "tcgplayer")
+        self.assertEqual(row["old_price"], 10.0)
+        self.assertEqual(row["current_price"], 20.0)
+
     def test_top_movers_carries_the_photo_collection_reference(self):
         self.photographed_card.price_trend = 100.0
         self.db.add(PriceHistory(

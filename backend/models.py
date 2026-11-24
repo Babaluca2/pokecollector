@@ -342,6 +342,8 @@ class PriceHistory(Base):
     price_high = Column(Float)
     price_market = Column(Float)
     price_trend = Column(Float)
+    # TCGPlayer market price in USD (best available finish), kept so movers can follow that market.
+    price_tcg_market = Column(Float)
 
     card = relationship("Card", back_populates="price_history")
 

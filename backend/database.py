@@ -164,6 +164,7 @@ def _run_migrations(conn):
         "ALTER TABLE cards ADD COLUMN IF NOT EXISTS price_market_holo FLOAT",
         "ALTER TABLE cards ADD COLUMN IF NOT EXISTS price_low_holo FLOAT",
         "ALTER TABLE cards ADD COLUMN IF NOT EXISTS price_trend_holo FLOAT",
+        "ALTER TABLE price_history ADD COLUMN IF NOT EXISTS price_tcg_market FLOAT",
         "ALTER TABLE cards ADD COLUMN IF NOT EXISTS price_avg1_holo FLOAT",
         "ALTER TABLE cards ADD COLUMN IF NOT EXISTS price_avg7_holo FLOAT",
         "ALTER TABLE cards ADD COLUMN IF NOT EXISTS price_avg30_holo FLOAT",
@@ -956,6 +957,7 @@ def migrate_custom_card_ownership():
                             price_high=history.price_high,
                             price_market=history.price_market,
                             price_trend=history.price_trend,
+                            price_tcg_market=history.price_tcg_market,
                         ))
                     for match in db.query(CustomCardMatch).filter(
                         CustomCardMatch.custom_card_id == source.id

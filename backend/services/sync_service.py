@@ -9,6 +9,7 @@ from sqlalchemy import func, or_, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
+from services.card_values import tcgplayer_price_usd
 from models import Card, Set, CollectionItem, WishlistItem, BinderCard, PriceHistory, SyncLog, PortfolioSnapshot, CustomCardMatch, User, UserSetting
 from services import pokemon_api, telegram
 from services.card_fallbacks import apply_cross_language_fallbacks, build_missing_language_cards_for_set
@@ -567,6 +568,7 @@ def record_price_history_batch(
             "price_high": card.price_high,
             "price_market": card.price_market,
             "price_trend": card.price_trend,
+            "price_tcg_market": tcgplayer_price_usd(card),
         }
         for card_id, card in sorted(cards_by_id.items())
     ]

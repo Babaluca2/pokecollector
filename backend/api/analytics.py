@@ -4,7 +4,7 @@ from sqlalchemy import func
 from api.auth import get_current_user
 from api.collection import _annotate_scan_photos
 from database import get_db
-from services.card_values import effective_market_price, normalize_price_field
+from services.card_values import effective_market_price, normalize_price_field, tcgplayer_price_usd
 from services.price_context import build_price_context
 from services.card_visibility import visible_any_card_filter, visible_set_filter
 from services.analytics import sort_top_movers
@@ -111,6 +111,7 @@ def get_top_movers(
     ).all()
     if not collection_items:
         return []
+    price_ctx = build_price_context(db, current_user.id, price_field=price_field)
 
     _annotate_scan_photos(db, current_user, collection_items)
     # Price movement is per printing, not per condition/variant row. Keep one
@@ -127,7 +128,10 @@ def get_top_movers(
 
         # Get oldest matching historical price in period. avg1/avg7/avg30 are not
         # stored historically yet, so fall back to market history for those fields.
-        history_column = getattr(PriceHistory, history_field)
+        # Follow the market the user chose: TCGPlayer history is stored in USD.
+        market = collection_item.price_source or price_ctx.default_market
+        use_tcg = market == "tcgplayer"
+        history_column = PriceHistory.price_tcg_market if use_tcg else getattr(PriceHistory, history_field)
         old_price_entry = db.query(PriceHistory).filter(
             PriceHistory.card_id == card_id,
             PriceHistory.date >= cutoff_date,
@@ -137,8 +141,16 @@ def get_top_movers(
         if not old_price_entry:
             continue
 
-        old_price = getattr(old_price_entry, history_field)
-        current_price = effective_market_price(card, price_field=history_field)
+        if use_tcg:
+            rate = price_ctx.usd_to_eur()
+            current_usd = tcgplayer_price_usd(card)
+            if not rate or current_usd is None:
+                continue
+            old_price = old_price_entry.price_tcg_market * rate
+            current_price = current_usd * rate
+        else:
+            old_price = getattr(old_price_entry, history_field)
+            current_price = effective_market_price(card, price_field=history_field)
 
         change_abs = current_price - old_price
         change_pct = ((current_price - old_price) / old_price * 100) if old_price > 0 else 0
@@ -155,6 +167,7 @@ def get_top_movers(
             "old_price": round(old_price, 2),
             "change_abs": round(change_abs, 2),
             "change_pct": round(change_pct, 1),
+            "market": "tcgplayer" if use_tcg else "cardmarket",
         })
 
     return sort_top_movers(results, sort_by)[:20]
