@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.middleware import SlowAPIMiddleware
-from slowapi.util import get_remote_address
+from services.client_ip import client_ip
 from slowapi.errors import RateLimitExceeded
 import logging
 import os
@@ -18,7 +18,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Rate limiter: uses client IP, default 60 requests/minute
-limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+limiter = Limiter(key_func=client_ip, default_limits=["60/minute"])
 
 
 def read_app_version() -> str:
@@ -66,6 +66,12 @@ async def lifespan(app: FastAPI):
     db = SessionLocal()
     try:
         bootstrap_admin(db)
+        from api.auth import multi_user_enabled
+        if not multi_user_enabled(db):
+            logger.warning(
+                "SECURITY: single-user mode is active. Every client that can reach this server is the "
+                "administrator. Enable multi-user mode before exposing it to the internet."
+            )
         from services.public_profile import migrate_public_profile_handles
         public_handle_migration = migrate_public_profile_handles(db)
         if public_handle_migration["migrated"] or public_handle_migration["disabled"]:
@@ -115,7 +121,8 @@ async def prevent_failed_public_response_caching(request: Request, call_next):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get("CORS_ORIGINS", "").split(",") if os.environ.get("CORS_ORIGINS") else ["*"],
+    # Same-origin by default: the bundled nginx serves the UI and the API from one origin.
+    allow_origins=[o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
@@ -158,7 +165,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 @app.middleware("http")
 async def login_rate_limit(request: Request, call_next):
     if request.url.path == "/api/auth/login" and request.method == "POST":
-        client_ip = get_remote_address(request)
+        ip = client_ip(request)
         # Use in-memory counter
         import time
         now = time.time()
@@ -169,7 +176,7 @@ async def login_rate_limit(request: Request, call_next):
         attempts = {k: v for k, v in attempts.items() if now - v[-1] < 60}
         app.state._login_attempts = attempts
         # Check this IP
-        ip_attempts = attempts.get(client_ip, [])
+        ip_attempts = attempts.get(ip, [])
         ip_attempts = [t for t in ip_attempts if now - t < 60]
         if len(ip_attempts) >= 5:
             from fastapi.responses import JSONResponse
@@ -178,7 +185,7 @@ async def login_rate_limit(request: Request, call_next):
                 content={"detail": "Too many login attempts. Try again in 1 minute."},
             )
         ip_attempts.append(now)
-        attempts[client_ip] = ip_attempts
+        attempts[ip] = ip_attempts
     return await call_next(request)
 app.include_router(cards.router, prefix="/api/cards", tags=["cards"])
 app.include_router(recognize_router, prefix="/api/cards", tags=["recognize"])

@@ -51,11 +51,13 @@ docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 
 **Before exposing this fork to the internet**
 
-- Turn on **multi-user mode** and create an admin account. In single-user mode every visitor is the administrator.
-- Set a strong `POSTGRES_PASSWORD`, `ADMIN_PASSWORD` and `JWT_SECRET_KEY`, and set `CORS_ORIGINS` to your own domain.
-- Publish only the frontend (port 3000) behind HTTPS (reverse proxy or tunnel). The fork binds the backend port to `127.0.0.1` so it is not reachable from the network; keep it that way.
-- The login limiter (5 attempts per minute) counts the address the backend sees. Behind nginx and a tunnel that is one shared address, so a flood of bad logins can briefly block everyone. Add rate limiting or access control in front (for example Cloudflare Access or a WAF rule on `/api/auth/login`), and forward the real client address to nginx.
+- Turn on **multi-user mode** and create an admin account. In single-user mode every visitor is the administrator (the backend logs a warning at startup when this mode is active).
+- `POSTGRES_PASSWORD` is now mandatory (Compose refuses to start without it). Also set `ADMIN_PASSWORD`, and `JWT_SECRET_KEY` if you want sessions to survive a rebuild.
+- CORS is same-origin by default; set `CORS_ORIGINS` only if another site must call the API.
+- Publish only the frontend (port 3000) behind HTTPS (reverse proxy or tunnel). The backend port is bound to `127.0.0.1`; keep it that way.
+- Login attempts are limited to 5 per minute per visitor. nginx now resolves the real visitor address from the proxy or tunnel in front of it (private networks only) and the backend trusts that address only when the connection comes from a private network. For stronger protection add Cloudflare Access or a WAF rate-limit rule on `/api/auth/login`.
 - Keep the imports (CN/JP) and backups admin-only, and keep your instance private: the Chinese dataset forbids redistribution.
+- Run `pip-audit -r backend/requirements.txt` on your machine before opening the app; it could not be run in the development sandbox.
 
 **Third-party data used by the fork** (nothing is bundled except set names; card data and images are downloaded on demand and cached on your server):
 
