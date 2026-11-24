@@ -148,12 +148,9 @@ async def enqueue_scan_job(
     # UI hides the toggle for the same reason, but the server does not trust
     # that alone.
     individual_set = set(requested_individual)
-    batch_modes = [
-        len(files) > 1
-        and position not in individual_set
-        and capability_mode != SCANNER_CAPABILITY_DEGRADED
-        for position in range(len(files))
-    ]
+    # Simple scanner flow: one photo per request, never several cards read out of one
+    # image. Each photo is recognised alone and proposed to the person for review.
+    batch_modes = [False for _ in range(len(files))]
     try:
         job = await create_scan_job(
             db,

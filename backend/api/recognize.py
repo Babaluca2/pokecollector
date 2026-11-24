@@ -1768,9 +1768,10 @@ async def _recognize_with_provider(
             api_key=api_key,
             image_b64=image_b64,
             mime_type=content_type,
-            allow_visual_verification=(
-                capability_mode != SCANNER_CAPABILITY_DEGRADED
-            ),
+            # Simple scanner flow: the model only reads name, set and number; the app
+            # proposes the card and its alternatives and the person picks. No second
+            # model call comparing reference images.
+            allow_visual_verification=False,
             photo_bytes=image_bytes,
             trace=trace,
             provider=provider,
