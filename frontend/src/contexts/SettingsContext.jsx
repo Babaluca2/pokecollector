@@ -32,10 +32,11 @@ const SUPPORTED_LANGUAGES = new Set(['en', ...Object.keys(TRANSLATION_LOADERS)])
 
 const DEFAULT_SETTINGS = {
   language: 'en',
+  pokeball_style: 'poke',
   price_display: '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
   price_primary: 'trend',
   price_market: 'cardmarket',
-  price_divergence_pct: '40',
+  price_divergence_pct: '50',
   portfolio_display_mode: 'portfolio_value',
   tcgdex_sync_languages: 'en,fr,ja,zh-cn,zh-tw,ko',
   tcgdex_digital_sets_enabled: 'true',

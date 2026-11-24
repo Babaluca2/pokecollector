@@ -3,7 +3,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 import AuthStartupScreen from './AuthStartupScreen'
 
-vi.mock('../contexts/SettingsContext', () => ({
+vi.mock('../contexts/SettingsContext', async () => ({
+  default: (await import('react')).createContext(null),
   useSettings: () => ({
     t: key => ({
       'auth.connectionTitle': 'Cannot reach PokéCollector',

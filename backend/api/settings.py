@@ -76,6 +76,12 @@ logger = logging.getLogger(__name__)
 PHOTO_PREFERENCE_SETTING_KEY = "prefer_own_card_photos"
 HOLO_EFFECTS_SETTING_KEY = "holo_effects_enabled"
 
+POKEBALL_STYLES = {
+    "poke", "great", "ultra", "master", "safari", "premier", "luxury", "heal", "timer", "nest", "net",
+    "dive", "repeat", "quick", "dusk", "cherish", "dream", "love", "moon", "friend", "fast", "heavy",
+    "level", "sport",
+}
+
 PER_USER_KEYS = {
     "language", "currency", "price_primary", "price_display",
     "price_market", "price_divergence_pct",
@@ -89,7 +95,7 @@ PER_USER_KEYS = {
     *SCANNER_CUSTOM_MODEL_SETTINGS.values(),
     *SCANNER_CAPABILITY_SETTINGS.values(),
     SCAN_DIAGNOSTICS_SETTING_KEY, PHOTO_PREFERENCE_SETTING_KEY,
-    HOLO_EFFECTS_SETTING_KEY,
+    HOLO_EFFECTS_SETTING_KEY, "pokeball_style",
     SCANNER_GEMINI_FALLBACK_SETTING_KEY,
 }
 
@@ -172,9 +178,10 @@ DEFAULT_SETTINGS = {
     "price_alert_threshold": "10",
     "language": "en",
     "currency": "EUR",
+    "pokeball_style": "poke",
     "price_primary": "trend",
     "price_market": "cardmarket",
-    "price_divergence_pct": "40",
+    "price_divergence_pct": "50",
     "portfolio_display_mode": "portfolio_value",
     "price_display": '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
     "set_overview_filters": "{}",
@@ -210,6 +217,11 @@ def _coerce_setting_value(key: str, value) -> str:
         SCANNER_GEMINI_FALLBACK_SETTING_KEY,
     }:
         return "true" if str(value).lower() in {"true", "1", "yes", "on"} else "false"
+    if key == "pokeball_style":
+        normalized = str(value).strip().lower()
+        if normalized not in POKEBALL_STYLES:
+            raise HTTPException(status_code=422, detail="Unknown pokeball_style")
+        return normalized
     if key == "price_market":
         normalized = str(value).strip().lower()
         if normalized not in {"cardmarket", "tcgplayer"}:

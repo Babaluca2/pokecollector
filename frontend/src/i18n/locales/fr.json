@@ -844,6 +844,8 @@
     "priceMarketCardmarket": "Cardmarket (EUR)",
     "priceMarketTcgplayer": "TCGPlayer (USD, converti)",
     "priceDivergence": "Alerte d'écart de prix",
+    "pokeball": "Poké Ball",
+    "pokeballDesc": "Affichée dans la navigation, les chargements et la carte dresseur. Réglage propre à chaque utilisateur.",
     "priceDivergenceDesc": "Demander quel prix garder quand Cardmarket et TCGPlayer diffèrent d'au moins ce pourcentage",
     "imageCoverage": "Images manquantes",
     "imageCoverageDesc": "Cartes sans aucune image, par langue.",

@@ -1,5 +1,6 @@
 // Shows the user's trainer profile like a real Pokemon Trainer Card
 // Props: trainerName, totalCards, totalValue, collectedSets, totalSets, weeklyGain, gainLoss
+import PokeballIcon from './PokeballIcon'
 import { useSettings } from '../contexts/SettingsContext'
 
 export default function TrainerCard({
@@ -40,7 +41,7 @@ export default function TrainerCard({
               border: '1px solid rgba(245,200,66,0.25)',
             }}
           >
-            <img src="/pokeball.svg" className="w-12 h-12 opacity-50" alt="" />
+            <PokeballIcon size={48} style={{ opacity: 0.7 }} />
           </div>
 
           {/* Stats */}

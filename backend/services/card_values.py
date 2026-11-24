@@ -88,7 +88,7 @@ VALID_ITEM_PRICE_SOURCES = {MARKET_CARDMARKET, MARKET_TCGPLAYER, MARKET_MANUAL}
 # A pair of markets "diverges" when they differ by at least this percentage of
 # the cheaper price AND by at least MIN_DIVERGENCE_EUR (so that a 0.05 vs 0.12
 # bulk card does not raise a warning).
-DEFAULT_DIVERGENCE_PCT = 40.0
+DEFAULT_DIVERGENCE_PCT = 50.0
 MIN_DIVERGENCE_EUR = 1.0
 
 _TCGPLAYER_FIELDS_BY_VARIANT = {

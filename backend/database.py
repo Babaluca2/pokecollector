@@ -38,7 +38,7 @@ DEFAULT_SETTINGS = {
     "price_display": '["trend", "avg", "avg1", "avg7", "avg30", "low"]',
     "price_primary": "trend",
     "price_market": "cardmarket",
-    "price_divergence_pct": "40",
+    "price_divergence_pct": "50",
     "portfolio_display_mode": "portfolio_value",
     "multi_user_mode": "false",
     "tcgdex_sync_languages": "en,fr,ja,zh-cn,zh-tw,ko",

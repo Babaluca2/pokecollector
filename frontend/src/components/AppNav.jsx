@@ -1,3 +1,4 @@
+import PokeballIcon from './PokeballIcon'
 import { useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
@@ -117,19 +118,9 @@ export default function AppNav() {
         aria-label={t('home.navigation')}
         className="pokeball-home-button fixed bottom-6 left-4 z-40 w-12 h-12 rounded-full flex items-center justify-center
           transition-transform duration-200 active:scale-90"
-        style={{
-          background: 'linear-gradient(180deg, var(--color-brand-red) 50%, #E4E1DA 50%)',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
-          border: '1px solid var(--color-border)',
-        }}
+        style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.5)' }}
       >
-        {/* Pokeball center button */}
-        <div className="w-4 h-4 rounded-full bg-white border-2 border-black flex items-center justify-center"
-          style={{ boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)' }}>
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
-        </div>
-        {/* Horizontal divider line */}
-        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-black pointer-events-none" />
+        <PokeballIcon size={48} />
       </button>
     </>
   )

@@ -2,6 +2,8 @@ import ImageCoverage from '../components/ImageCoverage'
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import PokeballIcon from '../components/PokeballIcon'
+import { POKEBALLS } from '../utils/pokeballs'
 import { Crown, RefreshCw, Download, Upload, Plus, Pencil, Trash2, User, UserCheck, UserX, Zap, Copy } from 'lucide-react'
 import {
   getSyncStatus, triggerSync, triggerAllPriceSync, rescheduleFullSync, reschedulePriceSync,
@@ -742,6 +744,16 @@ export default function Settings() {
     }
   }
 
+  const currentPokeball = settings.pokeball_style || 'poke'
+  const handlePokeballChange = async (id) => {
+    try {
+      await updateSettings({ pokeball_style: id })
+      toast.success(t('settings.saved'))
+    } catch {
+      toast.error(t('settings.saveFailed'))
+    }
+  }
+
   const handleHoloEffectsToggle = async (enabled) => {
     try {
       await updateSettings({ holo_effects_enabled: enabled ? 'true' : 'false' })
@@ -1112,6 +1124,23 @@ export default function Settings() {
                   onChange={handleLanguageChange}
                 />
               </SettingsRow>
+              <SettingsRow label={t('settings.pokeball')} description={t('settings.pokeballDesc')}>
+                <div className="flex flex-wrap justify-end gap-2 max-w-[18rem]">
+                  {POKEBALLS.map((ball) => (
+                    <button
+                      key={ball.id}
+                      type="button"
+                      title={ball.name}
+                      aria-label={ball.name}
+                      aria-pressed={currentPokeball === ball.id}
+                      onClick={() => handlePokeballChange(ball.id)}
+                      className={`rounded-full p-0.5 border transition-colors ${currentPokeball === ball.id ? 'border-accent' : 'border-transparent hover:border-border'}`}
+                    >
+                      <PokeballIcon ball={ball} size={28} />
+                    </button>
+                  ))}
+                </div>
+              </SettingsRow>
               <SettingsRow label={t('settings.currency')} description={currencyDescription}>
                 <SelectControl
                   value={currentCurrency}
@@ -1146,8 +1175,8 @@ export default function Settings() {
               </SettingsRow>
               <SettingsRow label={t('settings.priceDivergence')} description={t('settings.priceDivergenceDesc')}>
                 <SelectControl
-                  value={String(settings.price_divergence_pct || '40')}
-                  options={['20', '30', '40', '60', '100'].map(pct => ({ value: pct, label: `${pct} %` }))}
+                  value={String(settings.price_divergence_pct || '50')}
+                  options={['20', '30', '40', '50', '60', '100'].map(pct => ({ value: pct, label: `${pct} %` }))}
                   onChange={handlePriceDivergenceChange}
                 />
               </SettingsRow>
