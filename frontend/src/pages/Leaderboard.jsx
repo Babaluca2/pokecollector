@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Navigate, useNavigate, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { ArrowUpDown, Trophy, Award, Globe } from 'lucide-react'
+import { ArrowUpDown, Trophy, Award, Globe, Library } from 'lucide-react'
 import { getLeaderboard } from '../api/client'
 import { useSettings } from '../contexts/SettingsContext'
 import { useAuth } from '../contexts/AuthContext'
@@ -132,12 +132,13 @@ export default function Leaderboard() {
                       </div>
                       <p className="text-xs   text-text-muted">{trainer.role}</p>
                       {trainer.user_id !== currentUser?.id && (
-                      <div className="mt-1 flex min-w-0 gap-2">
+                      <div className="mt-2 flex min-w-0 gap-2">
                         <button
                           type="button"
                           onClick={(e) => { e.stopPropagation(); navigate(`/collection/user/${trainer.user_id}`) }}
-                          className="truncate text-[10px] font-semibold text-brand-red hover:text-brand-red/80"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-bg-primary px-3 py-1.5 text-xs font-medium text-text-primary transition-colors hover:border-yellow/40 hover:bg-bg-elevated"
                         >
+                          <Library size={14} />
                           {t('leaderboard.viewCollection')}
                         </button>
                       </div>
