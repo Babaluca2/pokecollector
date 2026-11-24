@@ -56,13 +56,13 @@ export default function ImageCoverage() {
             {t('settings.importJpResult').replace('{filled}', importJp.data.filled).replace('{sets}', importJp.data.sets).replace('{cards}', importJp.data.cards)}
           </span>
         )}
-        {importJp.isError && <span className="text-xs text-red">{t('settings.importJpError')}</span>}
+        {importJp.isError && <span className="text-xs text-red-400">{t('settings.importJpError')}</span>}
         {importChs.data && (
           <span className="text-xs text-text-muted">
             {t('settings.importChsResult').replace('{sets}', importChs.data.sets).replace('{cards}', importChs.data.cards)}
           </span>
         )}
-        {importChs.isError && <span className="text-xs text-red">{t('settings.importChsError')}</span>}
+        {importChs.isError && <span className="text-xs text-red-400">{t('settings.importChsError')}</span>}
         {repair.data && (
           <span className="text-xs text-text-muted">
             {t('settings.imageRepairResult').replace('{repaired}', repair.data.repaired).replace('{remaining}', repair.data.still_missing)}
