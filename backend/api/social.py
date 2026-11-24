@@ -13,6 +13,8 @@ from services.card_visibility import visible_card_filter
 from services.digital_sets import digital_sets_enabled
 from services.public_profile_feature import public_profiles_enabled
 from services.portfolio_valuation import calculate_portfolio_valuation
+from services.price_context import build_price_context
+from types import SimpleNamespace
 
 router = APIRouter()
 
@@ -203,8 +205,19 @@ def _load_user_stats(db: Session, user_ids: list[int] | None = None, price_field
     price_field = normalize_price_field(price_field)
     sharing_enabled = public_profiles_enabled(db)
 
+    price_contexts: dict[int, object] = {}
+
     def _get_price(row):
-        return effective_market_price(row, getattr(row, "variant", None), price_field)
+        """Unit price in the owner's chosen market (per-copy source and manual price included)."""
+        ctx = price_contexts.get(row.user_id)
+        if ctx is None:
+            ctx = price_contexts[row.user_id] = build_price_context(db, row.user_id, price_field=price_field)
+        return ctx.price(SimpleNamespace(
+            card=row,
+            variant=getattr(row, "variant", None),
+            price_source=getattr(row, "price_source", None),
+            price_override=getattr(row, "price_override", None),
+        ))
 
     user_query = db.query(User).filter(User.is_active == True)
     if user_ids is not None:
@@ -221,6 +234,11 @@ def _load_user_stats(db: Session, user_ids: list[int] | None = None, price_field
         CollectionItem.quantity,
         CollectionItem.purchase_price,
         CollectionItem.variant,
+        CollectionItem.price_source,
+        CollectionItem.price_override,
+        Card.price_tcg_normal_market,
+        Card.price_tcg_holo_market,
+        Card.price_tcg_reverse_market,
         Card.id.label("card_db_id"),
         Card.name,
         Card.images_small,
