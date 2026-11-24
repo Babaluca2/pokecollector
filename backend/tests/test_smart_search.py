@@ -48,6 +48,13 @@ class SmartSearchTests(unittest.TestCase):
     def test_number_with_total(self):
         self.assertEqual(self.ids("paldea evolved pikachu 125/193"), ["b-125_en"])
 
+    def test_short_set_code_and_abbreviation(self):
+        self.assertEqual(self.ids("obf charizard 125"), ["a-125_en"])
+        self.assertEqual(self.ids("PAL pikachu"), ["b-125_en"])
+        self.assertEqual(self.ids("pal 125"), ["b-125_en"])
+        self.assertEqual(self.ids("b charizard"), [])  # one-letter codes are ignored
+        self.assertEqual(sorted(self.ids("pal")), ["b-125_en", "b-7_en"])
+
     def test_plain_name_unchanged(self):
         self.assertEqual(self.ids("charizard"), ["a-125_en", "b-7_en"])
 

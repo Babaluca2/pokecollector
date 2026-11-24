@@ -70,7 +70,8 @@ def _parse_smart_query(db: Session, user, term: str, lang: str):
     set_ids: list[str] = []
     lowered = text.lower()
     best = ""
-    for row in db.query(Set.name, Set.tcg_set_id).filter(visible_set_filter(db, user.id, lang)).all():
+    rows = db.query(Set.name, Set.tcg_set_id, Set.abbreviation).filter(visible_set_filter(db, user.id, lang)).all()
+    for row in rows:
         name = (row[0] or "").strip().lower()
         if len(name) >= 3 and name in lowered and len(name) > len(best):
             best = name
@@ -82,6 +83,22 @@ def _parse_smart_query(db: Session, user, term: str, lang: str):
         ]
         text = re.sub(re.escape(best), " ", lowered, count=1).strip()
         text = re.sub(r"\s+", " ", text)
+    else:
+        # Short set codes ("m1s", "dlr", "sv8") work too: match a whole word, case-insensitive,
+        # against the set code or abbreviation (dataset-imported ids lose their "chs-" prefix).
+        by_code: dict[str, list[str]] = {}
+        for _name, tcg_id, abbreviation in rows:
+            if not tcg_id:
+                continue
+            for code in {str(tcg_id).lower().removeprefix("chs-"), (abbreviation or "").strip().lower()}:
+                if len(code) >= 2:
+                    by_code.setdefault(code, []).append(tcg_id)
+        tokens = lowered.split()
+        for idx, token in enumerate(tokens):
+            if token in by_code:
+                set_ids = list(dict.fromkeys(by_code[token]))
+                text = " ".join(tokens[:idx] + tokens[idx + 1:]).strip()
+                break
     if not set_ids and number is None:
         return None
     probe = db.query(Card.id).filter(Card.is_custom == False, visible_card_filter(db, user.id, lang))  # noqa: E712
