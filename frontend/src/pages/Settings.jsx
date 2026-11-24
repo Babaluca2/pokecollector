@@ -1797,7 +1797,7 @@ function UsersTab({ t, queryClient }) {
   const [formUsername, setFormUsername] = useState('')
   const [formPassword, setFormPassword] = useState('')
   const [formRole, setFormRole] = useState('trainer')
-  const [formForceChange, setFormForceChange] = useState(false)
+  const [formForceChange, setFormForceChange] = useState(true)
   const [currentPw, setCurrentPw] = useState('')
   const [newPw, setNewPw] = useState('')
   const { user: currentUser } = useAuth()
@@ -1832,7 +1832,7 @@ function UsersTab({ t, queryClient }) {
     setFormUsername('')
     setFormPassword('')
     setFormRole('trainer')
-    setFormForceChange(false)
+    setFormForceChange(true)
     setShowModal(true)
   }
   const openEdit = (u) => { setEditingUser(u); setFormUsername(u.username); setFormPassword(''); setFormRole(u.role); setShowModal(true) }

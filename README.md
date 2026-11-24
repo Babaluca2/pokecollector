@@ -51,8 +51,8 @@ docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 
 **Before exposing this fork to the internet**
 
-- Turn on **multi-user mode** and create an admin account. In single-user mode every visitor is the administrator (the backend logs a warning at startup when this mode is active).
-- `POSTGRES_PASSWORD` is now mandatory (Compose refuses to start without it). Also set `ADMIN_PASSWORD`, and `JWT_SECRET_KEY` if you want sessions to survive a rebuild.
+- A fresh install starts with login enforced and the account `admin` / `Admin`. **Sign in and change that password right away**: the app forces the change at first login and blocks everything else until it is done, but until then the default is guessable. Do not publish the instance before that first login. In single-user mode every visitor is the administrator (the backend logs a warning at startup when this mode is active).
+- `POSTGRES_PASSWORD` is mandatory (Compose refuses to start without it). `ADMIN_PASSWORD` is optional now; set `JWT_SECRET_KEY` if you want sessions to survive a rebuild.
 - CORS is same-origin by default; set `CORS_ORIGINS` only if another site must call the API.
 - Publish only the frontend (port 3000) behind HTTPS (reverse proxy or tunnel). The backend port is bound to `127.0.0.1`; keep it that way.
 - Login attempts are limited to 5 per minute per visitor. nginx now resolves the real visitor address from the proxy or tunnel in front of it (private networks only) and the backend trusts that address only when the connection comes from a private network. For stronger protection add Cloudflare Access or a WAF rate-limit rule on `/api/auth/login`.
@@ -237,7 +237,7 @@ JWT_SECRET_KEY=some_long_random_string
 
 # Optional
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=your_admin_password
+# ADMIN_PASSWORD=   # leave empty to start with admin / Admin (forced change at first login)
 GEMINI_API_KEY=your_gemini_key
 GEMINI_MODEL=gemini-flash-latest
 TELEGRAM_BOT_TOKEN=your_bot_token
@@ -300,7 +300,8 @@ For scanner keys, hosted OpenAI, Ollama, and other compatible vision servers, se
 
 - In single-user mode, login is skipped and the app auto-authenticates as admin
 - In multi-user mode, use the admin account created from `ADMIN_USERNAME` / `ADMIN_PASSWORD`
-- If `ADMIN_PASSWORD` is omitted, a random password may be logged during bootstrap
+- If `ADMIN_PASSWORD` is omitted, the admin starts as `admin` / `Admin` and must choose a new password (8+ characters) at first login
+- Admin creates accounts in **Settings → Users**: the admin picks a temporary password, and the user must change it at first login (same when the admin resets a password)
 
 > [!WARNING]
 > Single-user mode has no authentication: every client that can reach the app is treated as the administrator. Use it only on a trusted local network. Do not expose a single-user installation to the internet; enable multi-user mode and protect public deployments with HTTPS and an appropriately configured reverse proxy.
@@ -337,7 +338,7 @@ The **Users** tab is only visible to admin users and only while multi-user mode 
 
 ### Enabling multi-user mode without locking yourself out
 
-Turning on multi-user mode enforces the login screen immediately and signs you out, and you then sign back in as the bootstrap admin. In single-user mode you never had to enter that password, so if you did not set `ADMIN_PASSWORD` it is the random one from the first-run log and you may not know it. Set a known password **before** enabling multi-user mode. From the host:
+Turning on multi-user mode enforces the login screen immediately and signs you out, and you then sign back in as the bootstrap admin. In single-user mode you never had to enter that password, so if you did not set `ADMIN_PASSWORD` it is the default `Admin` (or the one you changed it to). Set a known password **before** enabling multi-user mode. From the host:
 
 ```bash
 # Docker
@@ -373,7 +374,7 @@ If you are already locked out of multi-user mode, set `USER_MODE=single` in the 
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `ADMIN_USERNAME` | Username for the bootstrap admin account | `admin` |
-| `ADMIN_PASSWORD` | Password for the bootstrap admin account | Random, optionally logged |
+| `ADMIN_PASSWORD` | Password for the bootstrap admin account | `Admin`, changed at first login |
 | `GEMINI_API_KEY` | Initial Gemini key for the admin user; other users configure their own key in Settings | *(empty)* |
 | `GEMINI_MODEL` | Gemini model used by the card scanner. Change this if Google retires the default model for new API keys. | `gemini-flash-latest` |
 | `OPENAI_SCANNER_ENABLED` | Exposes the OpenAI-compatible provider in Scanner Settings. It stays hidden until deliberately enabled by an administrator. | `false` |

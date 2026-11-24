@@ -815,6 +815,7 @@
       "userUpdated": "Utilisateur mis à jour",
       "userDeleted": "Utilisateur supprimé",
       "forcePasswordChange": "L'utilisateur doit changer son mot de passe à la prochaine connexion",
+      "passwordRules": "Au moins 8 caractères, et pas « Admin ».",
       "cannotDeleteSelf": "Vous ne pouvez pas vous supprimer vous-même",
       "createdAt": "Créé le"
     },

@@ -75,7 +75,7 @@ function ForcePasswordChangeScreen() {
   })
 
   const passwordsMatch = newPassword === confirmPassword
-  const canSubmit = newPassword && confirmPassword && passwordsMatch && !forceChangeMutation.isPending
+  const canSubmit = newPassword.length >= 8 && confirmPassword && passwordsMatch && !forceChangeMutation.isPending
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -89,6 +89,7 @@ function ForcePasswordChangeScreen() {
         <div className="space-y-1">
           <h1 className="text-2xl font-bold text-text-primary">{t('settings.users.changePassword')}</h1>
           <p className="text-sm text-text-muted">{t('settings.users.forcePasswordChange')}</p>
+          <p className="text-xs text-text-muted">{t('settings.users.passwordRules')}</p>
         </div>
         <div>
           <label className="text-xs text-text-secondary mb-1 block">{t('settings.users.newPassword')}</label>

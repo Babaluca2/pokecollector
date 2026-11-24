@@ -127,13 +127,19 @@ def decode_token(token: str) -> dict:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
 
+DEFAULT_ADMIN_PASSWORD = "Admin"
+
+
 def bootstrap_admin(db: Session):
     """Create admin user on first run if no users exist."""
     if db.query(User).count() > 0:
         return
 
     username = os.getenv("ADMIN_USERNAME", "admin")
-    password = os.getenv("ADMIN_PASSWORD") or secrets.token_urlsafe(20)
+    env_password = os.getenv("ADMIN_PASSWORD")
+    # No ADMIN_PASSWORD: start with the well-known default and force a change at first login.
+    password = env_password or DEFAULT_ADMIN_PASSWORD
+    uses_default = not env_password
     log_credentials = os.getenv("ADMIN_BOOTSTRAP_LOG", "true").lower() != "false"
 
     admin = User(
@@ -141,10 +147,17 @@ def bootstrap_admin(db: Session):
         hashed_password=hash_password(password),
         role="admin",
         is_active=True,
+        must_change_password=uses_default,
     )
     db.add(admin)
     db.commit()
     db.refresh(admin)
+
+    if uses_default:
+        # The default password only makes sense behind a login screen.
+        from database import save_setting
+
+        save_setting("multi_user_mode", "true")
 
     # init_db() runs before the first administrator exists, so its legacy settings
     # migration cannot import GEMINI_API_KEY on a brand-new installation. Seed the
@@ -169,6 +182,9 @@ def bootstrap_admin(db: Session):
 
     if log_credentials:
         logger.info("Initial admin user created — username: %s", username)
-        logger.info("Initial admin password: %s", password)  # nosec — intentional, user can set ADMIN_PASSWORD env var instead
+        if uses_default:
+            logger.info("Initial admin password is the default; it must be changed at first login")
+        else:
+            logger.info("Initial admin password taken from ADMIN_PASSWORD")
     else:
         logger.info("Initial admin user created (credentials suppressed)")

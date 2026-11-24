@@ -30,7 +30,7 @@ class CreateUserRequest(BaseModel):
     password: str
     role: str = "trainer"
     avatar_id: int | None = None
-    must_change_password: bool = False
+    must_change_password: bool = True
 
 
 class UpdateUserRequest(BaseModel):
@@ -123,7 +123,32 @@ def multi_user_enabled(db: Session) -> bool:
     return str(multi).lower() == "true"
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
+PASSWORD_CHANGE_ALLOWED_PATHS = {
+    "/api/auth/me",
+    "/api/auth/me/force-password",
+    "/api/auth/me/password",
+    "/api/auth/mode",
+}
+MIN_PASSWORD_LENGTH = 8
+
+
+def validate_new_password(password: str, min_length: int = MIN_PASSWORD_LENGTH) -> None:
+    if len(password or "") < min_length:
+        raise HTTPException(status_code=400, detail=f"Password must be at least {min_length} characters")
+    if password.strip().lower() == "admin":
+        raise HTTPException(status_code=400, detail="This password is too common")
+
+
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db), request: Request = None
+) -> User:
+    user = _resolve_user(token, db)
+    if request is not None and user.must_change_password and request.url.path.rstrip("/") not in PASSWORD_CHANGE_ALLOWED_PATHS:
+        raise HTTPException(status_code=403, detail="password_change_required")
+    return user
+
+
+def _resolve_user(token: str, db: Session) -> User:
     if not token:
         if not multi_user_enabled(db):
             admin = db.query(User).filter(User.role == "admin", User.is_active == True).first()
@@ -239,6 +264,7 @@ def create_user(
     existing = db.query(User).filter(User.username == data.username).first()
     if existing:
         raise HTTPException(status_code=400, detail="Username already exists")
+    validate_new_password(data.password, 4)
     user = User(
         username=data.username,
         hashed_password=hash_password(data.password),
@@ -272,7 +298,10 @@ def update_user(
         _sync_public_handle_for_username(db, user, data.username)
         user.username = data.username
     if data.password is not None:
+        validate_new_password(data.password, 4)
         user.hashed_password = hash_password(data.password)
+        if user.id != current_user.id:
+            user.must_change_password = True
     if data.role is not None:
         user.role = data.role
     if data.is_active is not None:
@@ -398,6 +427,7 @@ def change_password(
 ):
     if not verify_password(data.current_password, current_user.hashed_password):
         raise HTTPException(status_code=400, detail="Current password is incorrect")
+    validate_new_password(data.new_password)
     current_user.hashed_password = hash_password(data.new_password)
     current_user.must_change_password = False
     db.commit()
@@ -412,6 +442,7 @@ def force_change_password(
 ):
     if not current_user.must_change_password:
         raise HTTPException(status_code=400, detail="Password change is not required")
+    validate_new_password(data.new_password)
     current_user.hashed_password = hash_password(data.new_password)
     current_user.must_change_password = False
     db.commit()
