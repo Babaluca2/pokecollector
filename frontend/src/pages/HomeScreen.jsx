@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   RefreshCw, LogOut,
-  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, Trophy, ListOrdered, Info, Layers3,, ShoppingBag
+  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, Trophy, ListOrdered, Info, Layers3, ShoppingBag
 } from 'lucide-react'
 import HomeQuickAdd from '../components/HomeQuickAdd'
 import {
