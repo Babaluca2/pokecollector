@@ -562,6 +562,7 @@ def _parse_import_row(row: dict, row_number: int) -> CollectionItemCreate:
 @router.get("/user/{user_id}", response_model=List[CollectionItemResponse])
 def get_user_collection(
     user_id: int,
+    price_field: str = Query(default="price_trend"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -578,7 +579,16 @@ def get_user_collection(
         # binders and template browser.
         visible_card_filter(db, user_id, "all"),
     )
-    return _annotate_standard_legality(query.all(), _collection_standard_legal_fingerprints(db))
+    items = _annotate_standard_legality(query.all(), _collection_standard_legal_fingerprints(db))
+    # Prices follow the owner's choices (market, per-card source, manual price).
+    price_ctx = build_price_context(db, user_id, price_field=price_field)
+    for item in items:
+        if not item.card:
+            continue
+        price, market = price_ctx.resolve(item)
+        item.price_used_market = market
+        item.effective_price = round(price, 4)
+    return items
 
 
 @router.get("/", response_model=List[CollectionItemResponse])

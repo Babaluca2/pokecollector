@@ -7,7 +7,7 @@ import TcgdexLanguageSelect from '../components/TcgdexLanguageSelect'
 import { useSettings } from '../contexts/SettingsContext'
 import { resolveCardImageUrl } from '../utils/imageUrl'
 import { CardModal } from '../components/CardItem'
-import { getEffectiveCardPrice } from '../utils/prices'
+import { getCollectionItemPrice } from '../utils/prices'
 import { TCGDEX_LANGUAGES, tcgdexLanguageLabel } from '../utils/tcgdexLanguages'
 import { textIncludes } from '../utils/textSearch'
 import { CardDisplay, CardLegend, withCollectionItemState } from '../components/card-system'
@@ -88,7 +88,7 @@ export default function UserCollection() {
       let valA, valB
       switch (sortBy) {
         case 'name': valA = a.card?.name || ''; valB = b.card?.name || ''; break
-        case 'price': valA = getEffectiveCardPrice(a.card, a.variant, pricePrimaryField); valB = getEffectiveCardPrice(b.card, b.variant, pricePrimaryField); break
+        case 'price': valA = getCollectionItemPrice(a, pricePrimaryField); valB = getCollectionItemPrice(b, pricePrimaryField); break
         case 'quantity': valA = a.quantity; valB = b.quantity; break
         case 'rarity': valA = a.card?.rarity || ''; valB = b.card?.rarity || ''; break
         default: valA = a.card?.name || ''; valB = b.card?.name || ''
@@ -102,7 +102,7 @@ export default function UserCollection() {
     return result
   }, [items, searchText, filterRarity, filterVariant, filterLang, sortBy, sortOrder, pricePrimaryField])
 
-  const totalValue = filtered.reduce((sum, item) => sum + getEffectiveCardPrice(item.card, item.variant, pricePrimaryField) * item.quantity, 0)
+  const totalValue = filtered.reduce((sum, item) => sum + getCollectionItemPrice(item, pricePrimaryField) * item.quantity, 0)
   const totalCards = filtered.reduce((sum, item) => sum + item.quantity, 0)
 
   return (
@@ -222,7 +222,7 @@ export default function UserCollection() {
             const card = item.card
             if (!card) return null
             const imgSrc = resolveCardImageUrl(card)
-            const price = getEffectiveCardPrice(card, item.variant, pricePrimaryField)
+            const price = getCollectionItemPrice(item, pricePrimaryField)
             return (
               <CardDisplay
                 key={item.id}
