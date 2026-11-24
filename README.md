@@ -136,7 +136,6 @@ Korean cards still have no image source, and Japanese, Chinese and Korean cards 
 - Trade journal with incoming/outgoing cards and cash, automatic collection updates, editable trades, valuation, and trade analytics
 
 ### 👤 Single-User & Multi-User
-- Single-user mode: no login required, auto-auth as admin
 - Multi-user mode: JWT login, admin/trainer roles, separate user data
 - Per-user settings for language, currency, Telegram keys, and scanner provider keys
 - Force password change support on first login
