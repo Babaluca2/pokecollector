@@ -53,19 +53,19 @@ export default function ImageCoverage() {
         </button>
         {importJp.data && (
           <span className="text-xs text-text-muted">
-            {t('settings.importJpResult', { filled: importJp.data.filled, sets: importJp.data.sets, cards: importJp.data.cards })}
+            {t('settings.importJpResult').replace('{filled}', importJp.data.filled).replace('{sets}', importJp.data.sets).replace('{cards}', importJp.data.cards)}
           </span>
         )}
         {importJp.isError && <span className="text-xs text-red">{t('settings.importJpError')}</span>}
         {importChs.data && (
           <span className="text-xs text-text-muted">
-            {t('settings.importChsResult', { sets: importChs.data.sets, cards: importChs.data.cards })}
+            {t('settings.importChsResult').replace('{sets}', importChs.data.sets).replace('{cards}', importChs.data.cards)}
           </span>
         )}
         {importChs.isError && <span className="text-xs text-red">{t('settings.importChsError')}</span>}
         {repair.data && (
           <span className="text-xs text-text-muted">
-            {t('settings.imageRepairResult', { repaired: repair.data.repaired, remaining: repair.data.still_missing })}
+            {t('settings.imageRepairResult').replace('{repaired}', repair.data.repaired).replace('{remaining}', repair.data.still_missing)}
           </span>
         )}
       </div>

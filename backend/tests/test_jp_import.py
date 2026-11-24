@@ -14,9 +14,10 @@ SETS = [
     {"id": 3, "language": "ja", "released": False, "name": "Future", "code": "FUT"},
 ]
 CARDS = [
-    {"id": 10, "set_id": 1, "language": "ja", "name": "A", "number": "001", "image_url": "https://i/a.jpg"},
-    {"id": 11, "set_id": 2, "language": "ja", "name": "B", "number": "005", "image_url": "https://i/b.jpg"},
+    {"id": 10, "set_id": 1, "language": "ja", "name": "A", "number": "001", "image_url": "https://pub-54a82c9e988c459da62f95d0bd9c78d9.r2.dev/a.jpg"},
+    {"id": 11, "set_id": 2, "language": "ja", "name": "B", "number": "005", "image_url": "https://pub-54a82c9e988c459da62f95d0bd9c78d9.r2.dev/b.jpg"},
     {"id": 12, "set_id": 2, "language": "ja", "name": "C", "number": "006", "image_url": None},
+    {"id": 13, "set_id": 2, "language": "ja", "name": "D", "number": "007", "image_url": "http://169.254.169.254/x.jpg"},
 ]
 
 
@@ -30,7 +31,7 @@ class JpImportTests(unittest.TestCase):
         db.commit()
         result = import_jp_cards(db, (SETS, CARDS))
         self.assertEqual(result, {"filled": 1, "sets": 1, "cards": 1})
-        self.assertEqual(db.query(Card).filter(Card.id == "SV1S-001_ja").one().images_small, "https://i/a.jpg")
+        self.assertEqual(db.query(Card).filter(Card.id == "SV1S-001_ja").one().images_small, "https://pub-54a82c9e988c459da62f95d0bd9c78d9.r2.dev/a.jpg")
         self.assertEqual(db.query(Set).filter(Set.id == "pkmndb-2_ja").one().total, 1)
         self.assertEqual(import_jp_cards(db, (SETS, CARDS))["filled"], 0)
         db.close()

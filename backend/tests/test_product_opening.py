@@ -1,6 +1,5 @@
 import datetime
 import unittest
-from unittest.mock import patch
 
 from services.product_opening import allocate_unit_costs
 

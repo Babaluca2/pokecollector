@@ -4,7 +4,7 @@ from api.auth import get_current_user
 from api.collection import _annotate_scan_photos
 from database import get_db
 from models import CollectionItem, Card, Set, PortfolioSnapshot, SyncLog, User
-from services.card_values import effective_market_price, normalize_price_field
+from services.card_values import normalize_price_field
 from services.price_context import build_price_context
 from services.card_visibility import visible_any_card_filter, visible_set_filter
 from services.portfolio_valuation import (
