@@ -118,6 +118,8 @@ def card_needs_metadata_enrichment(card: Card, *, now: datetime.datetime | None 
     """
     if not card or card.is_custom or not (card.tcg_card_id or card.id):
         return False
+    if pokemon_api.is_external_card_id(card.tcg_card_id):
+        return False
     if not _card_missing_key_metadata(card):
         return False
     return _metadata_enrichment_attempt_is_due(card, now=now)
@@ -303,6 +305,7 @@ def enrich_missing_card_metadata(
         .filter(
             Card.is_custom == False,
             Card.tcg_card_id.isnot(None),
+            not_(or_(*[Card.tcg_card_id.startswith(p) for p in pokemon_api.EXTERNAL_CARD_PREFIXES])),
             or_(
                 Card.last_metadata_enrichment_attempt_at.is_(None),
                 Card.last_metadata_enrichment_attempt_at <= cooldown_cutoff,
@@ -329,6 +332,7 @@ def enrich_missing_card_metadata(
         .filter(
             Card.is_custom.is_(False),
             Card.tcg_card_id.isnot(None),
+            not_(or_(*[Card.tcg_card_id.startswith(p) for p in pokemon_api.EXTERNAL_CARD_PREFIXES])),
             or_(
                 Card.last_metadata_enrichment_attempt_at.is_(None),
                 Card.last_metadata_enrichment_attempt_at <= refresh_cutoff,

@@ -14,6 +14,29 @@ class SetNameTests(unittest.TestCase):
         self.assertEqual(english_set_name("SV1S", "fr", "Écarlate"), "Écarlate")
         self.assertEqual(english_set_name("sv1", "en", "Scarlet & Violet"), "Scarlet & Violet")
 
+    def test_chinese_import_prefix_is_ignored_for_lookup(self):
+        self.assertTrue(english_set_name("chs-CSV10.5C", "zh-cn", "补充包 黑雷奔流").isascii())
+
+    def test_localize_keeps_english_name_on_rerun(self):
+        from sqlalchemy import create_engine
+        from sqlalchemy.orm import sessionmaker
+        from sqlalchemy.pool import StaticPool
+        from database import Base
+        from models import Set
+        from services.set_names import localize_set_names
+
+        engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+        Base.metadata.create_all(engine)
+        db = sessionmaker(bind=engine)()
+        db.add(Set(id="chs-CSV10.5C_zh-cn", tcg_set_id="chs-CSV10.5C", name="补充包 黑雷奔流", lang="zh-cn"))
+        db.commit()
+        localize_set_names(db)
+        localize_set_names(db)
+        row = db.query(Set).one()
+        self.assertTrue(row.name.isascii())
+        self.assertEqual(row.native_name, "补充包 黑雷奔流")
+        db.close()
+
     def test_unknown_code_keeps_native_name(self):
         self.assertEqual(english_set_name("zzz", "ko", "원본"), "원본")
 

@@ -237,8 +237,9 @@ export const getDeckProbability = (deckId, params = {}) => api.get(`/decks/${dec
 // Sets
 export const syncAutoBinders = () => api.post('/binders/sync-auto').then(r => r.data)
 export const getUsdEurRate = () => api.get('/settings/usd-eur-rate').then(r => r.data?.rate ?? null)
-export const importChsCards = () => api.post('/sets/import-chs', null, { timeout: 300000 }).then(r => r.data)
-export const importJpCards = () => api.post('/sets/import-jp', null, { timeout: 600000 }).then(r => r.data)
+export const importChsCards = () => api.post('/sets/import-chs').then(r => r.data)
+export const getImportStatus = (name) => api.get(`/sets/import-status/${name}`).then(r => r.data)
+export const importJpCards = () => api.post('/sets/import-jp').then(r => r.data)
 export const repairImages = () => api.post('/sets/image-repair').then(r => r.data)
 export const getImageCoverage = () => api.get('/sets/image-coverage').then(r => r.data)
 export const getSets = (params) => api.get('/sets/', { params })

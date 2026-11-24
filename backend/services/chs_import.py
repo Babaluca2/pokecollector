@@ -36,13 +36,15 @@ def _card_row(collection: dict, card: dict, set_id: str) -> dict:
     if isinstance(artists, str):
         artists = [artists]
     url = _image_url(card.get("image"))
-    card_id = f"chs-{card['id']}"
+    # The same card can appear in several products (coin sets, promo boxes), so
+    # the product id is part of the key; otherwise the last product wins.
+    card_id = f"chs-{collection['id']}-{card['id']}"
     return {
         "id": f"{card_id}_{LANG}",
         "tcg_card_id": card_id,
         "name": card.get("name") or details.get("cardName") or card_id,
         "set_id": set_id,
-        "number": details.get("collectionNumber"),
+        "number": (details.get("collectionNumber") or "").split("/")[0].strip() or None,
         "rarity": details.get("rarityText"),
         "supertype": details.get("cardTypeText"),
         "hp": str(details["hp"]) if details.get("hp") else None,

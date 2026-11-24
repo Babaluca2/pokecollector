@@ -35,6 +35,8 @@ def english_set_name(tcg_set_id: Optional[str], lang: Optional[str], native: str
     if lang in KEEP_NATIVE or not tcg_set_id:
         return native
     key = tcg_set_id.lower()
+    if key.startswith("chs-"):  # sets created by the Chinese import
+        key = key[4:]
     if english_by_id and english_by_id.get(tcg_set_id):
         return english_by_id[tcg_set_id]
     table = _table()
@@ -60,7 +62,5 @@ def localize_set_names(db: Session) -> dict:
             row.native_name = native
             row.name = name
             changed += 1
-        elif row.native_name and row.native_name != row.name:
-            row.name = row.native_name
     db.commit()
     return {"renamed": changed}

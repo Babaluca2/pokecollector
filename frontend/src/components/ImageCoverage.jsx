@@ -1,27 +1,38 @@
+import { useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getImageCoverage, importChsCards, importJpCards, repairImages } from '../api/client'
+import { getImageCoverage, getImportStatus, importChsCards, importJpCards, repairImages } from '../api/client'
 import { useSettings } from '../contexts/SettingsContext'
+
+/** Start a long server-side import, then poll until it is done (it survives a page reload). */
+function useImportJob(name, start) {
+  const queryClient = useQueryClient()
+  const status = useQuery({
+    queryKey: ['import-status', name],
+    queryFn: () => getImportStatus(name),
+    refetchInterval: query => (query.state.data?.status === 'running' ? 3000 : false),
+  })
+  const mutation = useMutation({ mutationFn: start, onSuccess: () => status.refetch() })
+  const state = status.data?.status
+  useEffect(() => {
+    if (state !== 'done') return
+    queryClient.invalidateQueries({ queryKey: ['image-coverage'] })
+    queryClient.invalidateQueries({ queryKey: ['sets'] })
+    queryClient.invalidateQueries({ queryKey: ['cards'] })
+  }, [state, queryClient])
+  return {
+    mutate: mutation.mutate,
+    isPending: mutation.isPending || state === 'running',
+    data: state === 'done' ? status.data.result : null,
+    isError: mutation.isError || state === 'error',
+  }
+}
 
 /** Compact audit of cards that have no artwork, per language and per set. */
 export default function ImageCoverage() {
   const { t } = useSettings()
   const queryClient = useQueryClient()
-  const importChs = useMutation({
-    mutationFn: importChsCards,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['image-coverage'] })
-      queryClient.invalidateQueries({ queryKey: ['sets'] })
-      queryClient.invalidateQueries({ queryKey: ['cards'] })
-    },
-  })
-  const importJp = useMutation({
-    mutationFn: importJpCards,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['image-coverage'] })
-      queryClient.invalidateQueries({ queryKey: ['sets'] })
-      queryClient.invalidateQueries({ queryKey: ['cards'] })
-    },
-  })
+  const importChs = useImportJob('chs', importChsCards)
+  const importJp = useImportJob('jp', importJpCards)
   const repair = useMutation({
     mutationFn: repairImages,
     onSuccess: () => {

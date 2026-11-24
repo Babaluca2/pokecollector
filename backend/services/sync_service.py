@@ -190,6 +190,7 @@ def _price_sync_plan(
         syncable_cards.extend(
             card for card in cards
             if not getattr(card, "is_custom", False) and getattr(card, "tcg_card_id", None)
+            and not pokemon_api.is_external_card_id(card.tcg_card_id)  # dataset cards have no TCGdex prices
             and (include_digital or not getattr(card, "is_digital", False))
         )
 

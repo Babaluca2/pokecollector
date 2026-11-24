@@ -217,8 +217,18 @@ def search_cards(
     }
 
 
+EXTERNAL_CARD_PREFIXES = ("chs-", "pkmndb-")  # cards imported from community datasets
+
+
+def is_external_card_id(card_id: Optional[str]) -> bool:
+    """True for cards imported from community datasets, which TCGdex does not know."""
+    return bool(card_id) and str(card_id).startswith(EXTERNAL_CARD_PREFIXES)
+
+
 def get_card(card_id: str, lang: str = "en") -> Optional[Dict]:
     """Get a single card by ID from TCGdex."""
+    if is_external_card_id(card_id):
+        return None
     base_url = get_base_url(lang)
     with httpx.Client(timeout=30.0) as client:
         response = client.get(f"{base_url}/cards/{card_id}")

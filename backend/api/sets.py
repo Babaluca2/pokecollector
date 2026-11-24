@@ -1,3 +1,4 @@
+import threading
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -165,44 +166,61 @@ def mark_sets_seen(
     return {"message": "All new sets marked as seen"}
 
 
-@router.post("/import-chs")
-def import_chs(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    """Admin: import Simplified Chinese sets and cards from PTCG-CHS-Datasets."""
+_IMPORT_JOBS: dict[str, dict] = {}
+_IMPORT_LOCK = threading.Lock()
+
+
+def _run_import_job(name: str, runner) -> None:
+    from database import SessionLocal
+    from services.set_names import localize_set_names
+
+    db = SessionLocal()
+    try:
+        result = runner(db)
+        result.update(localize_set_names(db))
+        _IMPORT_JOBS[name] = {"status": "done", "result": result}
+    except Exception as exc:  # network or dataset format problem
+        db.rollback()
+        _IMPORT_JOBS[name] = {"status": "error", "detail": str(exc)[:300]}
+    finally:
+        db.close()
+
+
+def _start_import(name: str, runner) -> dict:
+    """Run a long import in a background thread so the request cannot time out."""
+    with _IMPORT_LOCK:
+        if _IMPORT_JOBS.get(name, {}).get("status") == "running":
+            return {"status": "running"}
+        _IMPORT_JOBS[name] = {"status": "running"}
+    threading.Thread(target=_run_import_job, args=(name, runner), daemon=True).start()
+    return {"status": "running"}
+
+
+@router.post("/import-chs", status_code=202)
+def import_chs(current_user: User = Depends(get_current_user)):
+    """Admin: import Simplified Chinese sets and cards from PTCG-CHS-Datasets (background)."""
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     from services.chs_import import import_chs_cards
 
-    try:
-        result = import_chs_cards(db)
-        from services.set_names import localize_set_names
-
-        result.update(localize_set_names(db))
-        return result
-    except Exception as exc:  # network or format problem
-        raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
+    return _start_import("chs", import_chs_cards)
 
 
-@router.post("/import-jp")
-def import_jp(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    """Admin: fill Japanese artwork and add missing JP sets from PKMNDB."""
+@router.post("/import-jp", status_code=202)
+def import_jp(current_user: User = Depends(get_current_user)):
+    """Admin: fill Japanese artwork and add missing JP sets from PKMNDB (background)."""
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     from services.jp_import import import_jp_cards
 
-    try:
-        result = import_jp_cards(db)
-        from services.set_names import localize_set_names
+    return _start_import("jp", import_jp_cards)
 
-        result.update(localize_set_names(db))
-        return result
-    except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"Import failed: {exc}") from exc
+
+@router.get("/import-status/{name}")
+def import_status(name: str, current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return _IMPORT_JOBS.get(name, {"status": "idle"})
 
 
 @router.post("/image-repair")
