@@ -57,7 +57,6 @@ export const getAuthMode = () => api.get('/auth/mode', {
   skipAuthentication: true,
   preserveSessionOnUnauthorized: true,
 }).then(r => r.data)
-export const setAuthMode = (enabled) => api.put('/auth/mode', { enabled }).then(r => r.data)
 export const getUsers = () => api.get('/auth/users').then(r => r.data)
 export const createUser = (data) => api.post('/auth/users', data).then(r => r.data)
 export const updateUser = (id, data) => api.put(`/auth/users/${id}`, data).then(r => r.data)

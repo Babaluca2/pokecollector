@@ -51,7 +51,7 @@ docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
 
 **Before exposing this fork to the internet**
 
-- A fresh install starts with login enforced and the account `admin` / `Admin`. **Sign in and change that password right away**: the app forces the change at first login and blocks everything else until it is done, but until then the default is guessable. Do not publish the instance before that first login. In single-user mode every visitor is the administrator (the backend logs a warning at startup when this mode is active).
+- A fresh install starts with login enforced and the account `admin` / `Admin`. **Sign in and change that password right away**: the app forces the change at first login and blocks everything else until it is done, but until then the default is guessable. Do not publish the instance before that first login.
 - `POSTGRES_PASSWORD` is mandatory (Compose refuses to start without it). `ADMIN_PASSWORD` is optional now; set `JWT_SECRET_KEY` if you want sessions to survive a rebuild.
 - CORS is same-origin by default; set `CORS_ORIGINS` only if another site must call the API.
 - Publish only the frontend (port 3000) behind HTTPS (reverse proxy or tunnel). The backend port is bound to `127.0.0.1`; keep it that way.
@@ -298,13 +298,9 @@ For scanner keys, hosted OpenAI, Ollama, and other compatible vision servers, se
 
 ### 5. Login
 
-- In single-user mode, login is skipped and the app auto-authenticates as admin
-- In multi-user mode, use the admin account created from `ADMIN_USERNAME` / `ADMIN_PASSWORD`
+- Login is always required (there is no single-user mode). Use the admin account created from `ADMIN_USERNAME` / `ADMIN_PASSWORD`
 - If `ADMIN_PASSWORD` is omitted, the admin starts as `admin` / `Admin` and must choose a new password (8+ characters) at first login
 - Admin creates accounts in **Settings → Users**: the admin picks a temporary password, and the user must change it at first login (same when the admin resets a password)
-
-> [!WARNING]
-> Single-user mode has no authentication: every client that can reach the app is treated as the administrator. Use it only on a trusted local network. Do not expose a single-user installation to the internet; enable multi-user mode and protect public deployments with HTTPS and an appropriately configured reverse proxy.
 
 ---
 
@@ -318,12 +314,11 @@ See [Reverse proxy authentication](docs/REVERSE_PROXY_AUTH.md) for the complete 
 
 ## 👥 Managing Users
 
-User management is available from the app UI when multi-user mode is enabled.
+User management is available from the app UI. Only an admin can create accounts; there is no self-registration.
 
 1. Log in as an admin user.
 2. Go to **Settings**.
-3. Enable **Multi-User Mode** if it is not enabled yet.
-4. Open the **Users** tab in Settings.
+3. Open the **Users** tab in Settings.
 
 From the **Users** tab, admins can:
 
@@ -334,11 +329,11 @@ From the **Users** tab, admins can:
 - delete other users
 - force new users to change their password on first login
 
-The **Users** tab is only visible to admin users and only while multi-user mode is enabled. In single-user mode, PokéCollector skips login and uses the bootstrap admin account automatically.
+The **Users** tab is only visible to admin users.
 
-### Enabling multi-user mode without locking yourself out
+### Resetting the admin password
 
-Turning on multi-user mode enforces the login screen immediately and signs you out, and you then sign back in as the bootstrap admin. In single-user mode you never had to enter that password, so if you did not set `ADMIN_PASSWORD` it is the default `Admin` (or the one you changed it to). Set a known password **before** enabling multi-user mode. From the host:
+If you lose the admin password, reset it from the host:
 
 ```bash
 # Docker
@@ -351,7 +346,7 @@ The script prompts for the new password (add `--username <name>` for a non-defau
 
 ### Recovering from a lockout
 
-If you are already locked out of multi-user mode, set `USER_MODE=single` in the environment and restart. That pins single-user mode and disables the login screen regardless of the stored setting, so you regain local admin access; reset the password with the script above, then remove the variable and restart to return to multi-user mode. While `USER_MODE` is set, the Multi-User Mode toggle in Settings is disabled and shows that the environment controls it. Because `USER_MODE=single` disables the login screen, treat it as a local/LAN recovery tool and do not leave it set on an internet-facing install. (`USER_MODE=multi` pins multi-user mode instead, which is safe to leave set.)
+Multi-user mode is now mandatory: there is no single-user mode, no toggle and no `USER_MODE` variable. Only an admin can create accounts. An existing single-user install is migrated once at startup: its admin is reset to `Admin` with a forced password change. If you ever lose the admin password, use the reset script above.
 
 ---
 
@@ -389,7 +384,6 @@ If you are already locked out of multi-user mode, set `USER_MODE=single` in the 
 | `TELEGRAM_BOT_TOKEN` | Initial Telegram bot token for the admin user | *(empty)* |
 | `TELEGRAM_CHAT_ID` | Initial Telegram chat ID for the admin user | *(empty)* |
 | `TCGDEX_SYNC_LANGUAGES` | Initial admin default for TCGdex set/card sync languages on first launch only. After bootstrap, the DB setting in Settings is authoritative. Comma-separated TCGdex language codes, or `all` to enable every supported TCGdex language. Empty or invalid values safely fall back to `en,fr,ja,zh-cn,zh-tw,ko`. Extra languages increase sync time, API calls, and database size. | `en,fr,ja,zh-cn,zh-tw,ko` |
-| `USER_MODE` | Pin the mode from the environment, overriding the stored setting and disabling the in-app toggle. `single` forces single-user (no login screen) and is the recovery hatch after a multi-user lockout; `multi` forces multi-user. Because `single` disables authentication, use it only on a local/LAN install and unset it once recovered. Unset means the in-app setting controls the mode. | *(unset)* |
 | `PUBLIC_MODE` | Enable SEO meta tags, Open Graph, and allow search engine indexing. Default blocks all crawlers. Recreate the frontend container after changing it. | `false` |
 | `POKECOLLECTOR_VERSION` | Optional frontend and backend image-tag override for controlled deployments and rollbacks. Leave unset to use the exact release bundled with `docker-compose.yml`; `latest` is available only when deliberately requested. | Bundled release version |
 | `CORS_ORIGINS` | Comma-separated list of allowed origins for CORS. If empty, allows all origins. Set to your domain for production (e.g. `https://pokecollector.romerg.de`). | *(all)* |

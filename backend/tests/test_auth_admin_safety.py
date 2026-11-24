@@ -220,7 +220,7 @@ class BootstrapAdminTests(unittest.TestCase):
             "ADMIN_BOOTSTRAP_LOG": "false",
             "GEMINI_API_KEY": "  first-start-key  ",
         }
-        with patch.dict(os.environ, env):
+        with patch.dict(os.environ, env), patch("database.save_setting"), patch("database.get_setting", return_value="true"):
             bootstrap_admin(self.db)
             bootstrap_admin(self.db)
 

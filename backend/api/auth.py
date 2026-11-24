@@ -89,38 +89,9 @@ def _sync_public_handle_for_username(db: Session, user: User, username: str) -> 
         raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
-def env_user_mode(*, warn_invalid: bool = False) -> str | None:
-    """USER_MODE pins the mode from the environment, overriding the stored setting:
-    'single' forces single-user (login screen off), 'multi' forces multi-user (login on).
-    Unset, blank, or unrecognised means no override. It is the recovery hatch for an admin
-    locked out of multi-user mode: set USER_MODE=single, restart, regain local access, reset
-    the password, then remove it. Forcing single-user disables the login screen, so that
-    direction is a local/LAN recovery tool, not something to leave set on a public install."""
-    raw = os.getenv("USER_MODE", "").strip().lower().replace("-", "_")
-    if raw in {"single", "single_user"}:
-        return "single"
-    if raw in {"multi", "multi_user"}:
-        return "multi"
-    if raw and warn_invalid:
-        logger.warning("USER_MODE=%r is not 'single' or 'multi'; ignoring it.", os.getenv("USER_MODE"))
-    return None
-
-
-def mode_is_env_locked() -> bool:
-    """True when USER_MODE pins the mode, so the in-app toggle cannot change it."""
-    return env_user_mode() is not None
-
-
 def multi_user_enabled(db: Session) -> bool:
-    """True when the login screen is enforced. The USER_MODE env override wins; otherwise the
-    stored setting, falling back to 'more than one user exists' when it has never been set."""
-    override = env_user_mode()
-    if override is not None:
-        return override == "multi"
-    multi = get_setting("multi_user_mode")
-    if multi is None:
-        multi = "true" if db.query(User).count() > 1 else "false"
-    return str(multi).lower() == "true"
+    """Login is always enforced: there is no single-user mode any more."""
+    return True
 
 
 PASSWORD_CHANGE_ALLOWED_PATHS = {
@@ -214,24 +185,7 @@ def get_me(current_user: User = Depends(get_current_user)):
 @router.get("/mode")
 def get_auth_mode(db: Session = Depends(get_db)):
     # `locked` tells the UI to disable the toggle: the mode is pinned by USER_MODE.
-    return {"multi_user": multi_user_enabled(db), "locked": mode_is_env_locked()}
-
-
-@router.put("/mode")
-def set_auth_mode(
-    enabled: bool = Body(..., embed=True),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin only")
-    if mode_is_env_locked():
-        raise HTTPException(
-            status_code=409,
-            detail="User mode is pinned by the USER_MODE environment variable and cannot be changed here",
-        )
-    save_setting("multi_user_mode", str(enabled).lower())
-    return {"multi_user": enabled}
+    return {"multi_user": True, "locked": True}
 
 
 @router.get("/users")

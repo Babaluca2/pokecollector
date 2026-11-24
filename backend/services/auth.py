@@ -130,9 +130,28 @@ def decode_token(token: str) -> dict:
 DEFAULT_ADMIN_PASSWORD = "Admin"
 
 
+def _migrate_legacy_single_user(db: Session):
+    """Multi-user is now mandatory. An install that ran in single-user mode has an admin whose
+    password was never needed (and was often random), so reset it once to the default with a
+    forced change. Everyone could already act as admin in that mode, so this is not a downgrade."""
+    from database import get_setting, save_setting
+
+    if get_setting("login_enforced_migrated") == "true":
+        return
+    if str(get_setting("multi_user_mode") or "").lower() != "true":
+        admins = db.query(User).filter(User.role == "admin", User.is_active == True).all()
+        if db.query(User).count() == 1 and len(admins) == 1:
+            admins[0].hashed_password = hash_password(DEFAULT_ADMIN_PASSWORD)
+            admins[0].must_change_password = True
+            db.commit()
+            logger.info("Single-user install migrated: admin reset to the default password (change forced)")
+    save_setting("login_enforced_migrated", "true")
+
+
 def bootstrap_admin(db: Session):
     """Create admin user on first run if no users exist."""
     if db.query(User).count() > 0:
+        _migrate_legacy_single_user(db)
         return
 
     username = os.getenv("ADMIN_USERNAME", "admin")
@@ -153,11 +172,9 @@ def bootstrap_admin(db: Session):
     db.commit()
     db.refresh(admin)
 
-    if uses_default:
-        # The default password only makes sense behind a login screen.
-        from database import save_setting
+    from database import save_setting
 
-        save_setting("multi_user_mode", "true")
+    save_setting("login_enforced_migrated", "true")
 
     # init_db() runs before the first administrator exists, so its legacy settings
     # migration cannot import GEMINI_API_KEY on a brand-new installation. Seed the

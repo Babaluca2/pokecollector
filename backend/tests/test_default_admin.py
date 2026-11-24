@@ -39,7 +39,29 @@ class DefaultAdminTests(unittest.TestCase):
     def test_default_password_forces_change_and_login_mode(self):
         self.assertTrue(verify_password("Admin", self.admin.hashed_password))
         self.assertTrue(self.admin.must_change_password)
-        self.save.assert_called_with("multi_user_mode", "true")
+        with self.assertRaises(HTTPException) as exc:
+            get_current_user(token=None, db=self.db, request=fake_request("/api/collection"))
+        self.assertEqual(exc.exception.status_code, 401)
+
+    def test_legacy_single_user_install_is_reset_once(self):
+        engine = create_engine("sqlite:///:memory:")
+        Base.metadata.create_all(engine)
+        db = sessionmaker(bind=engine)()
+        from services.auth import hash_password
+        db.add(User(username="admin", hashed_password=hash_password("random-unknown"), role="admin", is_active=True))
+        db.commit()
+        store = {}
+        with patch("database.get_setting", side_effect=lambda k, *a: store.get(k)), \
+             patch("database.save_setting", side_effect=lambda k, v: store.__setitem__(k, v)):
+            bootstrap_admin(db)
+            u = db.query(User).one()
+            self.assertTrue(verify_password("Admin", u.hashed_password))
+            self.assertTrue(u.must_change_password)
+            u.hashed_password = hash_password("Chosen-pass-1")
+            u.must_change_password = False
+            db.commit()
+            bootstrap_admin(db)
+        self.assertTrue(verify_password("Chosen-pass-1", db.query(User).one().hashed_password))
 
     def test_env_password_does_not_force_change(self):
         engine = create_engine("sqlite:///:memory:")
@@ -64,6 +86,18 @@ class DefaultAdminTests(unittest.TestCase):
         force_change_password(ForceChangePasswordRequest(new_password="Nouveau-mdp-9"), self.admin, self.db)
         self.assertFalse(self.admin.must_change_password)
         get_current_user(token=self.token(self.admin), db=self.db, request=fake_request("/api/collection"))
+
+    def test_only_admin_can_create_accounts(self):
+        self.admin.must_change_password = False
+        trainer = User(username="t", hashed_password="x", role="trainer", is_active=True)
+        self.db.add(trainer)
+        self.db.commit()
+        with self.assertRaises(HTTPException) as exc:
+            create_user(CreateUserRequest(username="x", password="temp1234"), trainer, self.db)
+        self.assertEqual(exc.exception.status_code, 403)
+        from main import app
+        paths = [r.path for r in app.routes if "POST" in getattr(r, "methods", ()) ]
+        self.assertEqual([p for p in paths if p.endswith(("register", "signup"))], [])
 
     def test_admin_created_and_reset_accounts_must_change(self):
         self.admin.must_change_password = False
