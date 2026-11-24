@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   RefreshCw, LogOut,
-  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, Trophy, ListOrdered, Info, Layers3,
+  Search, Library, Grid2X2, BarChart3, Settings, ArrowRightLeft, Trophy, ListOrdered, Info, Layers3,, ShoppingBag
 } from 'lucide-react'
 import HomeQuickAdd from '../components/HomeQuickAdd'
 import {
@@ -240,6 +240,7 @@ export default function HomeScreen() {
     { to: '/sets',       icon: Grid2X2,    label: t('nav.sets') },
     { to: '/pokedex',    icon: ListOrdered, label: t('nav.pokedex') },
     { to: '/binders',    icon: Layers3,     label: t('nav.binders') },
+    { to: '/products',   icon: ShoppingBag, label: t('nav.products') },
     { to: '/analytics',  icon: BarChart3,  label: t('nav.analytics') },
     { to: '/trades',     icon: ArrowRightLeft, label: t('nav.trades') },
     ...(multiUser ? [{ to: '/leaderboard', icon: Trophy, label: t('nav.leaderboard') }] : []),
