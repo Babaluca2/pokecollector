@@ -1320,6 +1320,7 @@ export default function Settings() {
               <p className="text-[11px] text-text-muted">
                 {t('settings.madeWith')} <a href="https://romerg.de/" target="_blank" rel="noreferrer" className="text-brand-red hover:opacity-80 transition-opacity font-semibold">Gilles Romer</a>
               </p>
+              <p className="text-[11px] text-text-muted mt-1">Forked up by Luca</p>
             </div>
           </section>
         </>
